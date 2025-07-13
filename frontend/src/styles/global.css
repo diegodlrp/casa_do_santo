@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* root */
+:root {
+    --color-bg-dark: #393228;
+    --color-bg-light: #f4ece1;
+    --color-text: #fff;
+    --color-text-caption: #c8a655;
+
+}
+
+/* container */
+.container {
+    @apply content-center mx-auto p-[12px] md:p-[32px]
+}
+
+/* titles */
+h2 {
+    @apply lg:m-[30px] font-bold uppercase text-[color:var(--color-text-caption)]
+}
+
+.nav-link {
+    @apply text-[color:var(--color-text)] text-lg font-bold duration-300
+}
+
+.nav-link:hover {
+    @apply text-[color:var(--color-text-caption)];
+}
+

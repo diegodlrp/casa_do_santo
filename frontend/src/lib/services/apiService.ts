@@ -1,0 +1,40 @@
+// import {authStore} from './authService';
+
+// BASE URL for API calls
+const API_BASE_URL = 'http://localhost:8000'
+// const api_key = 'xroo15zj.7DOgvspDouwAgSlk9bq4zK5R14ujlq1X.'
+// const api_key="api-test1111"
+/**
+ * Make an authenticated API request
+ */
+
+export async function apiRequest(endpoint: string, options: RequestInit = {}) {
+    try {
+        // Authorization: 
+        // Make the API request
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        // Make the API request
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+
+            headers,
+            mode: 'cors',
+        });
+
+        if (response.ok) { // Check if the request was successful (status code in the range 200-299)
+            try {
+                const data = await response.json();
+
+                // Now you can work with the 'data' object
+                return data
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+            }
+        }
+
+    } catch (error) {
+
+    }
+}

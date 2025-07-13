@@ -1,0 +1,31 @@
+import type { Translation } from '../i18n-types'
+
+const gl = {
+	accept: "Aceptar",
+    address: "Enderezo",
+    arrival_date: "Data de chegada",
+    check_availability: "Comprobar dispoñibilidade",
+    contact: "Contacto",
+    cookies_policy: "Política de Cookies",
+    departure_date: "Data de saída",
+    gallery: "Galería",
+    home: "Inicio",
+    legal_notice: "Aviso Legal",
+    location: "Localización",
+    locations: "Localizacións",
+    mail: "Correo electrónico",
+    more_photos: "Máis fotos",
+    name: "Nome",
+    n_guest: "Nº de hóspede",
+    phone: "Teléfono",
+    privacy_politic: "Política de privacidade",
+    rooms: "Habitacións",
+    send_message: "Enviar mensaxe",
+    write_your_message: "Escribe a túa mensaxe",
+    your_email: "O teu correo electrónico",
+    your_name: "O teu nome",
+	log: `Dieses Logging wurde von '{fileName}' aufgerufen`,
+    locale: "gl",
+} satisfies Translation
+
+export default gl

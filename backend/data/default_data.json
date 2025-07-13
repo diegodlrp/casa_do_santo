@@ -1,0 +1,49 @@
+{
+    "users": [
+        {
+            "username": "Pablo",
+            "email": "a25diegodp@gmail.com",
+            "first_name": "Pablo",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "last_name": "de la Riva",
+            "password": "abc123."
+        },
+        {
+            "username": "Santi",
+            "email": "a25diegodp@gmail.com",
+            "first_name": "Santiago",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "last_name": "de la Riva",
+            "password": "abc123."
+        }
+    ],
+    "tags":[
+        {
+            "name": "rooms"
+        },
+        {
+            "name": "locations"
+        },
+        {
+            "name": "services"
+        },
+        {
+            "name": "gallery"
+        }
+    ],
+    "web_data": [
+        {
+            "name": "Casa do Santo",
+            "logo": "casa-do-santo-logo.png",
+            "phone": "+34981234567",
+            "email": "casadosanto@gmail.com",
+            "address": "Rúa do Vilar 15, 15705 Santiago de Compostela, A Coruña, Spain",
+            "latitude": "42.8806",
+            "longitude": "-8.5447"
+        }
+    ]
+}

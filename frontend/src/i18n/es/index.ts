@@ -1,0 +1,31 @@
+import type { Translation } from '../i18n-types'
+
+const es = {
+	accept: "Aceptar",
+    address: "Dirección",
+    arrival_date: "Fecha de llegada",
+    check_availability: "Comprobar disponibilidad",
+    contact: "Contacto",
+    cookies_policy: "Política de Cookies",
+    departure_date: "Fecha de salida",
+    gallery: "Galería",
+    home: "Inicio",
+    legal_notice: "Aviso Legal",
+    location: "Ubicación",
+    locations: "Ubicaciones",
+    mail: "Correo electrónico",
+    more_photos: "Más fotos",
+    name: "Nombre",
+    n_guest: "Nº de huésped",
+    phone: "Teléfono",
+    privacy_politic: "Política de privacidad",
+    rooms: "Habitaciones",
+    send_message: "Enviar mensaje",
+    write_your_message: "Escribe tu mensaje",
+    your_email: "Tu correo electrónico",
+    your_name: "Tu nombre",
+	log: "Questa protocollazione è stata chiamata da '{fileName}'",
+    locale: "es",
+} satisfies Translation
+
+export default es

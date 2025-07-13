@@ -14,7 +14,9 @@
 
 # Environment files
 /.env
-
+/.venv
+.vagrant
+backend/venv
 # Angular CLI and build artefacts
 /.angular-cli.json
 /.ng/

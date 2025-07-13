@@ -1,37 +1,36 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
-    import { goto } from '$app/navigation'; // Import the goto function
+    import { base } from '$app/paths'
+    import { LL, locale } from '$i18n/i18n-svelte'
+    import { goto } from "$app/navigation"; // Import the goto function
 
     export let title: string;
     export let subtitle: string;
     export let img: string;
 
     // Get today's date
-	const today = new Date();
+    const today = new Date();
 
     let handleDateEnd;
-    
+
     let dateInit = "";
     let dateEnd = "";
     let dateLimit = "";
     let dateMin = "";
-	let n_people = 1;
-
+    let n_people = 1;
 
     const handleSubmit = async () => {
         // Example: Simulate a successful submission after a delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-// Redirect to /aaa
-goto('/reservation_form');
+        goto(base+"/"+$locale+"/reservation_form");
     };
 
     function getFormattedDate(date: Date) {
-		const year = date.getFullYear();
-		const month = (date.getMonth() + 1).toString().padStart(2, '0');
-		const day = date.getDate().toString().padStart(2, '0');
-		return `${year}-${month}-${day}`;
-	}
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
 </script>
 
 <div class="relative overflow-hidden pt-0 mt-0">
@@ -54,7 +53,7 @@ goto('/reservation_form');
                     >
                         <div>
                             <label for="dateInit" class="text-sm"
-                                >{$t("arrival_date")}:</label
+                                >"arrival_date":</label
                             >
                             <input
                                 bind:value={dateInit}
@@ -66,35 +65,35 @@ goto('/reservation_form');
                         </div>
                         <div>
                             <label for="dateEnd" class="text-sm"
-                                >{$t("departure_date")}:</label
+                                >"departure_date":</label
                             >
                             <input
                                 bind:value={dateEnd}
                                 min={dateMin}
                                 max={dateLimit}
                                 type="date"
-                                placeholder={$t("your name")}
+                                placeholder="your name"
                                 class="text-black ring-1 ring-gray-300 w-full rounded-md px-4 py-2 outline-none focus:ring-2 focus:ring-[#deb860]"
                             />
                         </div>
                         <div>
                             <label for="n_people" class="text-sm"
-                                >{$t("n_guest")}:</label
+                                >"n_guest":</label
                             >
                             <input
                                 bind:value={n_people}
                                 type="number"
                                 min="1"
                                 max="6"
-                                placeholder={$t("your name")}
+                                placeholder="your name"
                                 class="text-black ring-1 ring-gray-300 w-full rounded-md px-4 py-2 outline-none focus:ring-2 focus:ring-[#deb860]"
                             />
                         </div>
                         <div>
                             <button
-                                class="reservation_form_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
+                                class="core_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
                             >
-                                {$t("check_availability")}
+                                "check_availability"
                             </button>
                         </div>
                     </div>

@@ -2,8 +2,8 @@
 	import RiPhoneLine from "svelte-remixicon/RiPhoneLine.svelte";
 	import RiMailLine from "svelte-remixicon/RiMailLine.svelte";
 	import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
-	// import LL from '$i18n/i18n-svelte'
 	import type { PageData } from "./$types";
+    import ReservationForm from "$lib/ReservationForm.svelte";
 
 	export let data: PageData;
 
@@ -14,15 +14,19 @@
 		address,
 		email,
 		phone,
-		htitle,
-		hsubtitle,
-		hcontent,
+		page_content_title,
+		page_content_subtitle,
+		page_content,
+		about_us_title,
+        about_us_subtitle,
+        about_us_content,
+        about_us_img,
 		form_title,
 		form_subtitle,
 		form_img,
 		error,
 	} = data;
-	console.log("data", data);
+
 </script>
 
 <!-- HOME PAGE TITLE -->
@@ -83,10 +87,107 @@
 	</div>
 </div>
 <!-- END -->
+
 <!-- HOME PAGE CONTENT -->
-<div id="home_page_content">home_page_content</div>
+<div id="home_page_content">
+	<div>
+		<div></div>
+		<div>
+			<div>
+                <div>
+                    <h1>{@html page_content_title}</h1><br>
+                </div>
+				
+                <div>
+                    <h2 >{@html page_content_subtitle}</h2><br>
+                    <h4>{@html page_content}</h4>
+                </div>
+				
+			</div>
+
+			<!-- <ServicesComponent /> -->
+		</div>
+		<!-- <img
+			src="/svg/main_bg_gray.svg"
+			alt="background_room_core_left"
+			class="absolute top-0 left-0 img_2 z-0 main_img rotate-180"
+		/>
+
+		<img
+			src="/svg/main_bg_gray.svg"
+			alt="background_room_core_right"
+			class="absolute top-0 right-0 img_2 img_flip z-0 main_img rotate-180"
+		/> -->
+	</div>
+</div>
 <!-- END -->
-<div>about_us</div>
+
+<!-- HOME About Us -->
+<div id="home_page_about_us">
+	<div>
+		<div>
+			<div>
+				<img src={about_us_img} alt="about_us" class="w-full" />
+			</div>
+
+			<div>
+
+
+
+
+
+
+
+
+
+				<div>
+					<div>
+						<div
+						
+						>
+							<h1>
+								{@html about_us_title}
+							</h1>
+							
+								<h4
+									
+								>
+									{@html about_us_subtitle}
+								</h4>
+							
+						</div>
+					</div>
+	
+					<div
+						
+					>
+						<div >
+							<p >
+								{@html about_us_content}
+							</p>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
 <!-- END -->
-<div>reservation_form</div>
+
+<!-- HOME Reservation FormT -->
+<div id="home_page_reservation_form">
+	<ReservationForm title={form_title} subtitle={form_subtitle} img={form_img}/>
+</div>
 <!-- END -->

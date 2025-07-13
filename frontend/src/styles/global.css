@@ -9,14 +9,23 @@
 
 }
 
+* {
+    font-family: 'Montserrat';
+}
+
 /* container */
 .container {
     @apply content-center mx-auto p-[12px] md:p-[32px]
 }
 
 /* titles */
+
 h2 {
-    @apply lg:m-[30px] font-bold uppercase text-[color:var(--color-text-caption)]
+    @apply lg:m-[30px] leading-[35px] font-bold uppercase text-[color:var(--color-text-caption)]
+}
+
+h3 {
+    @apply  lg:m-[30px] leading-[35px] font-bold uppercase text-[color:var(--color-text)]
 }
 
 .nav-link {
@@ -27,3 +36,16 @@ h2 {
     @apply text-[color:var(--color-text-caption)];
 }
 
+/* polygon */
+.room_bg {
+    @apply  right-0 xl:[-webkit-clip-path:polygon(10%_0%,100%_0%,100%_100%,10%_100%,0%_86%)] xl:[clip-path:polygon(10%_0%,100%_0%,100%_100%,10%_100%,0%_10%)]
+}
+
+.room_bg_right {
+    @apply left-0 [-webkit-clip-path:polygon(10%_0%,100%_0%,100%_100%,10%_100%,0%_86%)] [clip-path:polygon(0%_0%,90%_0%,100%_10%,90%_100.00%,0%_100%)]
+}
+
+/* buttons */
+.core_button {
+    @apply bg-[color:var(--color-text-caption)] text-[color:var(--color-bg-dark)] uppercase p-[15px] text-center mt-[30px] -translate-x-1/2 left-1/2 text-sm font-bold cursor-pointer
+}

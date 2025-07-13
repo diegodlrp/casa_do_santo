@@ -11,9 +11,16 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let address = '';
     let email = '';
     let phone = '';
-    let htitle = '';
-    let hsubtitle = '';
-    let hcontent = '';
+
+    let page_content_title = '';
+    let page_content_subtitle = '';
+    let page_content = '';
+
+    let about_us_title = '';
+    let about_us_subtitle = '';
+    let about_us_content = '';
+    let about_us_img = '';
+
     let form_title = '';
     let form_subtitle = '';
     let form_img = '';
@@ -27,6 +34,27 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             img = titleResponse.image || '';
         } else {
             console.warn(`No title data found for locale: ${locale}`);
+        }
+
+        // Fetch title data
+        const contentResponse = await apiRequest(`/page_content/home_page_content/?lang=${locale}`);
+        if (titleResponse) {
+            page_content_title = contentResponse.title || '';
+            page_content_subtitle = contentResponse.excerpt || '';
+            page_content = contentResponse.content || '';
+        } else {
+            console.warn(`No page data found for locale: ${locale}`);
+        }
+
+        // Fetch about us data
+        const aboutUsResponse = await apiRequest(`/page_content/aboutus_page_content/?lang=${locale}`);
+        if (titleResponse) {
+            about_us_title = aboutUsResponse.title || '';
+            about_us_subtitle = aboutUsResponse.excerpt || '';
+            about_us_content = aboutUsResponse.content || '';
+            about_us_img = aboutUsResponse.image || '';
+        } else {
+            console.warn(`No about us data found for locale: ${locale}`);
         }
 
         // Fetch reservation form data
@@ -49,9 +77,13 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         address,
         email,
         phone,
-        htitle,
-        hsubtitle,
-        hcontent,
+        page_content_title,
+        page_content_subtitle,
+        page_content,
+        about_us_title,
+        about_us_subtitle,
+        about_us_content,
+        about_us_img,
         form_title,
         form_subtitle,
         form_img,

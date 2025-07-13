@@ -16,7 +16,7 @@
 
 </script>
 
-<header class="bg-[color:var(--color-bg-dark)] fixed w-full top-0 left-0 z-900 px-2 sm:px-6 lg:px-8">
+<header class="bg-[color:var(--color-bg-dark)] fixed w-full top-0 left-0 z-950 px-2 sm:px-6 lg:px-8">
     <nav class="container flex items-center justify-between h-16 sm:h-20">
         <div class="sm:text-2xl">
             <h2 class="text-center">

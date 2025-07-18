@@ -9,8 +9,13 @@
 
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     font-family: 'Montserrat';
+    
 }
 
 /* container */
@@ -43,6 +48,10 @@ h3 {
 
 .room_bg_right {
     @apply left-0 [-webkit-clip-path:polygon(10%_0%,100%_0%,100%_100%,10%_100%,0%_86%)] [clip-path:polygon(0%_0%,90%_0%,100%_10%,90%_100.00%,0%_100%)]
+}
+
+.form_bg {
+    @apply left-0 [-webkit-clip-path:polygon(10%_0%,100%_0%,100%_100%,10%_100%,0%_86%)] [clip-path:polygon(0%_0%,90%_0%,100%_10%,90%_100.00%,0%_100%)] bg-[color:var(--color-bg-dark)]
 }
 
 /* buttons */

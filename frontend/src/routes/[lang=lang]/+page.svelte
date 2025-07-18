@@ -89,9 +89,9 @@
 <!-- END -->
 
 <!-- HOME PAGE CONTENT -->
-<div id="home_page_content">
-	<div>
-		<div></div>
+<div id="home_page_content" class="pt-[36px] pb-[100px] relative w-full">
+
+		<div class=" min-h-[64px]"></div>
 		<div>
 			<div>
                 <div>
@@ -118,7 +118,7 @@
 			alt="background_room_core_right"
 			class="absolute top-0 right-0 img_2 img_flip z-0 main_img rotate-180"
 		/> -->
-	</div>
+
 </div>
 <!-- END -->
 

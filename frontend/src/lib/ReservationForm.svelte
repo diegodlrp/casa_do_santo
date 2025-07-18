@@ -37,7 +37,7 @@
     <div class="bg-cover bg-center" style="background-image: url({img});">
         <div class="w-full h-full bg-[color:var(--color-bg-light)]/80">
             <div class="h-16"></div>
-            <div class="container reservation_container pt-4 pb-4">
+            <div class="container form_bg pt-4 pb-4">
                 <form
                     on:submit|preventDefault={handleSubmit}
                     class=" reservation_form"

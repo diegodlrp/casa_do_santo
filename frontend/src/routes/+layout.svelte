@@ -4,6 +4,7 @@
 	import type { LayoutData } from './$types'
 
 	import '../styles/global.css'
+    import Footer from '$lib/Footer.svelte';
 
 	export let data: LayoutData
 	// at the very top, set the locale before you access the store and before the actual rendering takes place
@@ -13,7 +14,8 @@
 
 <Header />
 
-<main>
+<main class="bg-[color:var(--color-bg-light)]">
 	<slot />
 </main>
 
+<Footer />

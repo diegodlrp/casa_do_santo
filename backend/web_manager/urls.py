@@ -21,10 +21,12 @@ from django.conf import settings
 from rest_framework import routers
 
 from page_content.views import TagViewSet, PageContentViewSet
+from reservation.views import ReservationViewSet
 
 router = routers.DefaultRouter()
 router.register(r"page_content", PageContentViewSet)
 router.register(r"tags", TagViewSet)
+router.register(r"reservations", ReservationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

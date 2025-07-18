@@ -24,7 +24,35 @@
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
 <!-- ROOMS PAGE CONTENT -->
-<div class="min-h-[calc(100vh-264px)] sm:min-h-[calc(100vh-280px)]">aaa</div>
+<div class="min-h-[calc(100vh-264px)] sm:min-h-[calc(100vh-280px)]">
+    <div class=" min-h-[64px]"></div>
+
+    <div class="p-4 relative z-10 rounded-4xl">
+        <div class="container home_main_container">
+            <div class="home_main_text text-center">
+                <h2 class="pt-3 pb-4">{@html title}</h2>
+
+                <br />
+
+                <h4>{@html content}</h4>
+
+                <br />
+            </div>
+
+            <div
+                class="relative pt-16 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20"
+            >
+                <a href="#rooms_list" class="mt-8 inline-block text-3xl animate-bounce">
+                    &#8659;
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class=" min-h-[64px]"></div>
+</div>
 <!-- END -->
 <!-- ROOMS LIST -->
 <div id="rooms_list">

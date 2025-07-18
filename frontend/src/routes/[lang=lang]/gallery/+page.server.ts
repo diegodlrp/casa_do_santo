@@ -9,6 +9,9 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let title = '';
     let subtitle = '';
     let img = '';
+
+    let img_data: { alt: string; src: string }[] = [];
+
     let error: string | null = null;
 
     try {
@@ -22,6 +25,17 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             console.warn(`No title data found for locale: ${locale}`);
         }
 
+        // Fetch image data
+        const imageResponse = await apiRequest('/tags/gallery/page_content/');
+        if (titleResponse) {
+		    img_data = imageResponse.map((result: any) => ({
+                alt: result['slug'],
+                src: result['image']
+            }));
+        } else {
+            console.warn(`No images data found for locale: ${locale}`);
+        }
+
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -31,6 +45,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         title,
         subtitle,
         img,
+        img_data,
         error
     }
 }

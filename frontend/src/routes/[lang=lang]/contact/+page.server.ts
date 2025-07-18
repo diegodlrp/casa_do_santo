@@ -5,12 +5,6 @@ export const prerender = true;
 
 export const load: PageServerLoad = async ({ locals: { LL } }) => {
     const locale = LL.locale();
-
-    let title = '';
-    let content = '';
-    let img = '';
-
-    let rooms_data: any[] = [];
     
     let title_title = '';
     let title_subtitle = '';
@@ -48,9 +42,12 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     }
 
     return {
-        title,
-        subtitle,
-        img,
+        title_title,
+        title_subtitle,
+        title_img,
+        form_title,
+        form_subtitle,
+        form_img,
         error
     }
 }

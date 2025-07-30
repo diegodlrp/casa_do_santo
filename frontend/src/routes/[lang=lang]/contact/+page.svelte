@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { LL } from "$i18n/i18n-svelte";
     import RiPhoneLine from "svelte-remixicon/RiPhoneLine.svelte";
     import RiMailLine from "svelte-remixicon/RiMailLine.svelte";
     import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
@@ -9,25 +10,43 @@
 
     // Destructure the data directly
     const {
-        title_title,
-        title_subtitle,
         title_img,
-        form_title,
-        form_subtitle,
+        contact_img,
         form_img,
         error,
     } = data;
+    
+    $: title_title = data.title_title;
+    $: title_subtitle = data.title_subtitle;
+    $: contact_title = data.contact_title;
+    $: contact_content = data.contact_content;
+    $: form_title = data.form_title;
+    $: form_subtitle = data.form_subtitle;
 
-    let content = "";
-    let title = "";
     let phone = "";
     let address = "";
     let name = "";
     let email = "";
     let message = "";
-    let img = "";
 
-    const handleSubmit = async () => {};
+    const handleSubmit = async () => {
+        console.log(name)
+        console.log(email)
+        console.log(message)
+
+        const response = await fetch('http://localhost:8000/api/send-mail/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+
+					// Add CSRF token header if needed (see previous email example notes)
+				},
+				mode: 'cors',
+				// Send petition data as JSON
+				body: JSON.stringify({ name: name, mail: email, message: message }),
+				credentials: 'omit'
+			});
+    };
 </script>
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
@@ -35,7 +54,7 @@
     <div
         id="contact_form"
         class="bg-cover bg-center items-center"
-        style="background-image: url({img});"
+        style="background-image: url({contact_img});"
     >
         <div
             class="relative pt-[36px] pb-[100px] min-h-[80vh] overflow-hidden w-full h-full bg-[color:var(--color-bg-light)]/80"
@@ -49,14 +68,14 @@
                         <div class="flex-col justify-between p4 w-[55%]">
                             <div class="pb-4">
                                 <h2>
-                                    {@html title}
+                                    {@html contact_title}
                                 </h2>
-                                <p class="pr-4">
-                                    {@html content}
+                                <p class="pr-4 text-[color:var(--color-text)]">
+                                    {@html contact_content}
                                 </p>
                             </div>
 
-                            <div>
+                            <div class="text-[color:var(--color-text)]">
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
@@ -82,19 +101,19 @@
                         <div class="w-[55%]">
                             <form
                                 onsubmit={handleSubmit}
-                                class="flex flex-col space-y-4 w-[80%]"
+                                class="flex flex-col space-y-4 w-[80%] text-[color:var(--color-text)]"
                             >
                                 <!-- START name -->
                                 <div>
                                     <label for="name" class="text-sm"
-                                        >'name'</label
+                                        >{$LL.name()}</label
                                     >
                                 </div>
                                 <div>
                                     <input
                                         bind:value={name}
                                         type="text"
-                                        placeholder={"your name"}
+                                        placeholder={$LL.your_name()}
                                         class="text-[color:var(--color-text)] ring-1 ring-gray-300 w-full rounded-md px-4 py-2 outline-none"
                                         required
                                     />
@@ -103,14 +122,14 @@
                                 <!-- START email -->
                                 <div>
                                     <label for="email" class="text-sm"
-                                        >{"mail"}:</label
+                                        >{$LL.mail()}:</label
                                     >
                                 </div>
                                 <div>
                                     <input
                                         bind:value={email}
                                         type="email"
-                                        placeholder={"your email"}
+                                        placeholder={$LL.your_email()}
                                         class="text-[color:var(--color-text)] ring-1 ring-gray-300 w-full rounded-md px-4 py-2 outline-none"
                                         required
                                     />
@@ -119,13 +138,13 @@
                                 <!-- START message -->
                                 <div>
                                     <label for="message" class="text-sm"
-                                        >Message</label
+                                        >{$LL.message()}</label
                                     >
                                 </div>
                                 <div>
                                     <textarea
                                         bind:value={message}
-                                        placeholder={"write your message"}
+                                        placeholder={$LL.write_your_message()}
                                         rows="4"
                                         class="text-[color:var(--color-text)] ring-1 ring-gray-300 w-full rounded-md px-4 py-2 outline-none"
                                         required
@@ -155,8 +174,8 @@
                                 <!-- END checkbox -->
                                 <!-- START button -->
                                 <button
-                                    class="contact_form_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
-                                    >{"send message"}</button
+                                    class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-[30px]"
+                                    >{$LL.send_message()}</button
                                 >
                                 <!-- END button -->
                             </form>

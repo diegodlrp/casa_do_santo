@@ -10,6 +10,10 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let title_subtitle = '';
     let title_img = '';
 
+    let contact_title = '';
+    let contact_content = '';
+    let contact_img = '';
+
     let form_title = '';
     let form_subtitle = '';
     let form_img = '';
@@ -25,6 +29,17 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             title_img = titleResponse.image || '';
         } else {
             console.warn(`No title data found for locale: ${locale}`);
+        }
+
+        // Fetch contact data
+        const contactResponse = await apiRequest(`/page_content/contact_page_content/?lang=${locale}`)
+        if (contactResponse){
+            contact_title = contactResponse.title || '';
+            contact_content = contactResponse.content || '';
+            contact_img = contactResponse.image || '';
+
+        } else {
+            console.warn(`No contact data found for locale: ${locale}`);
         }
 
         // Fetch reservation form data
@@ -45,6 +60,9 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         title_title,
         title_subtitle,
         title_img,
+        contact_title,
+        contact_content,
+        contact_img,
         form_title,
         form_subtitle,
         form_img,

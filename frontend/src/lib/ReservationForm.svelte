@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { base } from '$app/paths'
-    import { LL, locale } from '$i18n/i18n-svelte'
+    import { base } from "$app/paths";
+    import { LL, locale } from "$i18n/i18n-svelte";
     import { goto } from "$app/navigation"; // Import the goto function
 
     export let title: string;
@@ -22,7 +22,7 @@
         // Example: Simulate a successful submission after a delay
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        goto(base+"/"+$locale+"/reservation_form");
+        goto(base + "/" + $locale + "/reservation_form");
     };
 
     function getFormattedDate(date: Date) {
@@ -38,9 +38,14 @@
         <div class="w-full h-full bg-[color:var(--color-bg-light)]/80">
             <div class="h-16"></div>
             <div class="container form_bg pt-4 pb-4">
+                <img
+                src="/svg/core_bg.svg"
+                alt="core_bg"
+                class="bg-cover bg-center absolute h-full bottom-0 right-[30vh]"
+            />
                 <form
                     on:submit|preventDefault={handleSubmit}
-                    class=" reservation_form"
+                    class="reservation_form text-[color:var(--color-text)]"
                 >
                     <h2>
                         {@html title}
@@ -53,7 +58,7 @@
                     >
                         <div>
                             <label for="dateInit" class="text-sm"
-                                >"arrival_date":</label
+                                >{$LL.arrival_date()}:</label
                             >
                             <input
                                 bind:value={dateInit}
@@ -65,7 +70,7 @@
                         </div>
                         <div>
                             <label for="dateEnd" class="text-sm"
-                                >"departure_date":</label
+                                >{$LL.departure_date()}:</label
                             >
                             <input
                                 bind:value={dateEnd}
@@ -78,7 +83,7 @@
                         </div>
                         <div>
                             <label for="n_people" class="text-sm"
-                                >"n_guest":</label
+                                >{$LL.n_guest()}:</label
                             >
                             <input
                                 bind:value={n_people}
@@ -93,7 +98,7 @@
                             <button
                                 class="core_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
                             >
-                                "check_availability"
+                            {$LL.check_availability()}
                             </button>
                         </div>
                     </div>

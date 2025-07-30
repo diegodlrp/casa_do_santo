@@ -5,6 +5,28 @@ from django.utils import timezone
 import datetime
 
 # Create your models here.
+
+class Guest(models.Model):
+    """
+    Model to store individual guest's contact and personal information.
+    """
+    name = models.CharField(max_length=100, verbose_name=_("Guest First Name"))
+    last_name = models.CharField(max_length=100, verbose_name=_("Guest Last Name"))
+    email = models.EmailField(unique=True, verbose_name=_("Guest Email")) # Make email unique for better lookup
+    phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
+    vat = models.CharField(max_length=20, blank=True, verbose_name=_("Guest VAT/Tax ID")) # Changed verbose_name for clarity
+
+    class Meta:
+        verbose_name = _("Guest")
+        verbose_name_plural = _("Guests")
+        # Add a unique_together constraint if a guest can be uniquely identified by name + last_name + email
+        # unique_together = ('name', 'last_name', 'email')
+        ordering = ['last_name', 'name']
+
+    def __str__(self):
+        return f"{self.name} {self.last_name} ({self.email})"
+
+
 class Reservation(models.Model):
     """
     Handles booking/reservation for the entire house
@@ -19,11 +41,33 @@ class Reservation(models.Model):
         ('no_show', _('No Show'))
     )
 
+    # --- PRIMARY GUEST REFERENCE ---
+    # The main guest making the reservation is now linked via ForeignKey.
+    # This replaces guest_first_name, guest_last_name, guest_email, guest_phone.
+    main_guest = models.ForeignKey(
+        Guest,
+        on_delete=models.SET_NULL, # If the Guest record is deleted, set this field to NULL
+        null=True,                 # Allow a reservation to exist without a main_guest (e.g., if deleted)
+        blank=True,                # Allow the field to be optional in forms/admin
+        related_name='main_reservations', # Renamed related_name for clarity
+        verbose_name=_("Main Guest")
+    )
+
+    # --- OTHER GUESTS REFERENCE ---
+    # Multiple other guests can be associated with this reservation.
+    other_guests = models.ManyToManyField(
+        Guest,
+        blank=True,
+        related_name='other_reservations', # Renamed for clarity
+        verbose_name=_("Other Guests")
+    )
+
     # Information about the primary guest making the reservation
-    guest_first_name = models.CharField(max_length=100, verbose_name=_("Guest First Name"))
-    guest_last_name = models.CharField(max_length=100, verbose_name=_("Guest Last Name"))
-    guest_email = models.EmailField(verbose_name=_("Guest Email"))
-    guest_phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
+    # >>> THESE FIELDS ARE NOW REMOVED/OBSOLETE <<<
+    # guest_first_name = models.CharField(max_length=100, verbose_name=_("Guest First Name"))
+    # guest_last_name = models.CharField(max_length=100, verbose_name=_("Guest Last Name"))
+    # guest_email = models.EmailField(verbose_name=_("Guest Email"))
+    # guest_phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
 
     # Reservation period
     check_in_date = models.DateField(verbose_name=_("Check-in Date"))
@@ -92,7 +136,10 @@ class Reservation(models.Model):
         ordering = ['check_in_date', 'check_out_date']
 
     def __str__(self):
-        return f"Reservation for {self.guest_first_name} {self.guest_last_name} from {self.check_in_date} to {self.check_out_date}"
+        # Now uses the main_guest's name
+        if self.main_guest:
+            return f"Reservation for {self.main_guest.name} {self.main_guest.last_name} from {self.check_in_date} to {self.check_out_date}"
+        return f"Reservation (ID: {self.pk}) from {self.check_in_date} to {self.check_out_date}"
 
     def clean(self):
         """
@@ -104,6 +151,9 @@ class Reservation(models.Model):
                 raise ValidationError(
                     _("Check-out date must be after check-in date.")
                 )
+
+        # Corrected: Use 'total_guests' (plural) matching your model field name
+        self.total_guests = self.num_adults + self.num_children
 
         # Ensure minimum 1 adult
         if self.num_adults < 1:
@@ -117,41 +167,9 @@ class Reservation(models.Model):
                 _("Check-in date cannot be in the past.")
             )
 
-        # Calculate total guests
-        self.total_guests = self.num_adults + self.num_children
-
         # Calculate total price (can be done here or in save/signal)
-        if self.daily_rate and self.num_nights > 0:
-            self.total_price = self.daily_rate * self.num_nights
+        # Ensure num_nights is calculated first if dates are set
+        if self.daily_rate and self.check_in_date and self.check_out_date: # Ensure dates are present for num_nights
+            self.total_price = self.daily_rate * 3
         else:
             self.total_price = 0 # Default if dates/rate not set yet
-
-
-    def save(self, *args, **kwargs):
-        """
-        Override save to run full validation and calculate derived fields.
-        """
-        self.full_clean() # Calls clean() and validates all fields
-        super().save(*args, **kwargs)
-
-    @property
-    def num_nights(self):
-        """Calculates the number of nights for the reservation."""
-        if self.check_in_date and self.check_out_date:
-            return (self.check_out_date - self.check_in_date).days
-        return 0
-
-    # You might add a method here to check for overlaps
-    def is_house_available(self, check_in, check_out):
-        """
-        Checks if the house is available for the given dates.
-        This is a crucial logic that would be handled in views/serializers,
-        but a method here can help for initial checks.
-        """
-        # Exclude current reservation if updating
-        conflicting_reservations = Reservation.objects.filter(
-            check_in_date__lt=check_out, # Check-in before desired check-out
-            check_out_date__gt=check_in,  # Check-out after desired check-in
-        ).exclude(pk=self.pk if self.pk else None) # Exclude self if updating
-
-        return not conflicting_reservations.exists()

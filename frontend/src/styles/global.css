@@ -6,7 +6,12 @@
     --color-bg-light: #f4ece1;
     --color-text: #fff;
     --color-text-caption: #c8a655;
+    --color-text-dark: #393228;
 
+}
+
+.text_dark {
+    @apply text-[color:var(--color-text-dark)]
 }
 
 html {
@@ -56,5 +61,5 @@ h3 {
 
 /* buttons */
 .core_button {
-    @apply bg-[color:var(--color-text-caption)] text-[color:var(--color-bg-dark)] uppercase p-[15px] text-center mt-[30px] -translate-x-1/2 left-1/2 text-sm font-bold cursor-pointer
+    @apply bg-[color:var(--color-text-caption)] text-[color:var(--color-bg-dark)] uppercase p-[15px] text-center text-sm font-bold cursor-pointer
 }

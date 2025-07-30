@@ -1,10 +1,15 @@
 import type { PageServerLoad } from './$types'
 import { apiRequest } from '$lib/services/apiService';
 
-export const prerender = true;
+// export const prerender = true;
 
-export const load: PageServerLoad = async ({ locals: { LL } }) => {
+export const load: PageServerLoad = async ({ locals: { LL }, url, depends }) => {
+    // Add this line to tell SvelteKit that this load function depends on the URL's search string.
+    // This will cause the load function to re-run whenever the query parameters change.
+    depends('url:search'); 
+
     const locale = LL.locale();
+    const room = url.searchParams.get('room');
 
     let title = '';
     let subtitle = '';
@@ -24,19 +29,34 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         } else {
             console.warn(`No title data found for locale: ${locale}`);
         }
+        if (room) {
+            // Fetch image data
+            const imageResponse = await apiRequest('/page_content/'+room+'/?lang=${locale}');
+            if (imageResponse) {
 
-        // Fetch image data
-        const imageResponse = await apiRequest('/tags/gallery/page_content/');
-        if (titleResponse) {
-		    img_data = imageResponse.map((result: any) => ({
-                alt: result['slug'],
-                src: result['image']
-            }));
+                img_data = imageResponse.gallery_images.map((result: any) => ({
+                    alt: result['caption'],
+                    src: result['image_file']
+                }));
+            } else {
+                console.warn(`No images `+room+` data found for locale: ${locale}`);
+            }
         } else {
-            console.warn(`No images data found for locale: ${locale}`);
+            // Fetch image data
+            const imageResponse = await apiRequest('/images/');
+            if (imageResponse) {
+                img_data = imageResponse.map((result: any) => ({
+                    alt: result['caption'],
+                    src: result['image_file']
+                }));
+            } else {
+                console.warn(`No images data found for locale: ${locale}`);
+            }
+
         }
 
-    }catch (e: any) {
+
+    } catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
     }

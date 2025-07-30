@@ -25,7 +25,7 @@
           "content": "Known historically as 'the End of the World,' Finisterre is a dramatic cape where pilgrims traditionally continued their journey after Santiago to burn their Camino clothes and watch the sunset over the vast Atlantic. Its lighthouse, stunning cliffs, and powerful sense of history make it an unforgettable destination.",
           "content_es": "Conocido históricamente como 'el Fin del Mundo', Finisterre es un dramático cabo donde los peregrinos tradicionalmente continuaban su viaje después de Santiago para quemar sus ropas del Camino y ver la puesta de sol sobre el vasto Atlántico. Su faro, impresionantes acantilados y un poderoso sentido de la historia lo convierten en un destino inolvidable.",
           "content_gl": "Coñecido historicamente como 'o Fin do Mundo', Fisterra é un dramático cabo onde os peregrinos tradicionalmente continuaban a súa viaxe despois de Santiago para queimar as súas roupas do Camiño e ver a posta de sol sobre o vasto Atlántico. O seu faro, impresionantes cantís e un poderoso sentido da historia convérteno nun destino inesquecible.",
-          "image": "finisterre.jpg",
+          "featured_image": "finisterre.jpg",
           "tags": [
             "locations",
             "gallery"
@@ -42,7 +42,7 @@
           "content": "Beyond Finisterre, the 'Coast of Death' stretches with its wild, untamed beauty. This dramatic coastline is famed for its rugged cliffs, treacherous waters, and numerous shipwrecks. Explore charming fishing villages like Muxía, enjoy fresh seafood, and immerse yourself in the raw natural power of Galicia.",
           "content_es": "Más allá de Finisterre, la 'Costa da Morte' se extiende con su belleza salvaje e indómita. Esta dramática línea costera es famosa por sus acantilados escarpados, sus peligrosas aguas y sus numerosos naufragios. Explore encantadores pueblos pesqueros como Muxía, disfrute del marisco fresco y sumérjase en la fuerza natural y cruda de Galicia.",
           "content_gl": "Máis alá de Fisterra, a 'Costa da Morte' esténdese coa súa beleza salvaxe e indómita. Esta dramática liña costeira é famosa polos seus cantís escarpados, as súas perigosas augas e os seus numerosos naufraxios. Explore encantadoras vilas de pescadores como Muxía, goce do marisco fresco e mergúllese na forza natural e crúa de Galicia.",
-          "image": "costa_da_morte.jpg",
+          "featured_image": "costa_da_morte.jpg",
           "tags": [
             "locations",
             "gallery"
@@ -59,7 +59,7 @@
           "content": "Just a short drive from Santiago, Padrón holds significant historical and cultural importance. It's famously the landing site of St. James's boat and the hometown of revered Galician poet Rosalía de Castro. Don't miss sampling the famous 'Pimientos de Padrón' (Padrón peppers) – some mild, some spicy!",
           "content_es": "A poca distancia de Santiago, Padrón posee una gran importancia histórica y cultural. Es famoso por ser el lugar de desembarco de la barca del Apóstol Santiago y la ciudad natal de la venerada poeta gallega Rosalía de Castro. ¡No deje de probar los famosos 'Pimientos de Padrón' – algunos suaves, otros picantes!",
           "content_gl": "A pouca distancia de Santiago, Padrón posúe unha gran importancia histórica e cultural. É famoso por ser o lugar de desembarco da barca do Apóstolo Santiago e a vila natal da venerada poeta galega Rosalía de Castro. Non deixe de probar os famosos 'Pementos de Padrón' – algúns suaves, outros picantes!",
-          "image": "padron.jpg",
+          "featured_image": "padron.jpg",
           "tags": [
             "locations",
             "gallery"
@@ -76,7 +76,7 @@
           "content": "Venture into the breathtaking Ribeira Sacra, a landscape carved by the Sil and Miño rivers, famous for its ancient terraced vineyards clinging to steep slopes. This region, literally 'Sacred Riverbank,' is dotted with medieval monasteries, offering stunning views and exquisite wines. A truly unique and scenic experience.",
           "content_es": "Adéntrese en la impresionante Ribeira Sacra, un paisaje esculpido por los ríos Sil y Miño, famosa por sus antiguos viñedos en terraza que se aferran a empinadas laderas. Esta región, literalmente 'Ribera Sagrada', está salpicada de monasterios medievales, ofreciendo vistas impresionantes y vinos exquisitos. Una experiencia verdaderamente única y pintoresca.",
           "content_gl": "Atrévese a entrar na impresionante Ribeira Sacra, unha paisaxe esculpida polos ríos Sil e Miño, famosa polos seus antigos viñedos en socalcos que se aferran a empinadas ladeiras. Esta rexión, literalmente 'Ribeira Sacra', está salpicada de mosteiros medievais, ofrecendo vistas impresionantes e viños exquisitos. Unha experiencia verdadeiramente única e pintoresca.",
-          "image": "ribeira_sacra.jpg",
+          "featured_image": "ribeira_sacra.jpg",
           "tags": [
             "locations",
             "gallery"
@@ -93,7 +93,7 @@
           "content": "Discover the Rías Baixas, Galicia's renowned wine region, famous for its crisp Albariño white wines. This area is characterized by its estuaries (rías) that delve inland, creating a lush, green landscape dotted with vineyards and bustling fishing ports. Indulge in exquisite seafood and explore charming coastal towns like Cambados.",
           "content_es": "Descubra las Rías Baixas, la reconocida región vinícola de Galicia, famosa por sus frescos vinos blancos Albariño. Esta zona se caracteriza por sus estuarios (rías) que se adentran en el interior, creando un paisaje verde y exuberante salpicado de viñedos y animados puertos pesqueros. Deléitese con exquisito marisco y explore encantadoras ciudades costeras como Cambados.",
           "content_gl": "Descubra as Rías Baixas, a recoñecida rexión vinícola de Galicia, famosa polos seus frescos viños brancos Albariño. Esta zona caracterízase polos seus estuarios (rías) que se adentran no interior, creando unha paisaxe verde e exuberante salpicada de viñedos e animados portos pesqueiros. Deléitese con exquisito marisco e explore encantadoras cidades costeiras como Cambados.",
-          "image": "rias_baixas.jpg",
+          "featured_image": "rias_baixas.jpg",
           "tags": [
             "locations",
             "gallery"

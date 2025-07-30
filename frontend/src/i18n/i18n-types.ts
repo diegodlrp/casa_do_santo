@@ -52,6 +52,10 @@ type RootTranslation = {
 	 */
 	home: string
 	/**
+	 * L​a​n​g​u​a​g​e
+	 */
+	language: string
+	/**
 	 * L​e​g​a​l​ ​N​o​t​i​c​e
 	 */
 	legal_notice: string
@@ -67,6 +71,10 @@ type RootTranslation = {
 	 * E​m​a​i​l
 	 */
 	mail: string
+	/**
+	 * M​e​s​s​a​g​e
+	 */
+	message: string
 	/**
 	 * M​o​r​e​ ​p​h​o​t​o​s
 	 */
@@ -156,6 +164,10 @@ export type TranslationFunctions = {
 	 */
 	home: () => LocalizedString
 	/**
+	 * Language
+	 */
+	language: () => LocalizedString
+	/**
 	 * Legal Notice
 	 */
 	legal_notice: () => LocalizedString
@@ -171,6 +183,10 @@ export type TranslationFunctions = {
 	 * Email
 	 */
 	mail: () => LocalizedString
+	/**
+	 * Message
+	 */
+	message: () => LocalizedString
 	/**
 	 * More photos
 	 */

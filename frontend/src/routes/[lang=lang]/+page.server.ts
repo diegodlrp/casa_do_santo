@@ -5,7 +5,7 @@ export const prerender = true;
 
 export const load: PageServerLoad = async ({ locals: { LL } }) => {
 	const locale = LL.locale();
-	
+
 	let title = '';
     let img = '';
     let address = '';

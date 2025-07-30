@@ -5,3 +5,5 @@ django-modeltranslation==0.16.2
 djangorestframework
 django-cors-headers
 black
+dotenv
+reportlab

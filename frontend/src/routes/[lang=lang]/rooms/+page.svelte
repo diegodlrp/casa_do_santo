@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
+    import { LL } from "$i18n/i18n-svelte";
     import Title from "$lib/Title.svelte";
     import ReservationForm from "$lib/ReservationForm.svelte";
 
@@ -7,19 +8,20 @@
 
     // Destructure the data directly
     const {
-        title,
-        content,
         img,
-        rooms_data,
-        title_title,
-        title_subtitle,
         title_img,
-        form_title,
-        form_subtitle,
         form_img,
         error,
     } = data;
-    console.log("data", data);
+
+    $: title = data.title;
+    $: content = data.content;
+    $: rooms_data = data.rooms_data;
+    $: title_title = data.title_title;
+    $: title_subtitle = data.title_subtitle;
+    $: form_title = data.form_title;
+    $: form_subtitle = data.form_subtitle;
+    
 </script>
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
@@ -90,7 +92,7 @@
 
                     <div class="text-base text-white leading-[31px] font-montserrat text-center">{@html room.content}</div>
 
-                    <a href="gallery" type="submit" class="core_button absolute">'more_photos'</a>
+                    <a href="gallery?room={room.slug}" type="submit" class="core_button mt-[30px] absolute hover:scale-105 active:scale-95 transition">{$LL.more_photos()}</a>
                 </div>
             </div>
 

@@ -25,7 +25,7 @@
           "content": "Our charming location offers the perfect blend of tranquility and convenience, just a stone's throw from the historic city of Santiago de Compostela. Enjoy the peace of the Galician countryside while being mere minutes from the vibrant cultural attractions and spiritual journey of the Camino.",
           "content_es": "Nuestra encantadora ubicación ofrece la mezcla perfecta de tranquilidad y comodidad, a un paso de la histórica ciudad de Santiago de Compostela. Disfrute de la paz del campo gallego mientras se encuentra a pocos minutos de las vibrantes atracciones culturales y el viaje espiritual del Camino.",
           "content_gl": "A nosa encantadora ubicación ofrece a mestura perfecta de tranquilidade e comodidade, a un paso da histórica cidade de Santiago de Compostela. Goce da paz do campo galego mentres se atopa a poucos minutos das vibrantes atraccións culturais e a viaxe espiritual do Camiño.",
-          "image": "service_location.jpg",
+          "featured_image": "service_location.jpg",
           "tags": [
             "services",
             "gallery"
@@ -42,7 +42,7 @@
           "content": "Our spacious rural home is designed to comfortably accommodate up to 6 persons, making it ideal for families or small groups. With ample living areas, cozy bedrooms, and shared spaces, everyone can relax and enjoy their stay together while still having room to unwind individually.",
           "content_es": "Nuestra espaciosa casa rural está diseñada para alojar cómodamente hasta 6 personas, lo que la hace ideal para familias o grupos pequeños. Con amplias zonas de estar, acogedoras habitaciones y espacios compartidos, todos pueden relajarse y disfrutar de su estancia juntos, al tiempo que tienen espacio para el descanso individual.",
           "content_gl": "A nosa espazosa casa rural está deseñada para aloxar comodamente ata 6 persoas, o que a fai ideal para familias ou pequenos grupos. Con amplas zonas de estar, acolledoras habitacións e espazos compartidos, todos poden relaxarse e gozar da súa estancia xuntos, ao mesmo tempo que teñen espazo para o descanso individual.",
-          "image": "service_space.jpg",
+          "featured_image": "service_space.jpg",
           "tags": [
             "services",
             "gallery"
@@ -59,7 +59,7 @@
           "content": "Enjoy the convenience and peace of mind of our dedicated private parking area, capable of accommodating up to two vehicles. Located directly on the premises, it offers easy access to the house and ensures your car is secure throughout your stay.",
           "content_es": "Disfrute de la comodidad y tranquilidad de nuestra zona de estacionamiento privado dedicada, con capacidad para hasta dos vehículos. Ubicado directamente en la propiedad, ofrece fácil acceso a la casa y garantiza la seguridad de su coche durante toda su estancia.",
           "content_gl": "Goce da comodidade e tranquilidade da nosa zona de estacionamento privado dedicada, con capacidade para ata dous vehículos. Situado directamente na propiedade, ofrece fácil acceso á casa e garante a seguridade do seu coche durante toda a súa estancia.",
-          "image": "service_parking.jpg",
+          "featured_image": "service_parking.jpg",
           "tags": [
             "services",
             "gallery"
@@ -76,7 +76,7 @@
           "content": "Unlike traditional rentals, we offer you the unique opportunity to rent the entire Casa do Santo building. This ensures complete privacy and exclusive access to all facilities, allowing you to create a truly private and intimate experience with your loved ones, without sharing any spaces.",
           "content_es": "A diferencia de los alquileres tradicionales, le ofrecemos la oportunidad única de alquilar todo el edificio de Casa do Santo. Esto garantiza total privacidad y acceso exclusivo a todas las instalaciones, permitiéndole crear una experiencia verdaderamente privada e íntima con sus seres queridos, sin compartir ningún espacio.",
           "content_gl": "A diferencia dos alugueres tradicionais, ofrecémosche a oportunidade única de alugar todo o edificio da Casa do Santo. Isto garante total privacidade e acceso exclusivo a todas as instalacións, permitíndoche crear unha experiencia verdadeiramente privada e íntima cos teus seres queridos, sen compartir ningún espazo.",
-          "image": "service_wholehouse.jpg",
+          "featured_image": "service_wholehouse.jpg",
           "tags": [
             "services",
             "gallery"

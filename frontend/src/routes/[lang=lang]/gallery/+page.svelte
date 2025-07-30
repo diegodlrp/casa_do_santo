@@ -7,7 +7,11 @@
     let selected_index: number | null = null;
 
     // Destructure the data directly
-    const { title, subtitle, img, img_data, error } = data;
+    $: title = data.title;
+    $: subtitle = data.subtitle;
+    $: img = data.img;
+    $: img_data = data.img_data;
+    $: error = data.error;
 
     function openLightbox(index: number) {
 		selected_index = index;
@@ -19,7 +23,7 @@
 </script>
 
 <Title {title} {subtitle} {img} />
-<div class="py-12 px-4 z-950">
+<div class="py-12 px-4 z-950 min-h-[calc(100vh-20px)]">
     <div class="container mx-auto">
         {#if img_data.length > 0}
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

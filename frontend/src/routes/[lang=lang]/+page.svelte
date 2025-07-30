@@ -3,29 +3,31 @@
 	import RiMailLine from "svelte-remixicon/RiMailLine.svelte";
 	import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
 	import type { PageData } from "./$types";
-    import ReservationForm from "$lib/ReservationForm.svelte";
+	import ReservationForm from "$lib/ReservationForm.svelte";
 
 	export let data: PageData;
 
 	// Destructure the data directly
 	const {
-		title,
+		
 		img,
 		address,
 		email,
 		phone,
-		page_content_title,
-		page_content_subtitle,
-		page_content,
-		about_us_title,
-        about_us_subtitle,
-        about_us_content,
-        about_us_img,
-		form_title,
-		form_subtitle,
+		about_us_img,
 		form_img,
 		error,
 	} = data;
+	
+	$: title = data.title;
+	$: page_content_title = data.page_content_title;
+	$: page_content_subtitle = data.page_content_subtitle;
+	$: page_content = data.page_content;
+	$: about_us_title = data.about_us_title;
+	$: about_us_subtitle = data.about_us_subtitle;
+	$: about_us_content = data.about_us_content;
+	$: form_title = data.form_title;
+	$: form_subtitle = data.form_subtitle;
 
 </script>
 
@@ -90,96 +92,72 @@
 
 <!-- HOME PAGE CONTENT -->
 <div id="home_page_content" class="pt-[36px] pb-[100px] relative w-full">
-
-		<div class=" min-h-[64px]"></div>
-		<div>
+	<img
+				src="/svg/core_bg_dark.svg"
+				alt="core_bg"
+				class="bg-cover bg-center absolute h-full right-0"
+			/>
+	<div class="min-h-[64px]"></div>
+	<div class="p-4 relative">
+		<div class="container">
+			
 			<div>
-                <div>
-                    <h1>{@html page_content_title}</h1><br>
-                </div>
-				
-                <div>
-                    <h2 >{@html page_content_subtitle}</h2><br>
-                    <h4>{@html page_content}</h4>
-                </div>
-				
+				<h2 class="text-center m-[30px]">{@html page_content_title}</h2>
 			</div>
 
-			<!-- <ServicesComponent /> -->
+			<div>
+				<h3 class="text-center text-[27px]">
+					<span class="text_dark">{@html page_content_subtitle}</span>
+				</h3>
+				<br />
+				<h4 class="text_dark">{@html page_content}</h4>
+			</div>
 		</div>
-		<!-- <img
-			src="/svg/main_bg_gray.svg"
-			alt="background_room_core_left"
-			class="absolute top-0 left-0 img_2 z-0 main_img rotate-180"
-		/>
 
-		<img
-			src="/svg/main_bg_gray.svg"
-			alt="background_room_core_right"
-			class="absolute top-0 right-0 img_2 img_flip z-0 main_img rotate-180"
-		/> -->
-
+		<!-- <ServicesComponent /> -->
+	</div>
 </div>
 <!-- END -->
 
 <!-- HOME About Us -->
-<div id="home_page_about_us">
-	<div>
-		<div>
-			<div>
+<div
+	id="home_page_about_us"
+	class="bg-cover bg-center"
+	style="background-image: url({about_us_img}); opacity: 1;"
+>
+	<div class="relative py-0 md:py-0 bg-[color:var(--color-bg-dark)]/80">
+		<div class="flex flex-col md:flex-row">
+			<div class="w-full md:w-1/3">
 				<img src={about_us_img} alt="about_us" class="w-full" />
 			</div>
 
-			<div>
-
-
-
-
-
-
-
-
-
-				<div>
-					<div>
-						<div
-						
-						>
-							<h1>
+			<div class="w-full md:w-2/3 bg-cover bg-center">
+				<div
+					class="relative h-[100%] "
+				>
+					<div class="py-0 px-[65px] xl:mt-[160px] lg:mt-[90px] md:mt-[40px] ">
+						<img
+							src="/svg/core_bg.svg"
+							alt="core_bg"
+							class="bg-cover bg-center absolute h-full right-0"
+						/>
+						<div>
+							<h2 class="text-center m-[30px]">
 								{@html about_us_title}
-							</h1>
-							
-								<h4
-									
-								>
-									{@html about_us_subtitle}
-								</h4>
-							
+							</h2>
+
+							<h3 class="text-center text-[27px]">
+								{@html about_us_subtitle}
+							</h3>
 						</div>
 					</div>
-	
+
 					<div
-						
+						class="text-base text-white leading-[31px] font-montserrat text-center pl-4 pr-4 xl:mb-[160px] lg:mb-[90px] mb-[40px]"
 					>
-						<div >
-							<p >
-								{@html about_us_content}
-							</p>
-						</div>
+						{@html about_us_content}
 					</div>
 				</div>
-
-
-
-
-
-
-
-
-
-
-
-
 			</div>
 		</div>
 	</div>
@@ -188,6 +166,10 @@
 
 <!-- HOME Reservation FormT -->
 <div id="home_page_reservation_form">
-	<ReservationForm title={form_title} subtitle={form_subtitle} img={form_img}/>
+	<ReservationForm
+		title={form_title}
+		subtitle={form_subtitle}
+		img={form_img}
+	/>
 </div>
 <!-- END -->

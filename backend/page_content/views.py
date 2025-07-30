@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import PageContentSerializer, TagSerializer
-from .models import PageContent, Tag
+from .serializers import PageContentSerializer, TagSerializer, ImageSerializer
+from .models import PageContent, Tag, Image
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -78,3 +78,11 @@ class PageContentViewSet(ModelViewSet):
                 return Response(serializer.data)
         # Using super().list() is good here if no language override is needed
         return super().list(request, *args, **kwargs)
+
+class ImageViewSet(ModelViewSet):
+    """
+    API endpoint that allows Image to be viewed or edited.
+    """
+    queryset = Image.objects.all().order_by("id")
+    serializer_class = ImageSerializer
+    lookup_field = 'caption'

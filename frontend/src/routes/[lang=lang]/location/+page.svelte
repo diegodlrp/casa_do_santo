@@ -12,10 +12,9 @@
 		error,
 	} = data;
 
-    console.log("img", img)
 </script>
 <Title title={title} subtitle={subtitle} img={img}/>
 <div
-            class="relative w-[100%] h-[calc(100vh-20px)] sm:h-[calc(100vh-36px)] overflow-hidden"
+            class="relative w-[100%] min-h-[calc(100vh-20px)] sm:h-[calc(100vh-36px)] overflow-hidden"
         >
 </div>

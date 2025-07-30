@@ -26,7 +26,7 @@
           "content": "Step into Casa do Santo through our charming entrance, leading directly into a comfortable and inviting living area. This cozy space is perfect for unwinding after a day of exploration, sharing stories, or simply enjoying a quiet moment by the fireplace with a good book.",
           "content_es": "Adéntrese en Casa do Santo a través de nuestra encantadora entrada, que conduce directamente a una cómoda y acogedora sala de estar. Este espacio íntimo es perfecto para relajarse después de un día de exploración, compartir historias o simplemente disfrutar de un momento de tranquilidad junto a la chimenea con un buen libro.",
           "content_gl": "Adéntrese na Casa do Santo a través da nosa encantadora entrada, que conduce directamente a unha cómoda e acolledora sala de estar. Este espazo íntimo é perfecto para relaxarse despois dun día de exploración, compartir historias ou simplemente gozar dun momento de tranquilidade xunto á lareira cun bo libro.",
-          "image": "room_entry.jpg",
+          "featured_image": "room_entry.jpg",
           "tags": [
             "rooms",
             "gallery"
@@ -43,7 +43,7 @@
             "content": "This beautifully restored kitchen breathes new life into traditional design. Thoughtfully updated with modern amenities, it retains its original character with **exposed wooden beams**. It's a warm, inviting space perfect for both lively gatherings and quiet mornings.",
             "content_es": "Esta cocina bellamente restaurada insufla nueva vida al diseño tradicional. Cuidadosamente actualizada con comodidades modernas, conserva su carácter original con **vigas de madera expuestas**. Es un espacio cálido y acogedor, perfecto tanto para reuniones animadas como para mañanas tranquilas.",
             "content_gl": "Esta cociña belamente restaurada insufla nova vida ao deseño tradicional. Coidadosamente actualizada con comodidades modernas, conserva o seu carácter orixinal con **vigas de madeira expostas**. É un espazo cálido e acolledor, perfecto tanto para reunións animadas como para mañás tranquilas.",
-            "image": "room_kitchen.jpg",
+            "featured_image": "room_kitchen.jpg",
             "tags": [
               "rooms",
               "gallery"
@@ -60,7 +60,7 @@
             "content": "This isn't just a living room; it's a testament to the house's rich past. Thoughtfully maintained original features, such as **rustic hardwood floors**, invite you to unwind. It's a truly authentic space, designed for comfort and reflecting the unique story of this traditional Galician country home.",
             "content_es": "Este no es solo un salón; es un testimonio del rico pasado de la casa. Las características originales cuidadosamente mantenidas, como los **suelos de madera rústica**, invitan a relajarse. Es un espacio verdaderamente auténtico, diseñado para la comodidad y que refleja la historia única de esta casa rural tradicional gallega.",
             "content_gl": "Esta non é só unha sala de estar; é un testemuño do rico pasado da casa. As características orixinais coidadosamente mantidas, como os **chanos de madeira rústica**, invítano a relaxarse. É un espazo verdadeiramente auténtico, deseñado para o confort e que reflicte a historia única desta casa rural tradicional galega.",
-            "image": "room_livingroom.jpg",
+            "featured_image": "room_livingroom.jpg",
             "tags": [
               "rooms",
               "gallery"
@@ -77,7 +77,7 @@
             "content": "A lovely, updated bathroom that blends old charm with new comforts. It's clean, bright, and has everything you need.",
             "content_es": "Un baño encantador y actualizado que combina el encanto antiguo con las comodidades modernas. Es limpio, luminoso y tiene todo lo que necesitas.",
             "content_gl": "Un baño encantador e actualizado que combina o encanto antigo coas comodidades modernas. É limpo, luminoso e ten todo o que precisas.",
-            "image": "room_bathroom.jpg",
+            "featured_image": "room_bathroom.jpg",
             "tags": [
               "rooms",
               "gallery"
@@ -94,7 +94,7 @@
             "content": "Discover comfort in our cozy bedroom, designed for restful nights. It features a comfortable bed, soft linens, and thoughtful touches that create a peaceful atmosphere, perfect for unwinding after a day of exploring. Wake up refreshed and ready for new adventures.",
             "content_es": "Descubra el confort en nuestro acogedor dormitorio, diseñado para noches de descanso. Cuenta con una cama cómoda, ropa de cama suave y detalles pensados que crean una atmósfera de paz, perfecta para relajarse después de un día de exploración. Despierte renovado y listo para nuevas aventuras.",
             "content_gl": "Descubra o confort no noso acolledor dormitorio, deseñado para noites de descanso. Conta cunha cama cómoda, roupa de cama suave e detalles pensados que crean unha atmosfera de paz, perfecta para relaxarse despois dun día de exploración. Espérte renovado e listo para novas aventuras.",
-            "image": "room_bedroom.jpg",
+            "featured_image": "room_bedroom.jpg",
             "tags": [
               "rooms",
               "gallery"

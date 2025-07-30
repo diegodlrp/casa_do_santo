@@ -5,7 +5,7 @@ from django.db import transaction
 from django.core.files import File  # <-- Import File class
 
 from django.contrib.auth.models import User
-from page_content.models import Tag, PageContent
+from page_content.models import Tag, PageContent, Image
 # from web_data.models import WebData
 from django.conf import settings  # Import settings to get MEDIA_ROOT
 
@@ -182,7 +182,7 @@ class Command(BaseCommand):
                                 "tags", []
                             )  # List of tag names from JSON
                             image_filename = item.pop(
-                                "image", None
+                                "featured_image", None
                             )  # Image filename from JSON
 
                             if not options["dry_run"]:
@@ -234,21 +234,45 @@ class Command(BaseCommand):
 
                                 # Handle the image file for the PageContent
                                 if image_filename:
+                                    
+                                    print("\n\n\n")
+                                    print("image_filename",image_filename)
                                     image_path = os.path.join(
                                         SEED_IMAGES_DIR, image_filename
                                     )
                                     if os.path.exists(image_path):
-                                        with open(image_path, "rb") as f:
-                                            # Save the image to the ImageField
-                                            page_content.image.save(
-                                                image_filename, File(f)
+       
+                                        try:
+                                            with open(image_path, "rb") as f:
+                                                # 1. Create a Django File object from the opened file.
+                                                # The 'name' argument ensures the file is saved with its original filename.
+                                                image_file_obj = File(f, name=image_filename)
+
+                                                # 2. Create an instance of your Image model.
+                                                # Assign the File object to the 'image_file' field.
+                                                # Optionally, add a caption.
+                                                new_image_instance = Image.objects.create(
+                                                    image_file=image_file_obj,
+                                                    caption=f"Featured image for {slug}" # A descriptive caption
+                                                )
+
+                                                # 3. Assign this new Image instance to the OneToOneField on PageContent.
+                                                page_content.featured_image = new_image_instance
+                                                # 4. Crucial: Save the page_content instance to update the OneToOne relationship in the database.
+                                                page_content.save()
+
+                                            self.stdout.write(
+                                                self.style.SUCCESS(
+                                                    f"    Attached featured image: '{image_filename}' to '{slug}'"
+                                                )
                                             )
-                                            # No need for an extra page_content.save() here as .save() on ImageField does it
-                                        self.stdout.write(
-                                            self.style.SUCCESS(
-                                                f"    Attached image: '{image_filename}' to '{slug}'"
+                                        except Exception as e:
+                                            self.stdout.write(
+                                                self.style.ERROR(
+                                                    f"    Error processing featured image '{image_filename}' for '{slug}': {e}"
+                                                )
                                             )
-                                        )
+
                                     else:
                                         self.stdout.write(
                                             self.style.WARNING(
@@ -261,6 +285,9 @@ class Command(BaseCommand):
                                             f"    No image filename provided for page: '{slug}'."
                                         )
                                     )
+
+
+
                             else:  # Dry run for page content
                                 self.stdout.write(
                                     self.style.NOTICE(

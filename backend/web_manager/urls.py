@@ -20,16 +20,18 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework import routers
 
-from page_content.views import TagViewSet, PageContentViewSet
+from page_content.views import TagViewSet, PageContentViewSet, ImageViewSet
 from reservation.views import ReservationViewSet
 
 router = routers.DefaultRouter()
 router.register(r"page_content", PageContentViewSet)
 router.register(r"tags", TagViewSet)
+router.register(r"images", ImageViewSet)
 router.register(r"reservations", ReservationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
+    path("api/", include("api_service.urls")),
     path("", include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

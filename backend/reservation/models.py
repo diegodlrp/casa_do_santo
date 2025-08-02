@@ -12,9 +12,10 @@ class Guest(models.Model):
     """
     name = models.CharField(max_length=100, verbose_name=_("Guest First Name"))
     last_name = models.CharField(max_length=100, verbose_name=_("Guest Last Name"))
-    email = models.EmailField(unique=True, verbose_name=_("Guest Email")) # Make email unique for better lookup
+    email = models.EmailField(verbose_name=_("Guest Email"), blank=True) # Make email unique for better lookup
     phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
     vat = models.CharField(max_length=20, blank=True, verbose_name=_("Guest VAT/Tax ID")) # Changed verbose_name for clarity
+    adult = models.BooleanField(verbose_name=_("Guest adult"))
 
     class Meta:
         verbose_name = _("Guest")

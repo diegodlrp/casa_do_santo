@@ -1,10 +1,12 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
+  import { page } from "$app/stores";
   import { onMount } from "svelte";
 
   // Define a type for an individual guest
   interface Guest {
-    fullname: string;
+    name: string;
+    last_name: string;
     vat: string;
     adult: boolean;
   }
@@ -15,10 +17,10 @@
     guest_last_name: string;
     guest_email: string;
     guest_phone: string;
+    guest_vat: string;
+    guest_adult: boolean;
     check_in_date: string;
     check_out_date: string;
-    num_adults: number;
-    num_children: number;
     special_requests: string;
     // New: Array to hold additional guests
     additional_guests: Guest[];
@@ -30,10 +32,10 @@
     guest_last_name: "",
     guest_email: "",
     guest_phone: "",
+    guest_vat: "",
+    guest_adult: true,
     check_in_date: "",
     check_out_date: "",
-    num_adults: 1, // Minimum 1 adult (primary guest)
-    num_children: 0,
     special_requests: "",
     additional_guests: [], // Start with no additional guests
   };
@@ -50,7 +52,8 @@
     const month = (d.getMonth() + 1).toString().padStart(2, "0");
     const day = d.getDate().toString().padStart(2, "0");
     today = `${year}-${month}-${day}`;
-
+    // formData.check_in_date = $page.url.searchParams.get('check_in');
+    // formData.check_out_date = $page.url.searchParams.get('check_out');
     if (
       !formData.check_in_date ||
       new Date(formData.check_in_date) < new Date(today)
@@ -82,7 +85,7 @@
   function addGuest() {
     formData.additional_guests = [
       ...formData.additional_guests,
-      { first_name: "", last_name: "", email: "", phone: "" },
+      { name: "", last_name: "", vat: "", adult: false },
     ];
     // Clear any previous general errors related to guest count if they were there
     if (
@@ -108,17 +111,14 @@
     index: number,
   ): { [key: string]: string[] } {
     const guestErrors: { [key: string]: string[] } = {};
-    if (!guest.first_name.trim()) {
+    if (!guest.name.trim()) {
       guestErrors.first_name = ["El nombre es requerido."];
     }
     if (!guest.last_name.trim()) {
       guestErrors.last_name = ["El apellido es requerido."];
     }
-    if (
-      !guest.email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guest.email)
-    ) {
-      guestErrors.email = ["Por favor, introduce un email válido."];
+    if (!guest.vat.trim()) {
+      guestErrors.last_name = ["El DNI es requerido."];
     }
     return guestErrors;
   }
@@ -164,12 +164,6 @@
       }
     }
 
-    // Validate Number of Adults (already handled by min="1" but good to have client-side backup)
-    if (formData.num_adults < 1) {
-      errors.num_adults = ["Debe haber al menos un adulto."];
-      isValid = false;
-    }
-
     // Validate Additional Guests
     const additionalGuestErrors: { [key: string]: string[] }[] = [];
     formData.additional_guests.forEach((guest, index) => {
@@ -190,12 +184,6 @@
     totalGuests += formData.additional_guests.length; // Add number of additional guests
 
     // If you want to enforce num_adults to be at least (1 + number of additional_guests)
-    if (formData.num_adults < totalGuests) {
-      errors.num_adults = [
-        `El número de adultos debe ser al menos ${totalGuests} (huésped principal + ${formData.additional_guests.length} huéspedes adicionales).`,
-      ];
-      isValid = false;
-    }
 
     return isValid;
   }
@@ -213,26 +201,29 @@
         ...formData,
         // Create an array of all guests for the backend
         guests_details: [
-          {
-            first_name: formData.guest_first_name,
-            last_name: formData.guest_last_name,
-            email: formData.guest_email,
-            phone: formData.guest_phone,
-          },
+          // {
+          //   first_name: formData.guest_first_name,
+          //   last_name: formData.guest_last_name,
+          //   email: formData.guest_email,
+          //   phone: formData.guest_phone,
+          //   vat: formData.guest_vat
+          // },
           ...formData.additional_guests.map((guest) => ({
-            first_name: guest.first_name,
+            first_name: guest.name,
             last_name: guest.last_name,
-            email: guest.email,
-            phone: guest.phone || null, // Ensure phone is null if empty for backend
+            vat: guest.vat,
+            adult: guest.adult,
+            email: "",
+            phone: "",
           })),
         ],
         // Remove individual guest fields if your backend expects only the 'guests_details' array
-        guest_first_name: undefined,
-        guest_last_name: undefined,
-        guest_email: undefined,
-        guest_phone: undefined,
+        // guest_first_name: undefined,
+        // guest_last_name: undefined,
+        // guest_email: undefined,
+        // guest_phone: undefined,
       };
-
+      console.log("reservationData",reservationData)
       const response = await fetch("http://127.0.0.1:8000/reservations/", {
         method: "POST",
         headers: {
@@ -271,8 +262,6 @@
           )
             .toISOString()
             .split("T")[0],
-          num_adults: 1,
-          num_children: 0,
           special_requests: "",
           additional_guests: [],
         };
@@ -405,6 +394,32 @@
               <p class="mt-1 text-sm text-red-600">{errors.guest_phone[0]}</p>
             {/if}
           </div>
+          <div>
+            <label>DNI</label>
+            <input
+              type="text"
+              id="last_name"
+              bind:value={formData.guest_vat}
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            />
+          </div>
+          <div class="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="myCheckbox"
+              bind:checked={formData.guest_adult}
+              class="h-4 w-4  border-gray-300 rounded focus:ring-indigo-500"
+              aria-labelledby="myCheckboxLabel"
+            />
+            <label
+              for="myCheckbox"
+              id="myCheckboxLabel"
+             
+            >
+              Adulto
+            </label>
+          </div>
         </div>
       </fieldset>
 
@@ -423,20 +438,8 @@
           </button>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             <div>
-              <!-- fullname -->
-              <label
-                for="additional_guest_fullname_{i}"
-                class="block text-sm font-medium mb-1">Full name</label
-              >
-
-              <input
-                type="text"
-                id="additional_guest_fullname_{i}"
-                bind:value={guest.fullname}
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
-
+              <!-- name -->
+              
               <label
                 for="additional_guest_first_name_{i}"
                 class="block text-sm font-medium mb-1">Nombre</label
@@ -444,13 +447,13 @@
               <input
                 type="text"
                 id="additional_guest_first_name_{i}"
-                bind:value={guest.first_name}
+                bind:value={guest.name}
                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 required
               />
               {#if errors.additional_guests && errors.additional_guests[i] && errors.additional_guests[i].first_name}
                 <p class="mt-1 text-sm text-red-600">
-                  {errors.additional_guests[i].first_name[0]}
+                  {errors.additional_guests[i].name[0]}
                 </p>
               {/if}
             </div>
@@ -473,40 +476,30 @@
               {/if}
             </div>
             <div>
-              <label
-                for="additional_guest_email_{i}"
-                class="block text-sm font-medium mb-1">Email</label
-              >
+              <label>DNI</label>
               <input
-                type="email"
-                id="additional_guest_email_{i}"
-                bind:value={guest.email}
+                type="text"
+                id="last_name"
+                bind:value={guest.vat}
                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 required
               />
-              {#if errors.additional_guests && errors.additional_guests[i] && errors.additional_guests[i].email}
-                <p class="mt-1 text-sm text-red-600">
-                  {errors.additional_guests[i].email[0]}
-                </p>
-              {/if}
             </div>
-            <div>
-              <label
-                for="additional_guest_phone_{i}"
-                class="block text-sm font-medium mb-1"
-                >Teléfono (Opcional)</label
-              >
+            <div class="flex items-center space-x-2">
               <input
-                type="tel"
-                id="additional_guest_phone_{i}"
-                bind:value={guest.phone}
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                type="checkbox"
+                id="myCheckbox"
+                bind:checked={formData.guest_adult}
+                class="h-4 w-4  border-gray-300 rounded focus:ring-indigo-500"
+                aria-labelledby="myCheckboxLabel"
               />
-              {#if errors.additional_guests && errors.additional_guests[i] && errors.additional_guests[i].phone}
-                <p class="mt-1 text-sm text-red-600">
-                  {errors.additional_guests[i].phone[0]}
-                </p>
-              {/if}
+              <label
+                for="myCheckbox"
+                id="myCheckboxLabel"
+               
+              >
+                Adulto
+              </label>
             </div>
           </div>
         </fieldset>
@@ -568,40 +561,6 @@
           </div>
         </div>
       </fieldset>
-
-      <!-- <fieldset class="border border-gray-300 p-4 rounded-md">
-      <legend class="text-lg font-semibold text-gray-700 px-2">Número de Huéspedes</legend>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-        <div>
-          <label for="num_adults" class="block text-sm font-medium text-gray-700 mb-1">Adultos</label>
-          <input
-            type="number"
-            id="num_adults"
-            bind:value={formData.num_adults}
-            min="1"
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-          {#if errors.num_adults}
-            <p class="mt-1 text-sm text-red-600">{errors.num_adults[0]}</p>
-          {/if}
-        </div>
-        <div>
-          <label for="num_children" class="block text-sm font-medium text-gray-700 mb-1">Niños</label>
-          <input
-            type="number"
-            id="num_children"
-            bind:value={formData.num_children}
-            min="0"
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-          {#if errors.num_children}
-            <p class="mt-1 text-sm text-red-600">{errors.num_children[0]}</p>
-          {/if}
-        </div>
-      </div>
-    </fieldset> -->
 
       <div>
         <label for="special_requests" class="block text-sm font-medium mb-1"

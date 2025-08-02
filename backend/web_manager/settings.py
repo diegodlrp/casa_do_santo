@@ -61,7 +61,7 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {}
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173/",  # For local development
+    "http://localhost:5173",  # For local development
     "http://127.0.0.1:5173",  # Also for local development
     #"http://192.168.56.3:5173",
 ]

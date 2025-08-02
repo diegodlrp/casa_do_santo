@@ -92,7 +92,13 @@
 
                     <div class="text-base text-white leading-[31px] font-montserrat text-center">{@html room.content}</div>
 
-                    <a href="gallery?room={room.slug}" type="submit" class="core_button mt-[30px] absolute hover:scale-105 active:scale-95 transition">{$LL.more_photos()}</a>
+                    <a
+        href="gallery?room={room.slug}"
+        type="submit"
+        class="core_button left-1/2 -translate-x-1/2 px-6 py-2 mt-[30px] absolute hover:scale-105 active:scale-95 transition"
+    >
+        {$LL.more_photos()}
+    </a>
                 </div>
             </div>
 

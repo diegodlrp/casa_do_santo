@@ -34,6 +34,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"flatpickr": "^4.6.13",
+		"flowbite-svelte": "^1.10.22",
 		"svelte-remixicon": "^2.7.0"
 	}
 }

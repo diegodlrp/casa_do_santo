@@ -164,11 +164,12 @@
                                         for="checked-checkbox"
                                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                         >{"accept"}
-                                        <a
+                                        <!-- <a
                                             href="/privacy"
                                             class="text-[#c8a655]"
                                             >{"privacy_politic"}</a
-                                        ></label
+                                        > -->
+                                        </label
                                     >
                                 </div>
                                 <!-- END checkbox -->

@@ -3,9 +3,17 @@ import { apiRequest } from '$lib/services/apiService';
 
 export const prerender = true;
 
+export const entries = () => {
+    return [
+        { lang: 'es' },
+        { lang: 'en' },
+        { lang: 'gl' }
+    ];
+};
+
 export const load: PageServerLoad = async ({ locals: { LL } }) => {
 	const locale = LL.locale();
-
+    console.log('La función de carga se está ejecutando');
 	let title = '';
     let img = '';
     let address = '';

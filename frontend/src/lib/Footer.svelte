@@ -95,7 +95,7 @@
         <!-- END separation line -->
         <!-- START nav links -->
         <div class="flex flex-1 items-center justify-center">
-            <a href="{base}/{$locale}/legal_advice" class="nav-link px-4 py-2">
+            <!-- <a href="{base}/{$locale}/legal_advice" class="nav-link px-4 py-2">
                 {$LL.legal_notice()}
             </a>
 
@@ -105,7 +105,7 @@
 
             <a href="{base}/{$locale}/cookies" class="nav-link px-4 py-2">
                 {$LL.cookies_policy()}
-            </a>
+            </a> -->
         </div>
         <!-- END nav links -->
     </div>

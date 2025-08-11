@@ -7,14 +7,15 @@ from reportlab.pdfgen import canvas
 from django.core.mail import send_mail
 import json
 
+
 # Create your views here.
 @csrf_exempt
 @require_POST
 def send_mail_view(request):
     data = json.loads(request.body)
-    name = data.get('name', '')
-    mail = data.get('mail', '')
-    message = data.get('message', '')
+    name = data.get("name", "")
+    mail = data.get("mail", "")
+    message = data.get("message", "")
     subject = f"Casa do Santo/Formulario Contacto"
     mail_body = f"""
         El/la señor/a {name} ha escrito un correo: \n

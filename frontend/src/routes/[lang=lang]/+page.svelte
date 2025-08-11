@@ -4,31 +4,28 @@
 	import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
 	import type { PageData } from "./$types";
 	import ReservationForm from "$lib/ReservationForm.svelte";
+	import Services from "$lib/Services.svelte";
 
 	export let data: PageData;
 
 	// Destructure the data directly
-	const {
-		
-		img,
-		address,
-		email,
-		phone,
-		about_us_img,
-		form_img,
-		error,
-	} = data;
-	
+	const { img, address, email, phone, about_us_img, form_img, error } = data;
+
 	$: title = data.title;
 	$: page_content_title = data.page_content_title;
 	$: page_content_subtitle = data.page_content_subtitle;
+	$: services_content_title = data.services_content_title;
+	$: services_content_subtitle = data.services_content_subtitle;
+	$: services_data = data.services_data;
+	$: rules_content_title = data.rules_content_title;
+	$: rules_content_subtitle = data.rules_content_subtitle;
+	$: rules_data = data.rules_data;
 	$: page_content = data.page_content;
 	$: about_us_title = data.about_us_title;
 	$: about_us_subtitle = data.about_us_subtitle;
 	$: about_us_content = data.about_us_content;
 	$: form_title = data.form_title;
 	$: form_subtitle = data.form_subtitle;
-
 </script>
 
 <!-- HOME PAGE TITLE -->
@@ -93,14 +90,13 @@
 <!-- HOME PAGE CONTENT -->
 <div id="home_page_content" class="pt-[36px] pb-[100px] relative w-full">
 	<img
-				src="/svg/core_bg_dark.svg"
-				alt="core_bg"
-				class="bg-cover bg-center absolute h-full right-0"
-			/>
+		src="/svg/core_bg_dark.svg"
+		alt="core_bg"
+		class="bg-cover bg-center absolute h-full right-0"
+	/>
 	<div class="min-h-[64px]"></div>
 	<div class="p-4 relative">
 		<div class="container">
-			
 			<div>
 				<h2 class="text-center m-[30px]">{@html page_content_title}</h2>
 			</div>
@@ -113,9 +109,20 @@
 				<h4 class="text_dark">{@html page_content}</h4>
 			</div>
 		</div>
-
-		<!-- <ServicesComponent /> -->
 	</div>
+</div>
+<div class="bg-[color:var(--color-bg-dark)]">
+	<Services
+		title={services_content_title}
+		subtitle={services_content_subtitle}
+		data={services_data}
+	/>
+	<Services
+		title={rules_content_title}
+		subtitle={rules_content_subtitle}
+		data={rules_data}
+	/>
+	<div class="min-h-[64px]"></div>
 </div>
 <!-- END -->
 
@@ -132,10 +139,10 @@
 			</div>
 
 			<div class="w-full md:w-2/3 bg-cover bg-center">
-				<div
-					class="relative h-[100%] "
-				>
-					<div class="py-0 px-[65px] xl:mt-[160px] lg:mt-[90px] md:mt-[40px] ">
+				<div class="relative h-[100%]">
+					<div
+						class="py-0 px-[65px] xl:mt-[160px] lg:mt-[90px] md:mt-[40px]"
+					>
 						<img
 							src="/svg/core_bg.svg"
 							alt="core_bg"

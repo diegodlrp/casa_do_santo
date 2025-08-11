@@ -23,6 +23,7 @@ const gl = {
     privacy_politic: "Política de privacidade",
     rooms: "Habitacións",
     send_message: "Enviar mensaxe",
+    what_to_visit: "Que visitar",
     write_your_message: "Escribe a túa mensaxe",
     your_email: "O teu correo electrónico",
     your_name: "O teu nome",

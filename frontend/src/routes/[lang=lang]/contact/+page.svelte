@@ -30,9 +30,6 @@
     let message = "";
 
     const handleSubmit = async () => {
-        console.log(name)
-        console.log(email)
-        console.log(message)
 
         const response = await fetch('http://localhost:8000/api/send-mail/', {
 				method: 'POST',

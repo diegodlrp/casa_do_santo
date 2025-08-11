@@ -36,7 +36,7 @@
                         >{$LL.rooms()}</a
                     >
                     <a href="{base}/{$locale}/location" class="nav-link"
-                        >{$LL.location()}</a
+                        >{$LL.what_to_visit()}</a
                     >
                     <a href="{base}/{$locale}/gallery" class="nav-link"
                         >{$LL.gallery()}</a

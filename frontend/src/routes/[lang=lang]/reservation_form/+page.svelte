@@ -223,7 +223,7 @@
         // guest_email: undefined,
         // guest_phone: undefined,
       };
-      console.log("reservationData",reservationData)
+
       const response = await fetch("http://127.0.0.1:8000/reservations/", {
         method: "POST",
         headers: {

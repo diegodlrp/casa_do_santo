@@ -27,8 +27,6 @@
     const handleSubmit = async () => {
         // Example: Simulate a successful submission after a delay
         await new Promise((resolve) => setTimeout(resolve, 500));
-        console.log("checkInDate",checkInDate);
-        console.log("checkOutDate",checkOutDate);
         goto(base + "/" + $locale + "/reservation_form?checkInDate="+checkInDate+"&checkOutDate="+checkOutDate);
     };
 

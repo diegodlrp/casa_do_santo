@@ -23,6 +23,7 @@ const es = {
     privacy_politic: "Política de privacidad",
     rooms: "Habitaciones",
     send_message: "Enviar mensaje",
+    what_to_visit: "Que visitar",
     write_your_message: "Escribe tu mensaje",
     your_email: "Tu correo electrónico",
     your_name: "Tu nombre",

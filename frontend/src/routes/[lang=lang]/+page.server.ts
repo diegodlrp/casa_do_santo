@@ -13,7 +13,6 @@ export const entries = () => {
 
 export const load: PageServerLoad = async ({ locals: { LL } }) => {
 	const locale = LL.locale();
-    console.log('La función de carga se está ejecutando');
 	let title = '';
     let img = '';
     let address = '';
@@ -23,6 +22,15 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let page_content_title = '';
     let page_content_subtitle = '';
     let page_content = '';
+
+    let services_content_title = '';
+    let services_content_subtitle = '';
+    let services_data: any[] = [];
+ 
+
+    let rules_content_title = '';
+    let rules_content_subtitle = '';
+    let rules_data: any[] = [];
 
     let about_us_title = '';
     let about_us_subtitle = '';
@@ -52,6 +60,28 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             page_content = contentResponse.content || '';
         } else {
             console.warn(`No page data found for locale: ${locale}`);
+        }
+
+        // Fetch services data
+        const servicesResponse = await apiRequest(`/page_content/services_page_content/?lang=${locale}`);
+        if (servicesResponse) {
+            services_content_title = servicesResponse.title;
+            services_content_subtitle = servicesResponse.excerpt;
+            services_data = await apiRequest(`/tags/services/page_content/?lang=${locale}`);
+
+        } else {
+            console.warn(`No service data found for locale: ${locale}`)
+        }
+
+        // Fetch rules data
+        const rulesResponse = await apiRequest(`/page_content/rules_page_content/?lang=${locale}`);
+        if (rulesResponse) {
+            rules_content_title = rulesResponse.title;
+            rules_content_subtitle = rulesResponse.excerpt;
+            rules_data = await apiRequest(`/tags/rules/page_content/?lang=${locale}`);
+
+        } else {
+            console.warn(`No rules data found for locale: ${locale}`)
         }
 
         // Fetch about us data
@@ -88,6 +118,12 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         page_content_title,
         page_content_subtitle,
         page_content,
+        services_content_title,
+        services_content_subtitle,
+        services_data,
+        rules_content_title,
+        rules_content_subtitle,
+        rules_data,
         about_us_title,
         about_us_subtitle,
         about_us_content,

@@ -5,7 +5,7 @@ export const prerender = true;
 
 export const load: PageServerLoad = async ({ locals: { LL } }) => {
     const locale = LL.locale();
-    console.log("locale",locale)
+
     let title = '';
     let content = '';
     let img = '';
@@ -60,7 +60,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
     }
-    console.log("rooms_data",rooms_data)
+
     return {
         title,
         content,

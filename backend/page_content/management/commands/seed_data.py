@@ -6,6 +6,7 @@ from django.core.files import File  # <-- Import File class
 
 from django.contrib.auth.models import User
 from page_content.models import Tag, PageContent, Image
+
 # from web_data.models import WebData
 from django.conf import settings  # Import settings to get MEDIA_ROOT
 
@@ -234,30 +235,34 @@ class Command(BaseCommand):
 
                                 # Handle the image file for the PageContent
                                 if image_filename:
-                                    
+
                                     print("\n\n\n")
-                                    print("image_filename",image_filename)
+                                    print("image_filename", image_filename)
                                     image_path = os.path.join(
                                         SEED_IMAGES_DIR, image_filename
                                     )
                                     if os.path.exists(image_path):
-       
+
                                         try:
                                             with open(image_path, "rb") as f:
                                                 # 1. Create a Django File object from the opened file.
                                                 # The 'name' argument ensures the file is saved with its original filename.
-                                                image_file_obj = File(f, name=image_filename)
+                                                image_file_obj = File(
+                                                    f, name=image_filename
+                                                )
 
                                                 # 2. Create an instance of your Image model.
                                                 # Assign the File object to the 'image_file' field.
                                                 # Optionally, add a caption.
                                                 new_image_instance = Image.objects.create(
                                                     image_file=image_file_obj,
-                                                    caption=f"Featured image for {slug}" # A descriptive caption
+                                                    caption=f"Featured image for {slug}",  # A descriptive caption
                                                 )
 
                                                 # 3. Assign this new Image instance to the OneToOneField on PageContent.
-                                                page_content.featured_image = new_image_instance
+                                                page_content.featured_image = (
+                                                    new_image_instance
+                                                )
                                                 # 4. Crucial: Save the page_content instance to update the OneToOne relationship in the database.
                                                 page_content.save()
 
@@ -286,8 +291,6 @@ class Command(BaseCommand):
                                         )
                                     )
 
-
-
                             else:  # Dry run for page content
                                 self.stdout.write(
                                     self.style.NOTICE(
@@ -305,11 +308,6 @@ class Command(BaseCommand):
                         self.style.WARNING("No Page Content data found to seed.")
                     )
 
-
-
-
-
-
                 # # --- 4. Seed WebData ---
                 # web_data_data = data_to_load.get("web_data", [])
                 # if web_data_data:
@@ -320,7 +318,7 @@ class Command(BaseCommand):
                 #         name = item["name"]
                 #         # IMPORTANT: Use create_user for proper password hashing
                 #         if not WebData.objects.filter(name=name).exists():
-                #             if not options["dry_run"]:   
+                #             if not options["dry_run"]:
                 #                 WebData.objects.create(
                 #                    **item
                 #                 )

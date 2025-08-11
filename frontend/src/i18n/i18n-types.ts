@@ -104,6 +104,10 @@ type RootTranslation = {
 	 */
 	send_message: string
 	/**
+	 * W​h​a​t​ ​t​o​ ​v​i​s​i​t
+	 */
+	what_to_visit: string
+	/**
 	 * W​r​i​t​e​ ​y​o​u​r​ ​m​e​s​s​a​g​e
 	 */
 	write_your_message: string
@@ -215,6 +219,10 @@ export type TranslationFunctions = {
 	 * Send Message
 	 */
 	send_message: () => LocalizedString
+	/**
+	 * What to visit
+	 */
+	what_to_visit: () => LocalizedString
 	/**
 	 * Write your message
 	 */

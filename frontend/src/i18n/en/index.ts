@@ -23,6 +23,7 @@ const en = {
     privacy_politic: "privacy politic",
     rooms: "Rooms",
     send_message: "Send Message",
+    what_to_visit: "What to visit",
     write_your_message: "Write your message",
     your_email: "Your email",
     your_name: "Your name",

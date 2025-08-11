@@ -28,7 +28,7 @@ class Image(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Uploaded At"))
 
     sort_order = models.PositiveIntegerField(default=0)
-    hidden = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False,  verbose_name=_("Hidden in Gallery"))
     # Una imagen puede tener múltiples tags (para categorizar imágenes en tu librería)
     # tags = models.ManyToManyField(
     #     Tag,

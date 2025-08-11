@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types'
 import { apiRequest } from '$lib/services/apiService';
 
-export const prerender = true;
+//export const prerender = true;
 
 export const entries = () => {
     return [

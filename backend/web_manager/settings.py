@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-gfffq+m^-14yvmt-vn^dhuvwz)ogd6fu_!u20auln09=5&6ep(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['34.68.62.185', 'casadosanto.duckdns.org', 'casadosantoadmin.duckdns.org', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -151,7 +151,8 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static"

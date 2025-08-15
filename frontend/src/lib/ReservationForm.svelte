@@ -189,32 +189,6 @@
     }
 
     /* Your existing .calendar-wrapper, .date-display-inputs, etc. styles */
-    .calendar-wrapper {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        display: inline-block;
-        margin-bottom: 20px;
-        background-color: white; /* Ensure background is white for calendar readability */
-    }
-    .date-display-inputs {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
-    }
-    .date-display-inputs input {
-        flex: 1;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 16px;
-        pointer-events: none;
-        background-color: #f9f9f9;
-    }
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
-    }
+
+    
 </style>

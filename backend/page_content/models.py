@@ -2,8 +2,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
-# --- Modelo Tag (sin cambios) ---
 class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=_("Name"))
 

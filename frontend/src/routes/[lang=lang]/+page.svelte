@@ -111,19 +111,7 @@
 		</div>
 	</div>
 </div>
-<div class="bg-[color:var(--color-bg-dark)]">
-	<Services
-		title={services_content_title}
-		subtitle={services_content_subtitle}
-		data={services_data}
-	/>
-	<Services
-		title={rules_content_title}
-		subtitle={rules_content_subtitle}
-		data={rules_data}
-	/>
-	<div class="min-h-[64px]"></div>
-</div>
+
 <!-- END -->
 
 <!-- HOME About Us -->
@@ -164,13 +152,40 @@
 					>
 						{@html about_us_content}
 					</div>
+					
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="bg-[color:var(--color-bg-dark)] flex">
+		<!-- <a class="text-[color:var(--color-text)]" href="https://maps.app.goo.gl/fZhtSQQbJkm6LbXh6">Consulta nuestra ubicación</a> -->
+		<iframe
+			class="w-full"
+			title="googleMap"
+			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1594.8552699115357!2d-8.590021393750158!3d42.85221034766503!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2efdf5e3f50223%3A0xe2c661c334b55dfd!2sAldea%20Coira%2C%2020%2C%2015895%20Ames%2C%20A%20Coru%C3%B1a!5e0!3m2!1ses!2ses!4v1755257838346!5m2!1ses!2ses"
+
+			height="450"
+			style="border:0;"
+			loading="lazy"
+			referrerpolicy="no-referrer-when-downgrade"
+		></iframe>
+	</div>
 </div>
 <!-- END -->
-
+<div class="bg-[color:var(--color-bg-dark)]">
+	<Services
+		title={services_content_title}
+		subtitle={services_content_subtitle}
+		data={services_data}
+	/>
+	<Services
+		title={rules_content_title}
+		subtitle={rules_content_subtitle}
+		data={rules_data}
+	/>
+	<div class="min-h-[64px]"></div>
+</div>
 <!-- HOME Reservation FormT -->
 <div id="home_page_reservation_form">
 	<ReservationForm

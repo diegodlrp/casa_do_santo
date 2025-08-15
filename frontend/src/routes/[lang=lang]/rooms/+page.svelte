@@ -64,7 +64,7 @@
         >
             <!-- background img -->
             <div
-                class="h-[calc(100%+450px)] w-full bg-cover bg-center absolute -top-[450px] -scale-x-100"
+                class="h-[calc(100%+450px)] w-full bg-cover bg-center absolute -top-[450px]"
                 data-translatey="400"
                 data-when="span"
                 data-from="0"
@@ -83,11 +83,11 @@
                     <img
                         src="/svg/core_bg.svg"
                         alt="core_bg"
-                        class="bg-cover bg-center absolute h-full right-0"
+                        class="bg-cover bg-center absolute h-full "
                     />
 
                     <h2 class="text-center m-[30px]">{@html room.title}</h2>
-
+                    
                     <h3 class="text-center text-[27px]">{@html room.excerpt}</h3>
 
                     <div class="text-base text-white leading-[31px] font-montserrat text-center">{@html room.content}</div>

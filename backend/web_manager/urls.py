@@ -23,12 +23,14 @@ from rest_framework import routers
 
 from page_content.views import TagViewSet, PageContentViewSet, ImageViewSet
 from reservation.views import ReservationViewSet
+from base_data.views import BaseDataViewSet
 
 router = routers.DefaultRouter()
 router.register(r"page_content", PageContentViewSet)
 router.register(r"tags", TagViewSet)
 router.register(r"images", ImageViewSet)
 router.register(r"reservations", ReservationViewSet)
+router.register(r"basedata", BaseDataViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

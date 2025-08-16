@@ -21,6 +21,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
 
     let page_content_title = '';
     let page_content_subtitle = '';
+    let page_img = '';
     let page_content = '';
 
     let services_content_title = '';
@@ -57,6 +58,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         if (titleResponse) {
             page_content_title = contentResponse.title || '';
             page_content_subtitle = contentResponse.excerpt || '';
+            page_img = contentResponse.image || '';
             page_content = contentResponse.content || '';
         } else {
             console.warn(`No page data found for locale: ${locale}`);
@@ -117,6 +119,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         phone,
         page_content_title,
         page_content_subtitle,
+        page_img,
         page_content,
         services_content_title,
         services_content_subtitle,

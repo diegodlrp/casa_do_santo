@@ -3,6 +3,7 @@
     import Title from "$lib/Title.svelte";
     import ReservationForm from "$lib/ReservationForm.svelte";
     import Carrousel from "$lib/Carrousel.svelte";
+    import { onMount } from "svelte";
 
     export let data: PageData;
 
@@ -20,12 +21,34 @@
     $: form_title = data.form_title;
     $: form_subtitle = data.form_subtitle;
     $: form_img = data.form_img;
+
+    let mapDiv: HTMLDivElement;
+
+  onMount(() => {
+    // Replace with your real Casa do Santo coordinates
+    const location = { lat: 42.8782, lng: -8.5448 };
+
+    const map = new google.maps.Map(mapDiv, {
+      zoom: 13,
+      center: location,
+      disableDefaultUI: false, // keep zoom controls etc.
+    });
+
+    new google.maps.Marker({
+      position: location,
+      map,
+      title: "Casa do Santo",
+    });
+  });
+
 </script>
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
 <div
     class="relative w-[100%] min-h-[calc(100vh-20px)] sm:h-[calc(100vh-36px)] overflow-hidden"
-></div>
+>
+<div bind:this={mapDiv} class="w-full h-full"></div>
+</div>
 
 <!-- start Location page content -->
 <div class="pt-[36px] pb-[100px] relative w-full">

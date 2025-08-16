@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "api_service",
     "page_content",
-    "reservation"
+    "reservation",
+    "base_data"
 ]
 
 MIDDLEWARE = [

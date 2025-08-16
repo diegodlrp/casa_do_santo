@@ -20,11 +20,14 @@
     $: title_subtitle = data.title_subtitle;
     $: contact_title = data.contact_title;
     $: contact_content = data.contact_content;
+    $: contact_phone = data.contact_phone;
+    $: contact_email = data.contact_email;
+    $: contact_address = data.contact_address;
+    $: contact_address_link = data.contact_address_link;
     $: form_title = data.form_title;
     $: form_subtitle = data.form_subtitle;
-
-    let phone = "";
-    let address = "";
+    console.log(data);
+   
     let name = "";
     let email = "";
     let message = "";
@@ -77,19 +80,19 @@
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiPhoneLine />
-                                    <span>{phone}</span>
+                                    <a href="tel:{contact_phone}">{contact_phone}</a>
                                 </div>
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiMailLine />
-                                    <span>{email}</span>
+                                    <a href="mailto:{contact_email}">{contact_email}</a>
                                 </div>
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiMapPin2Line />
-                                    <span>{address}</span>
+                                    <a href="{contact_address_link}">{contact_address}</a>
                                 </div>
                             </div>
                         </div>

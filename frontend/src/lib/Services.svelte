@@ -22,11 +22,11 @@
                         alt={service.slug}
                     />
                     <p class="md:text-lg font-bold border-b-2 border-[color:var(--color-text-caption)]">
-                        {service.title}
+                        {@html service.title}
                     </p>
                 </div>
                 <p>
-                    {service.content}
+                    {@html service.content}
                 </p>
             </div>
         {/each}

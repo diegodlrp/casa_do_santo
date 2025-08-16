@@ -14,6 +14,7 @@
 	$: title = data.title;
 	$: page_content_title = data.page_content_title;
 	$: page_content_subtitle = data.page_content_subtitle;
+	$: page_img = data.page_img;
 	$: services_content_title = data.services_content_title;
 	$: services_content_subtitle = data.services_content_subtitle;
 	$: services_data = data.services_data;
@@ -88,25 +89,37 @@
 <!-- END -->
 
 <!-- HOME PAGE CONTENT -->
-<div id="home_page_content" class="pt-[36px] pb-[100px] relative w-full">
-	<img
-		src="/svg/core_bg_dark.svg"
-		alt="core_bg"
-		class="bg-cover bg-center absolute h-full right-0"
-	/>
-	<div class="min-h-[64px]"></div>
-	<div class="p-4 relative">
-		<div class="container">
-			<div>
-				<h2 class="text-center m-[30px]">{@html page_content_title}</h2>
-			</div>
+<div
+	id="home_page_content"
+	class=" relative w-full bg-cover bg-center"
+	style="background-image: url({page_img}); opacity: 1;"
+>
+	<div
+		class="w-[100%] h-[100%] pt-[36px] pb-[100px] bg-[color:var(--color-bg-light)]/80"
+	>
+		<img
+			src="/svg/core_bg_dark.svg"
+			alt="core_bg"
+			class="bg-cover bg-center absolute h-full right-0"
+		/>
+		<div class="min-h-[64px]"></div>
+		<div class="p-4 relative">
+			<div class="container">
+				<div>
+					<h2 class="text-center m-[30px]">
+						{@html page_content_title}
+					</h2>
+				</div>
 
-			<div>
-				<h3 class="text-center text-[27px]">
-					<span class="text_dark">{@html page_content_subtitle}</span>
-				</h3>
-				<br />
-				<h4 class="text_dark">{@html page_content}</h4>
+				<div>
+					<h3 class="text-center text-[27px]">
+						<span class="text_dark"
+							>{@html page_content_subtitle}</span
+						>
+					</h3>
+					<br />
+					<h4 class="text_dark">{@html page_content}</h4>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -152,7 +165,6 @@
 					>
 						{@html about_us_content}
 					</div>
-					
 				</div>
 			</div>
 		</div>
@@ -163,13 +175,14 @@
 		<iframe
 			class="w-full"
 			title="googleMap"
-			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1594.8552699115357!2d-8.590021393750158!3d42.85221034766503!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2efdf5e3f50223%3A0xe2c661c334b55dfd!2sAldea%20Coira%2C%2020%2C%2015895%20Ames%2C%20A%20Coru%C3%B1a!5e0!3m2!1ses!2ses!4v1755257838346!5m2!1ses!2ses"
-
+			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2924.758084990145!2d-8.590995587888248!3d42.85684100345086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2efd006966f953%3A0xdfe3d7c3723c22c0!2sCASA%20DO%20SANTO!5e0!3m2!1ses!2ses!4v1755301307635!5m2!1ses!2ses"
 			height="450"
 			style="border:0;"
 			loading="lazy"
 			referrerpolicy="no-referrer-when-downgrade"
 		></iframe>
+
+		
 	</div>
 </div>
 <!-- END -->

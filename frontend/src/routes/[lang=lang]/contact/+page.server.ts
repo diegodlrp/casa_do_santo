@@ -14,6 +14,11 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let contact_content = '';
     let contact_img = '';
 
+    let contact_phone = '';
+    let contact_email = '';
+    let contact_address = '';
+    let contact_address_link = '';
+
     let form_title = '';
     let form_subtitle = '';
     let form_img = '';
@@ -42,6 +47,17 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             console.warn(`No contact data found for locale: ${locale}`);
         }
 
+        // Fetch base data
+        const baseResponse = await apiRequest(`/basedata/1/?lang=${locale}`)
+        if (baseResponse){
+            contact_phone = baseResponse.phone || '';
+            contact_email = baseResponse.email || '';
+            contact_address = baseResponse.address || '';
+            contact_address_link = baseResponse.address_link || '';
+
+        } else {
+            console.warn(`No contact data found for locale: ${locale}`);
+        }
         // Fetch reservation form data
         const reservationResponse = await apiRequest(`/page_content/reservationform_page_content/?lang=${locale}`);
         if (reservationResponse) {
@@ -63,6 +79,10 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         contact_title,
         contact_content,
         contact_img,
+        contact_phone,
+        contact_email,
+        contact_address,
+        contact_address_link,
         form_title,
         form_subtitle,
         form_img,

@@ -26,8 +26,8 @@
 
   onMount(() => {
     // Replace with your real Casa do Santo coordinates
-    const location = { lat: 42.8782, lng: -8.5448 };
-
+    const location = { lat: 42.8568409, lng: -8.5932808 };
+    
     const map = new google.maps.Map(mapDiv, {
       zoom: 13,
       center: location,
@@ -35,10 +35,27 @@
     });
 
     new google.maps.Marker({
-      position: location,
-      map,
-      title: "Casa do Santo",
+        position: location,
+        map,
+        title: "Casa do Santo",
     });
+
+    carrousel_data.forEach((item) => {
+        try {
+            let excerpt = item.excerpt
+        }catch (e: any) {
+        console.error('Error fetching data for page:', e);
+       
+        }
+        let latitude = parseFloat(item['excerpt'].split(';')[0]);
+        let longitude = parseFloat(item['excerpt'].split(';')[1]);
+        
+        new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map,
+            title: item['title'],
+        });
+    })
   });
 
 </script>
@@ -47,32 +64,32 @@
 <div
     class="relative w-[100%] min-h-[calc(100vh-20px)] sm:h-[calc(100vh-36px)] overflow-hidden"
 >
-<div bind:this={mapDiv} class="w-full h-full"></div>
+    <div bind:this={mapDiv} class="w-full h-full"></div>
 </div>
 
 <!-- start Location page content -->
 <div class="pt-[36px] pb-[100px] relative w-full">
-	<img
-		src="/svg/core_bg_dark.svg"
-		alt="core_bg"
-		class="bg-cover bg-center absolute h-full right-0"
-	/>
-	<div class="min-h-[64px]"></div>
-	<div class="p-4 relative">
-		<div class="container">
-			<div>
-				<h2 class="text-center m-[30px]">{@html title}</h2>
-			</div>
+    <img
+        src="/svg/core_bg_dark.svg"
+        alt="core_bg"
+        class="bg-cover bg-center absolute h-full right-0"
+    />
+    <div class="min-h-[64px]"></div>
+    <div class="p-4 relative">
+        <div class="container">
+            <div>
+                <h2 class="text-center m-[30px]">{@html title}</h2>
+            </div>
 
-			<div>
-				<!-- <h3 class="text-center text-[27px]">
+            <div>
+                <!-- <h3 class="text-center text-[27px]">
 					<span class="text_dark">{@html subtitle}</span>
 				</h3> -->
 
-				<h4 class="text_dark text-center">{@html subtitle}</h4>
-			</div>
-		</div>
-	</div>
+                <h4 class="text_dark text-center">{@html subtitle}</h4>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- END -->
@@ -81,7 +98,7 @@
     style="background-image: url({carrousel_img});"
 >
     <div class="w-full h-full bg-[color:var(--color-bg-dark)] pt-[30px]">
-        <h2 class="text-center ">{@html carrousel_title}</h2>
+        <h2 class="text-center">{@html carrousel_title}</h2>
         <h3 class="text-center">{@html carrousel_subtitle}</h3>
         <Carrousel data={carrousel_data} />
     </div>

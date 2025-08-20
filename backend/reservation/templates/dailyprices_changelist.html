@@ -1,0 +1,54 @@
+{% extends "admin/change_list.html" %}
+
+{% block result_list %}
+<style>
+    table.calendar {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table.calendar th,
+    table.calendar td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        vertical-align: top;
+        width: 14.285%;
+        height: 90px;
+    }
+
+    /* table.calendar th { background: #f6f6f6; } */
+    .blank-td {
+        background: #6a6868;
+    }
+
+    .price-a {
+        font-size: 1.5rem;
+        padding-top: 25px;
+    }
+
+    .calendar-nav {
+        margin: 1rem 0;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .add-nav {
+        margin: 1rem 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+</style>
+<div class="add-nav">
+    <p><a class="button" href="{% url 'admin:dailyprice_bulk_add' %}">➕ Set prices for a date range</a></p>
+</div>
+
+<div class="calendar-nav">
+    <a href="{{ prev_url }}">&larr; Prev</a>
+    <strong>{{ year }} – {{ month }}</strong>
+    <a href="{{ next_url }}">Next &rarr;</a>
+</div>
+
+
+<div>{{ calendar|safe }}</div>
+{% endblock %}

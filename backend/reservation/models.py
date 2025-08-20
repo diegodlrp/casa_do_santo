@@ -183,3 +183,10 @@ class Reservation(models.Model):
             self.total_price = self.daily_rate * 3
         else:
             self.total_price = 0  # Default if dates/rate not set yet
+
+class DailyPrice(models.Model):
+    date = models.DateField(unique=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    
+    def __str__(self):
+        return f"{self.date}: {self.price}"

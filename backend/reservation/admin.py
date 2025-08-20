@@ -1,7 +1,14 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Reservation, Guest  # Ensure Guest is imported
-
+from .models import Reservation, Guest, DailyPrice  # Ensure Guest is imported
+from django.utils.safestring import mark_safe
+from calendar import monthrange
+import datetime
+from urllib.parse import urlencode
+from django.urls import reverse, path
+from .forms import BulkPriceForm
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 # Register your models here.
 @admin.register(Guest)
@@ -122,3 +129,147 @@ class ReservationAdmin(admin.ModelAdmin):
     #     form = super().get_form(request, obj, **kwargs)
     #     # form.base_fields['total_price'].disabled = True # No longer needed if in readonly_fields
     #     return form
+
+@admin.register(DailyPrice)
+class DailyPriceAdmin(admin.ModelAdmin):
+    list_display = ("date", "price")
+    change_list_template = "dailyprices_changelist.html"
+
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path("bulk-add/", self.admin_site.admin_view(self.bulk_add_view), name="dailyprice_bulk_add"),
+        ]
+        return custom_urls + urls
+
+    def bulk_add_view(self, request):
+        if request.method == "POST":
+            form = BulkPriceForm(request.POST)
+            if form.is_valid():
+                start = form.cleaned_data["start_date"]
+                end = form.cleaned_data["end_date"]
+                price = form.cleaned_data["price"]
+
+                current = start
+                created = 0
+                while current <= end:
+                    obj, made = DailyPrice.objects.get_or_create(
+                        date=current, defaults={"price": price}
+                    )
+                    if not made:  # already exists → update
+                        obj.price = price
+                        obj.save()
+                    created += 1
+                    current += datetime.timedelta(days=1)
+
+                messages.success(request, f"{created} daily prices set from {start} to {end}")
+                return redirect("admin:reservation_dailyprice_changelist")
+        else:
+            form = BulkPriceForm()
+
+        return render(request, "bulk_price_form.html", {
+            "form": form,
+            "opts": self.model._meta,
+        })
+
+    def changelist_view(self, request, extra_context=None):
+        today = datetime.date.today()
+        
+        try:
+            year = int(request.GET.get("year", today.year))
+        except (TypeError, ValueError):
+            year = today.year
+        try:
+            month = int(request.GET.get("month", today.month))
+        except (TypeError, ValueError):
+            month = today.month
+
+        cleaned = request.GET.copy()
+        cleaned.pop("year", None)
+        cleaned.pop("month", None)
+        request.GET = cleaned 
+
+        first_weekday, num_days = monthrange(year, month)  # 0=Mon ... 6=Sun
+        first_of_month = datetime.date(year, month, 1)
+        prev_month = (first_of_month - datetime.timedelta(days=1)).replace(day=1)
+        next_month = (first_of_month + datetime.timedelta(days=num_days)).replace(day=1)
+
+        prices = DailyPrice.objects.filter(date__year=year, date__month=month)
+        by_day = {p.date.day: p for p in prices}
+
+        changelist_url = reverse("admin:reservation_dailyprice_changelist")
+        prev_url = f"{changelist_url}?year={prev_month.year}&month={prev_month.month}"
+        next_url = f"{changelist_url}?year={next_month.year}&month={next_month.month}"
+        change_url_for = lambda pk: reverse("admin:reservation_dailyprice_change", args=[pk])
+        add_url_base = reverse("admin:reservation_dailyprice_add")
+
+        headers = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        parts = ['<table class="calendar">']
+        parts.append("<tr>" + "".join(f"<th>{h}</th>" for h in headers) + "</tr><tr>")
+        parts.append('<td class="blank-td"></td>' * first_weekday)  # leading blanks
+
+        for d in range(1, num_days + 1):
+            obj = by_day.get(d)
+            if obj:
+                cell = f"<strong>{d}</strong><br><br><a href='{change_url_for(obj.pk)}' class='price-a'>{obj.price} €</a>"
+            else:
+                if month >= today.month:
+                    cell = f"<strong>{d}</strong><br><br><a href='{add_url_base}?date={year}-{month:02d}-{d:02d}' class='price-a'>+</a>"
+                else:
+                    cell = f"<strong>{d}</strong><br><br>"
+            parts.append(f"<td>{cell}</td>")
+            if (first_weekday + d) % 7 == 0:
+                parts.append("</tr><tr>")
+        parts.append("</tr></table><br><br>")
+        calendar_html = mark_safe("".join(parts))
+
+        response = super().changelist_view(request, extra_context=extra_context)
+        if hasattr(response, "context_data"):
+            ctx = response.context_data
+            ctx["calendar"] = calendar_html
+            ctx["year"] = year
+            ctx["month"] = month
+            ctx["prev_url"] = prev_url
+            ctx["next_url"] = next_url
+        return response
+
+
+    # def get_urls(self):
+    #     urls = super().get_urls()
+    #     custom_urls = [
+    #         path("calendar/", self.admin_site.admin_view(self.calendar_view), name="dailyprice_calendar"),
+    #     ]
+    #     return custom_urls + urls
+
+    # def calendar_view(self, request):
+    #     today = datetime.date.today()
+    #     year, month = today.year, today.month
+
+    #     # get all prices for the current month
+    #     first_day, num_days = monthrange(year, month)
+    #     days = DailyPrice.objects.filter(date__year=year, date__month=month)
+
+    #     price_map = {d.date.day: d.price for d in days}
+
+    #     # build calendar HTML
+    #     calendar_html = "<table class='calendar'>"
+    #     calendar_html += "<tr>" + "".join(f"<th>{d}</th>" for d in ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]) + "</tr><tr>"
+
+    #     # empty cells before first day
+    #     calendar_html += "<td></td>" * ((first_day + 6) % 7)
+
+    #     # fill days
+    #     for day in range(1, num_days + 1):
+    #         price = price_map.get(day, "-")
+    #         calendar_html += f"<td>{day}<br>{price}</td>"
+    #         if (day + first_day) % 7 == 0:
+    #             calendar_html += "</tr><tr>"
+
+    #     calendar_html += "</tr></table>"
+
+    #     from django.shortcuts import render
+    #     return render(request, "admin/dailyprice_calendar.html", {
+    #         "calendar": mark_safe(calendar_html),
+    #         "opts": self.model._meta,
+    #     })

@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Set Daily Prices for a Range</h1>
+  <form method="post">{% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <button type="submit" class="button">Save</button>
+  </form>
+  <p><a href="{% url 'admin:reservation_dailyprice_changelist' %}">Back to calendar</a></p>
+{% endblock %}

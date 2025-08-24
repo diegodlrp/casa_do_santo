@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let title = '';
     let subtitle = '';
     let img = '';
+    let content = '';
 
     let carrousel_title = '';
     let carrousel_subtitle = '';
@@ -43,6 +44,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             title = locationResponse.title || '';
             subtitle = locationResponse.excerpt || '';
             img = locationResponse.image || '';
+            content = locationResponse.content || '';
         } else {
             console.warn(`No title data found for locale: ${locale}`);
         }
@@ -88,6 +90,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         title,
         subtitle,
         img,
+        content,
         carrousel_title,
         carrousel_subtitle,
         carrousel_img,

@@ -14,6 +14,7 @@
     $: title = data.title;
     $: subtitle = data.subtitle;
     $: img = data.img;
+    $: content = data.content;
     $: carrousel_title = data.carrousel_title;
     $: carrousel_subtitle = data.carrousel_subtitle;
     $: carrousel_img = data.carrousel_img;
@@ -87,6 +88,8 @@
 				</h3> -->
 
                 <h4 class="text_dark text-center">{@html subtitle}</h4>
+                <br>
+                <p class="text_dark text-center">{@html content}</p>
             </div>
         </div>
     </div>

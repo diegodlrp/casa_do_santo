@@ -224,7 +224,7 @@
         // guest_phone: undefined,
       };
 
-      const response = await fetch("http://127.0.0.1:8000/reservations/", {
+      const response = await fetch("http://casadosantoadmin.duckdns.org/reservations/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

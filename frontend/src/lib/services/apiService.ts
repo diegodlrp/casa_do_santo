@@ -1,7 +1,7 @@
 // import {authStore} from './authService';
 
 // BASE URL for API calls
-const API_BASE_URL = 'http://casadosantoadmin.duckdns.org'
+const API_BASE_URL = 'http://127.0.0.1:8000'
 // const api_key = 'xroo15zj.7DOgvspDouwAgSlk9bq4zK5R14ujlq1X.'
 // const api_key="api-test1111"
 /**

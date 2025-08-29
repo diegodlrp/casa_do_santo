@@ -16,7 +16,7 @@
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
 <div
-    class="relative w-[100%] min-h-[calc(100vh-20px)] sm:h-[calc(100vh-36px)] overflow-hidden"
+    class="relative w-[100%] min-h-[calc(100vh-20px)] overflow-hidden"
 >
     {#if rate_data.length > 0}
         <div class="min-h-[24px]"></div>
@@ -59,7 +59,7 @@
                                 >{rate.start_date}</td
                             >
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{rate.end_date}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{rate.price}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{rate.price}€</td>
                         </tr>
                     {/each}
                 </tbody>

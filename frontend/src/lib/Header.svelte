@@ -4,6 +4,7 @@
 	import LocaleSwitcher from './LocaleSwitcher.svelte'
 	import RiMenu5Line from "svelte-remixicon/RiMenu5Line.svelte";
     import RiCloseLargeFill from "svelte-remixicon/RiCloseLargeFill.svelte";
+    import ReservationSwitcher from './ReservationSwitcher.svelte';
 
 	let nav_menu: HTMLDivElement;
     let show_open = true;
@@ -32,6 +33,7 @@
                 <li>
                     <a href="{base}/{$locale}" class="nav-link">{$LL.home()}</a>
                 </li>
+                <ReservationSwitcher />
                 <li>
                     <a href="{base}/{$locale}/rooms" class="nav-link">{$LL.rooms()}</a>
                 </li>

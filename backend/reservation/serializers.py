@@ -1,6 +1,6 @@
 # reservations_app/serializers.py
 from rest_framework import serializers
-from .models import Guest, Reservation
+from .models import Guest, Reservation, Discount
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction  # Needed for atomic operations in create
 from django.core.mail import send_mail
@@ -291,3 +291,9 @@ class ReservationSerializer(serializers.ModelSerializer):
             return JsonResponse({"message": str(e)})
 
         return reservation
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = "__all__"
+

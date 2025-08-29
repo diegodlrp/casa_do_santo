@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Reservation, Guest, DailyPrice  # Ensure Guest is imported
+from .models import Reservation, Guest, DailyPrice, Discount  # Ensure Guest is imported
 from django.utils.safestring import mark_safe
 from calendar import monthrange
 import datetime
@@ -273,3 +273,11 @@ class DailyPriceAdmin(admin.ModelAdmin):
     #         "calendar": mark_safe(calendar_html),
     #         "opts": self.model._meta,
     #     })
+
+# Register your models here.
+@admin.register(Discount)
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ("days_number", "discount", "percentage")
+    search_fields = ("days_number", "discount", "percentage")
+    list_filter = ("days_number",)  # Basic filters
+    ordering = ("days_number", "discount", "percentage")

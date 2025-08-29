@@ -22,7 +22,7 @@ from django.conf import settings
 from rest_framework import routers
 
 from page_content.views import TagViewSet, PageContentViewSet, ImageViewSet
-from reservation.views import ReservationViewSet
+from reservation.views import ReservationViewSet, DiscountViewSet
 from base_data.views import BaseDataViewSet
 
 router = routers.DefaultRouter()
@@ -31,6 +31,7 @@ router.register(r"tags", TagViewSet)
 router.register(r"images", ImageViewSet)
 router.register(r"reservations", ReservationViewSet)
 router.register(r"basedata", BaseDataViewSet)
+router.register(r"discount", DiscountViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

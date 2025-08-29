@@ -28,6 +28,10 @@ type RootTranslation = {
 	 */
 	arrival_date: string
 	/**
+	 * Book
+	 */
+	book: string,
+	/**
 	 * C​h​e​c​k​ ​A​v​a​i​l​a​b​i​l​i​t​y
 	 */
 	check_availability: string
@@ -96,6 +100,10 @@ type RootTranslation = {
 	 */
 	privacy_politic: string
 	/**
+	 * Rates
+	 */
+	rates: string
+	/**
 	 * R​o​o​m​s
 	 */
 	rooms: string
@@ -143,6 +151,10 @@ export type TranslationFunctions = {
 	 * Arrival date
 	 */
 	arrival_date: () => LocalizedString
+	/**
+	 * Book
+	 */
+	book: () => LocalizedString
 	/**
 	 * Check Availability
 	 */
@@ -211,6 +223,10 @@ export type TranslationFunctions = {
 	 * privacy politic
 	 */
 	privacy_politic: () => LocalizedString
+	/**
+	 * Rates
+	 */
+	rates: () => LocalizedString
 	/**
 	 * Rooms
 	 */

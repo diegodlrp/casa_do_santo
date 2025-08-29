@@ -190,3 +190,8 @@ class DailyPrice(models.Model):
     
     def __str__(self):
         return f"{self.date}: {self.price}"
+
+class Discount(models.Model):
+    days_number = models.PositiveIntegerField()
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    percentage = models.BooleanField(default=True)

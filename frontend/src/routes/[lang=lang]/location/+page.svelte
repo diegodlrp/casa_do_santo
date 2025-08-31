@@ -25,45 +25,46 @@
 
     let mapDiv: HTMLDivElement;
 
-  onMount(() => {
-    // Replace with your real Casa do Santo coordinates
-    const location = { lat: 42.8568409, lng: -8.5932808 };
-    
-    const map = new google.maps.Map(mapDiv, {
-      zoom: 13,
-      center: location,
-      disableDefaultUI: false, // keep zoom controls etc.
-    });
+    onMount(() => {
+        // Replace with your real Casa do Santo coordinates
+        const location = { lat: 42.8568409, lng: -8.5932808 };
 
-    new google.maps.Marker({
-        position: location,
-        map,
-        title: "Casa do Santo",
-    });
-
-    carrousel_data.forEach((item) => {
-        try {
-            let excerpt = item.excerpt
-        }catch (e: any) {
-        console.error('Error fetching data for page:', e);
-       
-        }
-        let latitude = parseFloat(item['excerpt'].split(';')[0]);
-        let longitude = parseFloat(item['excerpt'].split(';')[1]);
-        
-        new google.maps.Marker({
-            position: { lat: latitude, lng: longitude },
-            map,
-            title: item['title'],
+        const map = new google.maps.Map(mapDiv, {
+            zoom: 10,
+            center: location,
+            mapTypeId: google.maps.MapTypeId.HYBRID, // satellite by default
+            disableDefaultUI: false, // keep default controls
+            zoomControl: true, // force zoom buttons
+            mapTypeControl: true, // allow switching (optional)
         });
-    })
-  });
 
+        new google.maps.Marker({
+            position: location,
+            map,
+            title: "Casa do Santo",
+        });
+
+        carrousel_data.forEach((item) => {
+            try {
+                let excerpt = item.excerpt;
+            } catch (e: any) {
+                console.error("Error fetching data for page:", e);
+            }
+            let latitude = parseFloat(item["excerpt"].split(";")[0]);
+            let longitude = parseFloat(item["excerpt"].split(";")[1]);
+
+            new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map,
+                title: item["title"],
+            });
+        });
+    });
 </script>
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
 <div
-    class="relative w-[100%] min-h-[calc(100vh-20px)] sm:h-[calc(100vh-36px)] overflow-hidden"
+    class="relative w-[100%] h-[calc(100vh-264px)] sm:h-[calc(100vh-280px)] overflow-hidden"
 >
     <div bind:this={mapDiv} class="w-full h-full"></div>
 </div>
@@ -88,7 +89,7 @@
 				</h3> -->
 
                 <h4 class="text_dark text-center">{@html subtitle}</h4>
-                <br>
+                <br />
                 <p class="text_dark text-center">{@html content}</p>
             </div>
         </div>

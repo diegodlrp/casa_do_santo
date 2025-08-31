@@ -175,13 +175,13 @@
 		<iframe
 			class="w-full"
 			title="googleMap"
-			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2924.758084990145!2d-8.590995587888248!3d42.85684100345086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2efd006966f953%3A0xdfe3d7c3723c22c0!2sCASA%20DO%20SANTO!5e0!3m2!1ses!2ses!4v1755301307635!5m2!1ses!2ses"
+			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d458822.59978723153!2d-9.265504661741248!3d42.77930951014993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2efd006966f953%3A0xdfe3d7c3723c22c0!2sCASA%20DO%20SANTO!5e0!3m2!1ses!2ses!4v1756680662151!5m2!1ses!2ses"
 			height="450"
 			style="border:0;"
 			loading="lazy"
 			referrerpolicy="no-referrer-when-downgrade"
 		></iframe>
-
+	
 		
 	</div>
 </div>

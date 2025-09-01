@@ -19,9 +19,6 @@
     $: carrousel_subtitle = data.carrousel_subtitle;
     $: carrousel_img = data.carrousel_img;
     $: carrousel_data = data.carrousel_data;
-    $: form_title = data.form_title;
-    $: form_subtitle = data.form_subtitle;
-    $: form_img = data.form_img;
 
     let mapDiv: HTMLDivElement;
 
@@ -107,5 +104,3 @@
         <Carrousel data={carrousel_data} />
     </div>
 </div>
-
-<ReservationForm title={form_title} subtitle={form_subtitle} img={form_img} />

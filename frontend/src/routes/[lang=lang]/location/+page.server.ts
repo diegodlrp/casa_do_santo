@@ -21,10 +21,6 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
 
     let carrousel_data: any[] = [];
 
-    let form_title = '';
-    let form_subtitle = '';
-    let form_img = '';
-
     let error: string | null = null;
 
     try {
@@ -67,17 +63,6 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             console.warn(`No carrousel data form data found for locale: ${locale}`);
         }
 
-        // Fetch reservation form data
-        const reservationResponse = await apiRequest(`/page_content/reservationform_page_content/?lang=${locale}`);
-        if (reservationResponse) {
-            form_title = reservationResponse.title || '';
-            form_subtitle = reservationResponse.excerpt || '';
-            form_img = reservationResponse.image || '';
-        } else {
-            console.warn(`No reservation form data found for locale: ${locale}`);
-        }
-
-
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -95,9 +80,6 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         carrousel_subtitle,
         carrousel_img,
         carrousel_data,
-        form_title,
-        form_subtitle,
-        form_img,
         error
     }
 }

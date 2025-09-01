@@ -28,7 +28,7 @@
 
     onMount(() => {
         // Replace with your real Casa do Santo coordinates
-        const location = { lat: 42.8568409, lng: -8.5932808 };
+        const location = { lat: 42.8568341, lng: -8.5884587 };
 
         const map = new google.maps.Map(mapDiv, {
             zoom: 10,
@@ -38,11 +38,16 @@
             zoomControl: true, // force zoom buttons
             mapTypeControl: true, // allow switching (optional)
         });
+        const icon = {
+            url: "/img/logo.jpeg", // The image URL
+            scaledSize: new google.maps.Size(40, 40), // The size of the icon in pixels
+        };
 
         new google.maps.Marker({
             position: location,
             map,
             title: "Casa do Santo",
+            icon: icon
         });
 
         carrousel_data.forEach((item) => {

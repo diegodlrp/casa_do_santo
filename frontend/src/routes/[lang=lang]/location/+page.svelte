@@ -19,6 +19,10 @@
     $: carrousel_subtitle = data.carrousel_subtitle;
     $: carrousel_img = data.carrousel_img;
     $: carrousel_data = data.carrousel_data;
+    $: carrousel_activity_title = data.carrousel_activity_title;
+    $: carrousel_activity_subtitle = data.carrousel_activity_subtitle;
+    $: carrousel_activity_img = data.carrousel_activity_img;
+    $: carrousel_activity_data = data.carrousel_activity_data;
 
     let mapDiv: HTMLDivElement;
 
@@ -102,5 +106,11 @@
         <h2 class="text-center">{@html carrousel_title}</h2>
         <h3 class="text-center">{@html carrousel_subtitle}</h3>
         <Carrousel data={carrousel_data} />
+    </div>
+
+    <div class="w-full h-full bg-[color:var(--color-bg-dark)] pt-[30px]">
+        <h2 class="text-center">{@html carrousel_activity_title}</h2>
+        <h3 class="text-center">{@html carrousel_activity_subtitle}</h3>
+        <Carrousel data={carrousel_activity_data} />
     </div>
 </div>

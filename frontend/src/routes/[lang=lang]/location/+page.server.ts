@@ -21,6 +21,12 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
 
     let carrousel_data: any[] = [];
 
+    let carrousel_activity_title = '';
+    let carrousel_activity_subtitle = '';
+    let carrousel_activity_img = '';
+
+    let carrousel_activity_data: any[] = [];
+
     let error: string | null = null;
 
     try {
@@ -63,6 +69,24 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             console.warn(`No carrousel data form data found for locale: ${locale}`);
         }
 
+        // Fetch carrousel data
+        const carrouselActivityResponse = await apiRequest(`/page_content/carrusel-actividades/?lang=${locale}`);
+        if (carrouselActivityResponse){
+            carrousel_activity_title = carrouselActivityResponse.title || '';
+            carrousel_activity_subtitle = carrouselActivityResponse.excerpt || '';
+            carrousel_activity_img = carrouselActivityResponse.image || '';
+        }else {
+            console.warn(`No carrousel data found for locale: ${locale}`);
+        }
+
+        // Fetch carrousel data
+        const carrouselDataActivityResponse = await apiRequest(`/tags/actividades/page_content/?lang=${locale}`);
+        if (carrouselDataActivityResponse){
+            carrousel_activity_data = carrouselDataActivityResponse;
+        }else {
+            console.warn(`No carrousel data form data found for locale: ${locale}`);
+        }
+
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -80,6 +104,10 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         carrousel_subtitle,
         carrousel_img,
         carrousel_data,
+        carrousel_activity_title,
+        carrousel_activity_subtitle,
+        carrousel_activity_img,
+        carrousel_activity_data,
         error
     }
 }

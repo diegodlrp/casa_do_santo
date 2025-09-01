@@ -11,6 +11,7 @@
     export let title: string;
     export let subtitle: string;
     export let img: string;
+    export let content: string;
 
     // Get today's date
     const today = new Date();
@@ -115,34 +116,43 @@
                     <p class="pl-5">
                         {@html subtitle}
                     </p>
-
-                    <div class="flex flex-col items-center">
-                        <div
-                            id="inline-calendar-container"
-                            class="date-picker-container"
-                        >
-                            <input
-                                type="text"
-                                id="check_in_date"
-                                placeholder="Select check-in date"
-                            />
-
-                            <!-- <label for="check_out_date">Check-out Date:</label> -->
-                            <input
-                                type="text"
-                                id="check_out_date"
-                                placeholder="Select check-out date"
-                                class="hidden"
-                            />
-                        </div>
-                        <div class="mt-[30px]">
-                            <button
-                                class="core_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
+                    <div class="flex flex-row"> 
+                        <p class="pl-5 w-[33%]">
+                            {@html content}
+                        </p>
+                        <div class="flex flex-col items-center  w-[34%]">
+                            <div>
+                                
+                            </div>
+                            <div
+                                id="inline-calendar-container"
+                                class="date-picker-container"
                             >
-                                {$LL.check_availability()}
-                            </button>
+                                <input
+                                    type="text"
+                                    id="check_in_date"
+                                    placeholder="Select check-in date"
+                                />
+    
+                                <!-- <label for="check_out_date">Check-out Date:</label> -->
+                                <input
+                                    type="text"
+                                    id="check_out_date"
+                                    placeholder="Select check-out date"
+                                    class="hidden"
+                                />
+                            </div>
+                            <div class="mt-[30px]">
+                                <button
+                                    class="core_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
+                                >
+                                    {$LL.reservation_request()}
+                                </button>
+                            </div>
                         </div>
+                        <p class=" w-[33%]">aqui vamos aponer el precio calculado</p>
                     </div>
+                    
                 </form>
             </div>
             <div class="h-16"></div>

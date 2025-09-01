@@ -23,6 +23,7 @@ const en = {
     phone: "Phone",
     privacy_politic: "privacy politic",
     rates: "Rates",
+    reservation_request: "Reservation Request",
     rooms: "Rooms",
     send_message: "Send Message",
     what_to_visit: "What to visit",

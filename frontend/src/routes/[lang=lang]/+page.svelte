@@ -27,6 +27,7 @@
 	$: about_us_content = data.about_us_content;
 	$: form_title = data.form_title;
 	$: form_subtitle = data.form_subtitle;
+	$: form_content = data.form_content;
 </script>
 
 <!-- HOME PAGE TITLE -->
@@ -205,6 +206,7 @@
 		title={form_title}
 		subtitle={form_subtitle}
 		img={form_img}
+		content={form_content}
 	/>
 </div>
 <!-- END -->

@@ -23,6 +23,7 @@ const es = {
     phone: "Teléfono",
     privacy_politic: "Política de privacidad",
     rates: "Tarifas",
+    reservation_request: "Solicitud de Reserva",
     rooms: "Habitaciones",
     send_message: "Enviar mensaje",
     what_to_visit: "Que visitar",

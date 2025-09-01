@@ -41,6 +41,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let form_title = '';
     let form_subtitle = '';
     let form_img = '';
+    let form_content = '';
     let error: string | null = null;
 
 	try {
@@ -103,6 +104,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             form_title = reservationResponse.title || '';
             form_subtitle = reservationResponse.excerpt || '';
             form_img = reservationResponse.image || '';
+            form_content = reservationResponse.content || '';
         } else {
             console.warn(`No reservation form data found for locale: ${locale}`);
         }
@@ -134,6 +136,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         form_title,
         form_subtitle,
         form_img,
+        form_content,
         error
     };
 }

@@ -23,6 +23,7 @@ const gl = {
     phone: "Teléfono",
     privacy_politic: "Política de privacidade",
     rates: "Tarifas",
+    reservation_request: "Solicitude de reserva",
     rooms: "Habitacións",
     send_message: "Enviar mensaxe",
     what_to_visit: "Que visitar",

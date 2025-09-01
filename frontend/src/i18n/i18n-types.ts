@@ -28,9 +28,9 @@ type RootTranslation = {
 	 */
 	arrival_date: string
 	/**
-	 * Book
+	 * B​o​o​k
 	 */
-	book: string,
+	book: string
 	/**
 	 * C​h​e​c​k​ ​A​v​a​i​l​a​b​i​l​i​t​y
 	 */
@@ -100,9 +100,13 @@ type RootTranslation = {
 	 */
 	privacy_politic: string
 	/**
-	 * Rates
+	 * R​a​t​e​s
 	 */
 	rates: string
+	/**
+	 * Reservation Request
+	 */
+	reservation_request: string
 	/**
 	 * R​o​o​m​s
 	 */
@@ -227,6 +231,10 @@ export type TranslationFunctions = {
 	 * Rates
 	 */
 	rates: () => LocalizedString
+	/**
+	 * Reservation Request
+	 */
+	reservation_request: () => LocalizedString
 	/**
 	 * Rooms
 	 */

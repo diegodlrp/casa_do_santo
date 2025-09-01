@@ -10,7 +10,6 @@
     const {
         img,
         title_img,
-        form_img,
         error,
     } = data;
 
@@ -19,8 +18,6 @@
     $: rooms_data = data.rooms_data;
     $: title_title = data.title_title;
     $: title_subtitle = data.title_subtitle;
-    $: form_title = data.form_title;
-    $: form_subtitle = data.form_subtitle;
     
 </script>
 
@@ -107,11 +104,5 @@
 </div>
 <!-- END -->
 <!-- ROOMS Reservation Form -->
-<div id="home_page_reservation_form">
-    <ReservationForm
-        title={form_title}
-        subtitle={form_subtitle}
-        img={form_img}
-    />
-</div>
+
 <!-- END -->

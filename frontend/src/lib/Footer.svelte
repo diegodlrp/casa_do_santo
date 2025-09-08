@@ -7,6 +7,7 @@
     import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
     import { base } from "$app/paths";
     import { LL, locale } from "$i18n/i18n-svelte";
+    import ReservationSwitcher from './ReservationSwitcher.svelte';
 
     let name = "Casa do Santo";
     let address = "";
@@ -32,6 +33,7 @@
             >
                 <div class="grid grid-cols-1">
                     <a href="{base}/{$locale}" class="nav-link">{$LL.home()}</a>
+                    <ReservationSwitcher />
                     <a href="{base}/{$locale}/rooms" class="nav-link"
                         >{$LL.rooms()}</a
                     >

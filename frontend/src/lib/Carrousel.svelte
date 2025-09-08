@@ -71,8 +71,8 @@
                             src={location.image}
                             alt={location.slug}
                         />
-                        <h2 class="pt-[30px] text-[color:var(--color-text-caption)] text-center">{location.title}</h2>
-                        <p class="text-[color:var(--color-text)] text-center">{location.content}</p>
+                        <h2 class="pt-[30px] text-[color:var(--color-text-caption)] text-center">{@html location.title}</h2>
+                        <p class="text-[color:var(--color-text)] text-center">{@html location.content}</p>
                     </div>
                 </div>
             </li>

@@ -16,30 +16,26 @@
     // Get today's date
     const today = new Date();
 
-    let handleDateEnd;
-
-    let dateInit = "";
-    let dateEnd = "";
-    let dateLimit = "";
-    let dateMin = "";
-    let n_people = 1;
-    let selectedDate = "";
+    let isButtonDisabled = true;
 
     const handleSubmit = async () => {
         // Example: Simulate a successful submission after a delay
         await new Promise((resolve) => setTimeout(resolve, 500));
-        goto(base + "/" + $locale + "/reservation_form?checkInDate="+checkInDate+"&checkOutDate="+checkOutDate);
+        goto(
+            base +
+                "/" +
+                $locale +
+                "/reservation_form?checkInDate=" +
+                checkInDate +
+                "&checkOutDate=" +
+                checkOutDate,
+        );
     };
-
-    function getFormattedDate(date: Date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    }
 
     let checkInDate = "";
     let checkOutDate = "";
+    let n_days = 0;
+    let total_price = 0;
 
     onMount(async () => {
         const checkInInput = document.getElementById("check_in_date");
@@ -58,6 +54,7 @@
                 onChange: function (selectedDates, dateStr, instance) {
                     if (selectedDates.length === 2) {
                         // This condition checks if both start and end are selected
+                        console.log("selectedDates",selectedDates)
                         checkInDate = instance.formatDate(
                             selectedDates[0],
                             "Y-m-d",
@@ -66,34 +63,32 @@
                             selectedDates[1],
                             "Y-m-d",
                         );
+                        let differenceInTime = selectedDates[1].getTime() - selectedDates[0].getTime();
+                        n_days = differenceInTime / (1000 * 3600 * 24)+1;
+                        total_price = 233 * n_days;
+                        if (n_days>=3){
+                            isButtonDisabled = false;
+                        } else {
+                            isButtonDisabled = true;
+                        }
+                        
+                        console.info("checkOutDate",checkOutDate)
                     } else {
+                        isButtonDisabled = true;
                         checkInDate =
                             selectedDates.length > 0
                                 ? instance.formatDate(selectedDates[0], "Y-m-d")
                                 : "";
                         checkOutDate = "";
+                        n_days = 0;
+                        total_price = 0;
                     }
                 },
             });
 
-            // const checkOutInstance = flatpickr(checkOutInput, {
-            //     dateFormat: "Y-m-d",
-            //     minDate: "today", // Initial min date
-            //     inline: true,
-            //     altInput: true,
-            //     disable: titleResponse,
-            //     altFormat: "F j, Y",
-            //     onClose: function (selectedDates, dateStr, instance) {
-            //         // When the check-out calendar is closed, update checkOutDate
-            //         if (selectedDates.length > 0) {
-            //             checkOutDate = dateStr;
-            //         } else {
-            //             checkOutDate = "";
-            //         }
-            //     },
-            // });
         }
     });
+
 </script>
 
 <div class="relative overflow-hidden pt-0 mt-0">
@@ -116,14 +111,12 @@
                     <p class="pl-5">
                         {@html subtitle}
                     </p>
-                    <div class="flex flex-row"> 
+                    <div class="flex flex-row">
                         <p class="pl-5 w-[33%]">
                             {@html content}
                         </p>
-                        <div class="flex flex-col items-center  w-[34%]">
-                            <div>
-                                
-                            </div>
+                        <div class="flex flex-col items-center w-[34%]">
+                            <div></div>
                             <div
                                 id="inline-calendar-container"
                                 class="date-picker-container"
@@ -133,7 +126,7 @@
                                     id="check_in_date"
                                     placeholder="Select check-in date"
                                 />
-    
+
                                 <!-- <label for="check_out_date">Check-out Date:</label> -->
                                 <input
                                     type="text"
@@ -145,14 +138,23 @@
                             <div class="mt-[30px]">
                                 <button
                                     class="core_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
+                                    class:button_dissabled={isButtonDisabled === true}
+				
+                                    disabled={isButtonDisabled}
                                 >
                                     {$LL.reservation_request()}
                                 </button>
                             </div>
                         </div>
-                        <p class=" w-[33%]">aqui vamos aponer el precio calculado</p>
+                        <p class=" w-[33%]">
+                            aqui vamos aponer el precio calculado 
+                            <br/>
+                            n dias: {n_days}
+                            <br/>
+                            precio: {total_price}
+                        </p>
+                        
                     </div>
-                    
                 </form>
             </div>
             <div class="h-16"></div>
@@ -199,6 +201,4 @@
     }
 
     /* Your existing .calendar-wrapper, .date-display-inputs, etc. styles */
-
-    
 </style>

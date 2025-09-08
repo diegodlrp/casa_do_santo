@@ -104,7 +104,7 @@ type RootTranslation = {
 	 */
 	rates: string
 	/**
-	 * Reservation Request
+	 * R​e​s​e​r​v​a​t​i​o​n​ ​R​e​q​u​e​s​t
 	 */
 	reservation_request: string
 	/**

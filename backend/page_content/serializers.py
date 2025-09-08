@@ -36,4 +36,3 @@ class PageContentSerializer(serializers.ModelSerializer):
         if obj.featured_image and obj.featured_image.image_file:
             return request.build_absolute_uri(obj.featured_image.image_file.url)
         return None
-

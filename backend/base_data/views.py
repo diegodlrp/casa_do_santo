@@ -3,6 +3,7 @@ from .serializers import BaseDataSerializer
 from .models import BaseData
 from rest_framework.viewsets import ModelViewSet
 
+
 # Create your views here.
 class BaseDataViewSet(ModelViewSet):
     """

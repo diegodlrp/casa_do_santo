@@ -72,7 +72,6 @@ def send_reservation_mail_view(request):
         print("error:", e)
         return JsonResponse({"message": str(e)})
 
-    
     try:
         recipient_list = [mail]
         print("aaaaa")

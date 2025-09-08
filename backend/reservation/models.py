@@ -12,15 +12,35 @@ class Guest(models.Model):
     Model to store individual guest's contact and personal information.
     """
 
+    DOCUMENT_TYPES = [
+        ('NIF', 'NIF'),
+        ('DNI', 'DNI'),
+        ('NIE', 'NIE'),
+        ('PASSPORT', 'Passport'),
+        ('DRIVING_LICENSE', 'Driving License'),
+    ]
+
     name = models.CharField(max_length=100, verbose_name=_("Guest First Name"))
     last_name = models.CharField(max_length=100, verbose_name=_("Guest Last Name"))
+    last_name2 = models.CharField(max_length=100, verbose_name=_("Guest Last Name"), default="")
     email = models.EmailField(
         verbose_name=_("Guest Email"), blank=True
     )  # Make email unique for better lookup
     phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
+    mobile = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
     vat = models.CharField(
         max_length=20, blank=True, verbose_name=_("Guest VAT/Tax ID")
     )  # Changed verbose_name for clarity
+    document_type = models.CharField(
+        max_length=100,
+        choices=DOCUMENT_TYPES,
+        default='NIF',
+        verbose_name=_("Document Type")
+    )
+    nacionality = models.CharField(max_length=100, verbose_name=_("Nacionality"), default="")
+    address = models.CharField(max_length=100, verbose_name=_("Guest Address"), default="")
+    address_state = models.CharField(max_length=100, verbose_name=_("Guest State"), default="")
+    country = models.CharField(max_length=100, verbose_name=_("Guest Country"), default="")
     adult = models.BooleanField(verbose_name=_("Guest adult"))
 
     class Meta:

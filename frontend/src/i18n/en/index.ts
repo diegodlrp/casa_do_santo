@@ -26,6 +26,7 @@ const en = {
     reservation_request: "Reservation Request",
     rooms: "Rooms",
     send_message: "Send Message",
+    what_to_do: "What to do",
     what_to_visit: "What to visit",
     write_your_message: "Write your message",
     your_email: "Your email",

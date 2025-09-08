@@ -7,6 +7,7 @@
     import "swiper/css/pagination";
 
     export let data: any[] = [];
+    export let dark: boolean;
 
     let swiperInstance: Swiper | undefined;
     let swiperContainer: HTMLDivElement | undefined;
@@ -72,7 +73,9 @@
                             alt={location.slug}
                         />
                         <h2 class="pt-[30px] text-[color:var(--color-text-caption)] text-center">{@html location.title}</h2>
-                        <p class="text-[color:var(--color-text)] text-center">{@html location.content}</p>
+                        <p class="text-[color:var(--color-text)] text-center"
+                        class:text-[color:var(--color-text-dark)]={dark}
+                        >{@html location.content}</p>
                     </div>
                 </div>
             </li>

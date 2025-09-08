@@ -8,11 +8,34 @@
     import { base } from "$app/paths";
     import { LL, locale } from "$i18n/i18n-svelte";
     import ReservationSwitcher from './ReservationSwitcher.svelte';
+    import { onMount } from "svelte";
+    import { apiRequest } from "./services/apiService";
 
     let name = "Casa do Santo";
     let address = "";
     let email = "";
     let phone = "";
+
+	let error: string | null = null;
+    onMount(async () => {
+	try {
+			// Fetch title data
+			const baseDataResponse = await apiRequest(`/basedata/`);
+            if (baseDataResponse) {
+				address = baseDataResponse[0]["address"] || '';
+				phone = baseDataResponse[0]["phone"] || '';
+				email = baseDataResponse[0]["email"] || '';
+                console.log("email",email)
+			} else {
+				console.warn(`No title data found for locale: ${locale}`);
+			}
+	
+
+		}catch (e: any) {
+			console.error('Error fetching data for page:', e);
+			error = e; // Capture error message
+		}
+    });
 </script>
 
 <footer class="bg-[color:var(--color-bg-dark)] relative overflow-hidden">
@@ -38,7 +61,7 @@
                         >{$LL.rooms()}</a
                     >
                     <a href="{base}/{$locale}/location" class="nav-link"
-                        >{$LL.what_to_visit()}</a
+                        >{$LL.what_to_do()}</a
                     >
                     <a href="{base}/{$locale}/gallery" class="nav-link"
                         >{$LL.gallery()}</a

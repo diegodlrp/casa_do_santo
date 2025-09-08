@@ -26,6 +26,7 @@ const gl = {
     reservation_request: "Solicitude de reserva",
     rooms: "Habitacións",
     send_message: "Enviar mensaxe",
+    what_to_do: "Que hacer",
     what_to_visit: "Que visitar",
     write_your_message: "Escribe a túa mensaxe",
     your_email: "O teu correo electrónico",

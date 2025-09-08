@@ -64,7 +64,7 @@
                             "Y-m-d",
                         );
                         let differenceInTime = selectedDates[1].getTime() - selectedDates[0].getTime();
-                        n_days = differenceInTime / (1000 * 3600 * 24)+1;
+                        n_days = differenceInTime / (1000 * 3600 * 24);
                         total_price = 233 * n_days;
                         if (n_days>=3){
                             isButtonDisabled = false;

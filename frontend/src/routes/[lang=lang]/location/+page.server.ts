@@ -25,6 +25,8 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let carrousel_activity_subtitle = '';
     let carrousel_activity_img = '';
 
+    let logo_map_img = '';
+
     let carrousel_activity_data: any[] = [];
 
     let error: string | null = null;
@@ -87,6 +89,14 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             console.warn(`No carrousel data form data found for locale: ${locale}`);
         }
 
+        // Fetch basic data
+        const basicDataActivityResponse = await apiRequest(`/basedata/?lang=${locale}`);
+        if (basicDataActivityResponse){
+           logo_map_img = basicDataActivityResponse[0]["logo"];
+        }else {
+            console.warn(`No carrousel data form data found for locale: ${locale}`);
+        }
+
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -108,6 +118,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         carrousel_activity_subtitle,
         carrousel_activity_img,
         carrousel_activity_data,
+        logo_map_img,
         error
     }
 }

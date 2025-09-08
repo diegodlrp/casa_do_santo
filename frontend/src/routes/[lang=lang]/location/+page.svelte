@@ -7,6 +7,7 @@
 
     export let data: PageData;
 
+
     // Destructure the data directly
     $: title_title = data.title_title;
     $: title_subtitle = data.title_subtitle;
@@ -23,7 +24,7 @@
     $: carrousel_activity_subtitle = data.carrousel_activity_subtitle;
     $: carrousel_activity_img = data.carrousel_activity_img;
     $: carrousel_activity_data = data.carrousel_activity_data;
-
+    $: logo_map_img = data.logo_map_img;
     let mapDiv: HTMLDivElement;
 
     onMount(() => {
@@ -39,7 +40,7 @@
             mapTypeControl: true, // allow switching (optional)
         });
         const icon = {
-            url: "/img/logo.jpeg", // The image URL
+            url: logo_map_img, // The image URL
             scaledSize: new google.maps.Size(40, 40), // The size of the icon in pixels
         };
 
@@ -110,12 +111,12 @@
     <div class="w-full h-full bg-[color:var(--color-bg-dark)] pt-[30px]">
         <h2 class="text-center">{@html carrousel_title}</h2>
         <h3 class="text-center">{@html carrousel_subtitle}</h3>
-        <Carrousel data={carrousel_data} />
+        <Carrousel data={carrousel_data} dark={false}/>
     </div>
 
-    <div class="w-full h-full bg-[color:var(--color-bg-dark)] pt-[30px]">
-        <h2 class="text-center">{@html carrousel_activity_title}</h2>
-        <h3 class="text-center">{@html carrousel_activity_subtitle}</h3>
-        <Carrousel data={carrousel_activity_data} />
+    <div class="w-full h-full bg-[color:var(--color-bg-light)] pt-[30px]">
+        <h2 class="text-center text-[color:var(--color-text-dark)]">{@html carrousel_activity_title}</h2>
+        <h3 class="text-center text-[color:var(--color-text-dark)]">{@html carrousel_activity_subtitle}</h3>
+        <Carrousel data={carrousel_activity_data} dark={true}/>
     </div>
 </div>

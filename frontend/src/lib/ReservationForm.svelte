@@ -113,6 +113,7 @@
                             total_price =
                                 (total_price * (100 - variant_discount)) / 100;
                         } else {
+                            alert($LL.nights_warrning());
                             isButtonDisabled = true;
                         }
 

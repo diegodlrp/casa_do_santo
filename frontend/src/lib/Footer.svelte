@@ -7,7 +7,7 @@
     import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
     import { base } from "$app/paths";
     import { LL, locale } from "$i18n/i18n-svelte";
-    import ReservationSwitcher from './ReservationSwitcher.svelte';
+    import ReservationSwitcher from "./ReservationSwitcher.svelte";
     import { onMount } from "svelte";
     import { apiRequest } from "./services/apiService";
 
@@ -16,25 +16,23 @@
     let email = "";
     let phone = "";
 
-	let error: string | null = null;
+    let error: string | null = null;
     onMount(async () => {
-	try {
-			// Fetch title data
-			const baseDataResponse = await apiRequest(`/basedata/`);
+        try {
+            // Fetch title data
+            const baseDataResponse = await apiRequest(`/basedata/`);
             if (baseDataResponse) {
-				address = baseDataResponse[0]["address"] || '';
-				phone = baseDataResponse[0]["phone"] || '';
-				email = baseDataResponse[0]["email"] || '';
-                console.log("email",email)
-			} else {
-				console.warn(`No title data found for locale: ${locale}`);
-			}
-	
-
-		}catch (e: any) {
-			console.error('Error fetching data for page:', e);
-			error = e; // Capture error message
-		}
+                address = baseDataResponse[0]["address"] || "";
+                phone = baseDataResponse[0]["phone"] || "";
+                email = baseDataResponse[0]["email"] || "";
+                console.log("email", email);
+            } else {
+                console.warn(`No title data found for locale: ${locale}`);
+            }
+        } catch (e: any) {
+            console.error("Error fetching data for page:", e);
+            error = e; // Capture error message
+        }
     });
 </script>
 
@@ -56,7 +54,9 @@
             >
                 <div class="grid grid-cols-1">
                     <a href="{base}/{$locale}" class="nav-link">{$LL.home()}</a>
-                    <ReservationSwitcher />
+                    <a href="{base}/{$locale}/availability" class="nav-link"
+                        >{$LL.book()}</a
+                    >
                     <a href="{base}/{$locale}/rooms" class="nav-link"
                         >{$LL.rooms()}</a
                     >

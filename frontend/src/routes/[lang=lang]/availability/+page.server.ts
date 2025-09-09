@@ -28,6 +28,13 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let form_subtitle = '';
     let form_img = '';
     let form_content = '';
+
+    let percentage_true: any[] = [];
+    let percentage_false: any[] = [];
+
+    let rate_data: any[] = [];
+
+    
     let error: string | null = null;
 
     try {
@@ -61,6 +68,16 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         } else {
             console.warn(`No reservation form data found for locale: ${locale}`);
         }
+
+        const discountResponse = await apiRequest(`/discount/?lang=${locale}`);
+        if (discountResponse) {
+            percentage_true = discountResponse["percentage_true"]
+            percentage_false = discountResponse["percentage_false"]
+        } else {
+            console.warn(`No discountResponse data found for locale: ${locale}`);
+        }
+
+        rate_data = await apiRequest(`/calendar/price-data-ranges/`);
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -80,6 +97,9 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         form_subtitle,
         form_img,
         form_content,
+        percentage_true,
+        percentage_false,
+        rate_data,
         error
     };
 }

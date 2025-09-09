@@ -22,6 +22,7 @@ const es = {
     more_photos: "Más fotos",
     name: "Nombre",
     nights: "Noches",
+    nights_warrning: "Por favor, seleccione una fecha de entrada y una fecha de salida para crear una reserva válida. Minimo 3 noches",
     n_guest: "Nº de huésped",
     n_nights: "Número de noches",
     phone: "Teléfono",

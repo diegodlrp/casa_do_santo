@@ -22,6 +22,7 @@ const en = {
     more_photos: "More photos",
     name: "Name",
     nights: "Nights",
+    nights_warrning: "Please select a check-in and check-out date to create a valid reservation. Minimun 3 nights",
     n_guest: "Nº guest",
     n_nights: "Number of nights",
     phone: "Phone",

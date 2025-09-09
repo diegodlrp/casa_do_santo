@@ -96,9 +96,13 @@ type RootTranslation = {
 	 */
 	name: string
 	/**
-	 * Nights
+	 * N​i​g​h​t​s
 	 */
 	nights: string
+	/**
+	 * P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​ ​c​h​e​c​k​-​i​n​ ​a​n​d​ ​c​h​e​c​k​-​o​u​t​ ​d​a​t​e​ ​t​o​ ​c​r​e​a​t​e​ ​a​ ​v​a​l​i​d​ ​r​e​s​e​r​v​a​t​i​o​n​.​ ​M​i​n​i​m​u​n​ ​3​ ​n​i​g​h​t​s
+	 */
+	nights_warrning: string
 	/**
 	 * N​º​ ​g​u​e​s​t
 	 */
@@ -251,6 +255,10 @@ export type TranslationFunctions = {
 	 * Nights
 	 */
 	nights: () => LocalizedString
+	/**
+	 * Please select a check-in and check-out date to create a valid reservation. Minimun 3 nights
+	 */
+	nights_warrning: () => LocalizedString
 	/**
 	 * Nº guest
 	 */

@@ -22,6 +22,7 @@ const gl = {
     more_photos: "Máis fotos",
     name: "Nome",
     nights: "Noites",
+    nights_warrning: "Por favor, seleccione unha data de entrada e unha data de saída para crear unha reserva válida. Minimo 3 noites",
     n_guest: "Nº de hóspede",
     n_nights: "Número de noites",
     phone: "Teléfono",

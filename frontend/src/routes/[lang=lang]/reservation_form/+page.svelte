@@ -5,17 +5,13 @@
     import RiMapPin2Line from "svelte-remixicon/RiMapPin2Line.svelte";
     import type { PageData } from "./$types";
     import Title from "$lib/Title.svelte";
+    import { onMount } from "svelte";
 
     export let data: PageData;
 
     // Destructure the data directly
-    const {
-        title_img,
-        contact_img,
-        form_img,
-        error,
-    } = data;
-    
+    const { title_img, contact_img, form_img, error } = data;
+
     $: title_title = data.title_title;
     $: title_subtitle = data.title_subtitle;
     $: contact_title = data.contact_title;
@@ -27,26 +23,48 @@
     $: form_title = data.form_title;
     $: form_subtitle = data.form_subtitle;
     console.log(data);
-   
+
     let name = "";
     let email = "";
     let message = "";
+    let checkInDate = "";
+    let checkOutDate = "";
 
     const handleSubmit = async () => {
+        const response = await fetch(
+            "http://localhost:8000/api/send-reservationmail/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
 
-        const response = await fetch('http://localhost:8000/api/send-reservationmail/', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-
-					// Add CSRF token header if needed (see previous email example notes)
-				},
-				mode: 'cors',
-				// Send petition data as JSON
-				body: JSON.stringify({ name: name, mail: email, message: message }),
-				credentials: 'omit'
-			});
+                    // Add CSRF token header if needed (see previous email example notes)
+                },
+                mode: "cors",
+                // Send petition data as JSON
+                body: JSON.stringify({
+                    name: name,
+                    mail: email,
+                    message: message,
+                }),
+                credentials: "omit",
+            },
+        );
     };
+
+    onMount(() => {
+        // Check if window is defined to ensure this code only runs in the browser
+        if (typeof window !== "undefined") {
+            const urlParams = new URLSearchParams(window.location.search);
+            checkInDate = urlParams.get("checkInDate");
+            checkOutDate = urlParams.get("checkOutDate");
+            
+            console.log("Value of myParam is:", checkInDate);
+            console.log("Value of myParam is:", checkOutDate);
+
+           
+        }
+    });
 </script>
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
@@ -80,19 +98,25 @@
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiPhoneLine />
-                                    <a href="tel:{contact_phone}">{contact_phone}</a>
+                                    <a href="tel:{contact_phone}"
+                                        >{contact_phone}</a
+                                    >
                                 </div>
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiMailLine />
-                                    <a href="mailto:{contact_email}">{contact_email}</a>
+                                    <a href="mailto:{contact_email}"
+                                        >{contact_email}</a
+                                    >
                                 </div>
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiMapPin2Line />
-                                    <a href="{contact_address_link}">{contact_address}</a>
+                                    <a href={contact_address_link}
+                                        >{contact_address}</a
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -135,6 +159,32 @@
                                     />
                                 </div>
                                 <!-- END email -->
+
+                                <div>
+                                    <label for="check_in_date" class="block text-sm font-medium mb-1"
+                                      >Fecha de Entrada</label
+                                    >
+                                    <input
+                                      type="date"
+                                      id="check_in_date"
+                                      bind:value={checkInDate}
+                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                      required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label for="check_in_date" class="block text-sm font-medium mb-1"
+                                      >Fecha de Entrada</label
+                                    >
+                                    <input
+                                      type="date"
+                                      id="check_in_date"
+                                      bind:value={checkOutDate}
+                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                      required
+                                    />
+                                </div>
                                 <!-- START message -->
                                 <div>
                                     <label for="message" class="text-sm"
@@ -169,8 +219,7 @@
                                             class="text-[#c8a655]"
                                             >{"privacy_politic"}</a
                                         > -->
-                                        </label
-                                    >
+                                    </label>
                                 </div>
                                 <!-- END checkbox -->
                                 <!-- START button -->

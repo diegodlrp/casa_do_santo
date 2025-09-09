@@ -16,11 +16,13 @@
         {#each data as service}
             <div class="p-5 cursor-pointer rounded-md">
                 <div class="flex flex-row items-center gap-5">
+                    {#if service.image}
                     <img
                         class="inline h-10 w-10"
                         src={service.image}
                         alt={service.slug}
                     />
+                    {/if}
                     <p class="md:text-lg font-bold border-b-2 border-[color:var(--color-text-caption)]">
                         {@html service.title}
                     </p>

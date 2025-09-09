@@ -35,13 +35,26 @@
     let checkInDate = "";
     let checkOutDate = "";
     let n_days = 0;
+    let base_price = 0;
     let total_price = 0;
+
+    let percentage_true: any[] = [];
+    let percentage_false: any[] = [];
+
+    let fix_discount = 0;
+    let fix_discount_days = 0;
+    let variant_discount = 0;
+    let variant_discount_days = 0;
 
     onMount(async () => {
         const checkInInput = document.getElementById("check_in_date");
         const checkOutInput = document.getElementById("check_out_date");
         const titleResponse = await apiRequest(`/calendar/available-dates/`);
         console.log("titleResponse", titleResponse);
+        const discountResponse = await apiRequest(`/discount/?lang=${locale}`);
+        console.log("discountResponse", discountResponse);
+        percentage_true = discountResponse["percentage_true"];
+        percentage_false = discountResponse["percentage_false"];
         if (checkInInput && checkOutInput) {
             flatpickr(checkInInput, {
                 mode: "range",
@@ -54,7 +67,7 @@
                 onChange: function (selectedDates, dateStr, instance) {
                     if (selectedDates.length === 2) {
                         // This condition checks if both start and end are selected
-                        console.log("selectedDates",selectedDates)
+                        console.log("selectedDates", selectedDates);
                         checkInDate = instance.formatDate(
                             selectedDates[0],
                             "Y-m-d",
@@ -63,16 +76,47 @@
                             selectedDates[1],
                             "Y-m-d",
                         );
-                        let differenceInTime = selectedDates[1].getTime() - selectedDates[0].getTime();
+                        let differenceInTime =
+                            selectedDates[1].getTime() -
+                            selectedDates[0].getTime();
                         n_days = differenceInTime / (1000 * 3600 * 24);
-                        total_price = 233 * n_days;
-                        if (n_days>=3){
+
+                        if (n_days >= 3) {
                             isButtonDisabled = false;
+                            base_price = 233 * n_days;
+                            variant_discount_days = 0;
+
+                            percentage_true.forEach((item) => {
+                                console.log("item", item);
+                                if (
+                                    n_days >= item.days_number &&
+                                    item.days_number > variant_discount_days
+                                ) {
+                                    variant_discount_days = item.days_number;
+                                    variant_discount = item.discount;
+                                }
+                                console.log(percentage_true);
+                            });
+                            fix_discount_days = 0;
+                            percentage_false.forEach((item) => {
+                                if (
+                                    n_days >= item.days_number &&
+                                    item.days_number > fix_discount_days
+                                ) {
+                                    fix_discount_days = item.days_number;
+                                    fix_discount = item.discount;
+                                }
+                                console.log(percentage_true);
+                            });
+
+                            total_price = base_price - fix_discount;
+                            total_price =
+                                (total_price * (100 - variant_discount)) / 100;
                         } else {
                             isButtonDisabled = true;
                         }
-                        
-                        console.info("checkOutDate",checkOutDate)
+
+                        console.info("checkOutDate", checkOutDate);
                     } else {
                         isButtonDisabled = true;
                         checkInDate =
@@ -81,14 +125,17 @@
                                 : "";
                         checkOutDate = "";
                         n_days = 0;
+                        base_price = 0;
                         total_price = 0;
+                        fix_discount = 0;
+                        variant_discount = 0;
+                        variant_discount_days = 0;
+                        fix_discount_days = 0;
                     }
                 },
             });
-
         }
     });
-
 </script>
 
 <div class="relative overflow-hidden pt-0 mt-0">
@@ -138,22 +185,59 @@
                             <div class="mt-[30px]">
                                 <button
                                     class="core_button w-full h-full min-h-[42px] mt-6 md:mt-0 font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform"
-                                    class:button_dissabled={isButtonDisabled === true}
-				
+                                    class:button_dissabled={isButtonDisabled ===
+                                        true}
                                     disabled={isButtonDisabled}
                                 >
                                     {$LL.reservation_request()}
                                 </button>
                             </div>
                         </div>
-                        <p class=" w-[33%]">
-                            aqui vamos aponer el precio calculado 
-                            <br/>
-                            n dias: {n_days}
-                            <br/>
-                            precio: {total_price}
-                        </p>
-                        
+                        <div class="w-[33%] h-[100%]">
+                            <div
+                                class="font-bold uppercase text-[color:var(--color-text-caption)]"
+                            >
+                                <table class="w-80% h-[100%]">
+                                    <tbody>
+                                        <tr>
+                                            <td>{$LL.n_nights()}:</td>
+                                            <td class="text-right">{n_days}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$LL.price()}:</td>
+                                            <td class="text-right"
+                                                >{base_price} €</td
+                                            >
+                                        </tr>
+                                        <tr>
+                                            <td class="text-top"
+                                                >{$LL.discounts()}:</td
+                                            >
+                                            <td class="text-right"
+                                                >{#if fix_discount > 0}{fix_discount_days}
+                                                    {$LL.nights()}
+                                                    {fix_discount} €<br />{/if}
+                                                {#if variant_discount > 0}{variant_discount_days}
+                                                    {$LL.nights()}
+                                                    {variant_discount}%<br
+                                                    />{/if}</td
+                                            >
+                                        </tr>
+                                        <tr
+                                            class="mt-14 mb-5 border-b border-[color:var(--color-text-caption)] relative"
+                                        ></tr>
+                                        <tr>
+                                            <td class="text-top"
+                                                >{$LL.final_price()}:</td
+                                            >
+                                            <td class="text-right"
+                                                >{total_price} €</td
+                                            >
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

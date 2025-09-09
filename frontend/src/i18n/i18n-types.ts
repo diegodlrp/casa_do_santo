@@ -48,6 +48,14 @@ type RootTranslation = {
 	 */
 	departure_date: string
 	/**
+	 * D​i​s​c​o​u​n​t​s
+	 */
+	discounts: string
+	/**
+	 * F​i​n​a​l​ ​p​r​i​c​e
+	 */
+	final_price: string
+	/**
 	 * G​a​l​l​e​r​y
 	 */
 	gallery: string
@@ -88,13 +96,25 @@ type RootTranslation = {
 	 */
 	name: string
 	/**
+	 * Nights
+	 */
+	nights: string
+	/**
 	 * N​º​ ​g​u​e​s​t
 	 */
 	n_guest: string
 	/**
+	 * N​u​m​b​e​r​ ​o​f​ ​n​i​g​h​t​s
+	 */
+	n_nights: string
+	/**
 	 * P​h​o​n​e
 	 */
 	phone: string
+	/**
+	 * P​r​i​c​e
+	 */
+	price: string
 	/**
 	 * p​r​i​v​a​c​y​ ​p​o​l​i​t​i​c
 	 */
@@ -116,7 +136,7 @@ type RootTranslation = {
 	 */
 	send_message: string
 	/**
-	 * What to do
+	 * W​h​a​t​ ​t​o​ ​d​o
 	 */
 	what_to_do: string
 	/**
@@ -180,6 +200,14 @@ export type TranslationFunctions = {
 	 */
 	departure_date: () => LocalizedString
 	/**
+	 * Discounts
+	 */
+	discounts: () => LocalizedString
+	/**
+	 * Final price
+	 */
+	final_price: () => LocalizedString
+	/**
 	 * Gallery
 	 */
 	gallery: () => LocalizedString
@@ -220,13 +248,25 @@ export type TranslationFunctions = {
 	 */
 	name: () => LocalizedString
 	/**
+	 * Nights
+	 */
+	nights: () => LocalizedString
+	/**
 	 * Nº guest
 	 */
 	n_guest: () => LocalizedString
 	/**
+	 * Number of nights
+	 */
+	n_nights: () => LocalizedString
+	/**
 	 * Phone
 	 */
 	phone: () => LocalizedString
+	/**
+	 * Price
+	 */
+	price: () => LocalizedString
 	/**
 	 * privacy politic
 	 */

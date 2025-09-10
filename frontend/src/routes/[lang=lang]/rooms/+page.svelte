@@ -61,8 +61,13 @@
         >
             <!-- background img -->
             <div
-                class="h-[calc(100%+450px)] w-full bg-cover bg-center absolute -top-[450px]"
-                style="background-image: url({room.image}); opacity: 1;"
+                class="h-[100%] w-full bg-cover bg-center absolute"
+                data-translatey="400"
+                data-when="span"
+                data-from="0"
+                data-to="1"
+                data-easing="linear"
+                style="background-image: url({room.image}); opacity: 1; transform: translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale3d(1, 1, 1);"
             ></div>
 
             <!-- text -->

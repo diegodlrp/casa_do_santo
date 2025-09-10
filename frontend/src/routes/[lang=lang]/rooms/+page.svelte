@@ -67,7 +67,7 @@
                 data-from="0"
                 data-to="1"
                 data-easing="linear"
-                style="background-image: url({room.image}); opacity: 1; transform: translate3d(0px, 270px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale3d(1, 1, 1);"
+                style="background-image: url({room.image}); opacity: 1; "
             ></div>
 
             <!-- text -->

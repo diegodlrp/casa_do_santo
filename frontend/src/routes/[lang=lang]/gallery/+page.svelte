@@ -26,24 +26,22 @@
 <div class="py-12 px-4 z-950 min-h-[calc(100vh-20px)]">
     <div class="container mx-auto">
         {#if img_data.length > 0}
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="masonry-grid">
                 {#each img_data as image, i}
                     <div
-                        class="group relative overflow-hidden shadow-lg cursor-pointer bg-amber-50
-                        {i % 7 === 0 ? 'md:col-span-2 md:row-span-2' : ''}
-                        {i % 9 === 0 ? 'lg:col-span-1 lg:row-span-2' : ''}"
+                        class="group relative overflow-hidden shadow-lg cursor-pointer bg-amber-50"
                         onclick={() => openLightbox(i)}
                         role="button"
                         tabindex="0"
                         onkeypress={(e) => e.key === "Enter" && openLightbox(i)}
                     >
-                    <img
-                    src={image.src}
-                    alt={image.alt}
-                    class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                    loading="lazy"
-                />
-                </div>
+                        <img
+                            src={image.src}
+                            alt={image.alt}
+                            class="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                            loading="lazy"
+                        />
+                    </div>
                 {/each}
             </div>
         {/if}
@@ -52,3 +50,36 @@
 {#if selected_index !== null}
 	<Lightbox images={img_data} current_index={selected_index} on:close={closeLightbox} />
 {/if}
+
+
+<style>
+.masonry-grid {
+    /* Use CSS columns for a masonry effect */
+    column-count: 2; /* Default for small screens */
+    column-gap: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .masonry-grid {
+      column-count: 3; /* For medium screens */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .masonry-grid {
+      column-count: 4; /* For large screens */
+    }
+  }
+  
+  .masonry-grid > div {
+    /* Prevent images from being cut off between columns */
+    break-inside: avoid;
+    margin-bottom: 1rem; /* This creates the vertical gap between images */
+  }
+  
+  .masonry-grid img {
+    /* Ensure images fill their container and maintain aspect ratio */
+    width: 100%;
+    height: auto;
+  }
+</style>

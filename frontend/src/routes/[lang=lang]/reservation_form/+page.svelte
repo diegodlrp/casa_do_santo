@@ -170,6 +170,7 @@
                                       bind:value={checkInDate}
                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                       required
+                                      disabled
                                     />
                                 </div>
 
@@ -183,6 +184,7 @@
                                       bind:value={checkOutDate}
                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                       required
+                                      disabled
                                     />
                                 </div>
                                 <!-- START message -->

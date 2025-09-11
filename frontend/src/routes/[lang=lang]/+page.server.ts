@@ -42,6 +42,9 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let form_subtitle = '';
     let form_img = '';
     let form_content = '';
+
+    let logo_map_img = '';
+
     let error: string | null = null;
 
 	try {
@@ -108,6 +111,14 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         } else {
             console.warn(`No reservation form data found for locale: ${locale}`);
         }
+
+        // Fetch basic data
+        const basicDataActivityResponse = await apiRequest(`/basedata/?lang=${locale}`);
+        if (basicDataActivityResponse){
+           logo_map_img = basicDataActivityResponse[0]["logo"];
+        }else {
+            console.warn(`No carrousel data form data found for locale: ${locale}`);
+        }
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -137,6 +148,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         form_subtitle,
         form_img,
         form_content,
+        logo_map_img,
         error
     };
 }

@@ -5,6 +5,7 @@
 	import type { PageData } from "./$types";
 	import ReservationForm from "$lib/ReservationForm.svelte";
 	import Services from "$lib/Services.svelte";
+	import { onMount } from "svelte";
 
 	export let data: PageData;
 
@@ -28,6 +29,33 @@
 	$: form_title = data.form_title;
 	$: form_subtitle = data.form_subtitle;
 	$: form_content = data.form_content;
+	$: logo_map_img = data.logo_map_img;
+	let mapDiv: HTMLDivElement;
+
+	onMount(() => {
+		// Replace with your real Casa do Santo coordinates
+		const location = { lat: 42.8568341, lng: -8.5884587 };
+
+		const map = new google.maps.Map(mapDiv, {
+			zoom: 10,
+			center: location,
+			mapTypeId: google.maps.MapTypeId.HYBRID, // satellite by default
+			disableDefaultUI: false, // keep default controls
+			zoomControl: true, // force zoom buttons
+			mapTypeControl: true, // allow switching (optional)
+		});
+		const icon = {
+			url: logo_map_img, // The image URL
+			scaledSize: new google.maps.Size(40, 40), // The size of the icon in pixels
+		};
+
+		new google.maps.Marker({
+			position: location,
+			map,
+			title: "Casa do Santo",
+			icon: icon,
+		});
+	});
 </script>
 
 <!-- HOME PAGE TITLE -->
@@ -173,17 +201,10 @@
 
 	<div class="bg-[color:var(--color-bg-dark)] flex">
 		<!-- <a class="text-[color:var(--color-text)]" href="https://maps.app.goo.gl/fZhtSQQbJkm6LbXh6">Consulta nuestra ubicación</a> -->
-		<iframe
-			class="w-full"
-			title="googleMap"
-			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d458822.59978723153!2d-9.265504661741248!3d42.77930951014993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd2efd006966f953%3A0xdfe3d7c3723c22c0!2sCASA%20DO%20SANTO!5e0!3m2!1ses!2ses!4v1756680662151!5m2!1ses!2ses"
-			height="450"
-			style="border:0;"
-			loading="lazy"
-			referrerpolicy="no-referrer-when-downgrade"
-		></iframe>
-	
-		
+
+		<div class="relative w-[100%] h-[450px] overflow-hidden">
+			<div bind:this={mapDiv} class="w-full h-full"></div>
+		</div>
 	</div>
 </div>
 <!-- END -->

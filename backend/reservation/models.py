@@ -13,42 +13,98 @@ class Guest(models.Model):
     """
 
     DOCUMENT_TYPES = [
-        ('NIF', 'NIF'),
-        ('DNI', 'DNI'),
-        ('NIE', 'NIE'),
-        ('PASSPORT', 'Passport'),
-        ('DRIVING_LICENSE', 'Driving License'),
+        ("NIF", "NIF"),
+        ("DNI", "DNI"),
+        ("NIE", "NIE"),
+        ("PASSPORT", "Passport"),
+        ("DRIVING_LICENSE", "Driving License"),
     ]
 
-    name = models.CharField(max_length=100, verbose_name=_("Guest First Name"))
-    last_name = models.CharField(max_length=100, verbose_name=_("Guest Last Name"))
-    last_name2 = models.CharField(max_length=100, verbose_name=_("Guest Last Name"), default="")
+    SEX_TYPES = [
+        ("male", "Hombre"),
+        ("female", "Mujer"),
+    ]
+
+    name = models.CharField(max_length=100, verbose_name=_("Nombre"))
+    last_name = models.CharField(
+        max_length=100, null=True, blank=True, verbose_name=_("Primer apellido")
+    )
+    last_name2 = models.CharField(
+        max_length=100,
+        verbose_name=_("Segundo apellido"),
+        null=True,
+        blank=True,
+    )
     email = models.EmailField(
-        verbose_name=_("Guest Email"), blank=True
+        verbose_name=_("Email"),
+        null=True,
+        blank=True,
     )  # Make email unique for better lookup
-    phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
-    mobile = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
+    phone = models.CharField(
+        max_length=20, null=True, blank=True, verbose_name=_("Teléfono")
+    )
+    mobile = models.CharField(
+        max_length=20, null=True, blank=True, verbose_name=_("Móbil")
+    )
     vat = models.CharField(
-        max_length=20, blank=True, verbose_name=_("Guest VAT/Tax ID")
+        max_length=20, verbose_name=_("Nº de documento")
     )  # Changed verbose_name for clarity
     document_type = models.CharField(
         max_length=100,
         choices=DOCUMENT_TYPES,
-        default='NIF',
-        verbose_name=_("Document Type")
+        default="NIF",
+        verbose_name=_("Tipo de Documento"),
     )
-    nacionality = models.CharField(max_length=100, verbose_name=_("Nacionality"), default="")
-    address = models.CharField(max_length=100, verbose_name=_("Guest Address"), default="")
-    address_state = models.CharField(max_length=100, verbose_name=_("Guest State"), default="")
-    country = models.CharField(max_length=100, verbose_name=_("Guest Country"), default="")
-    adult = models.BooleanField(verbose_name=_("Guest adult"))
+    nacionality = models.CharField(
+        max_length=100,
+        verbose_name=_("Nacionalidad"),
+        null=True,
+        blank=True,
+    )
+    address = models.CharField(
+        max_length=100,
+        verbose_name=_("Dirección"),
+        null=True,
+        blank=True,
+    )
+    address_state = models.CharField(
+        max_length=100,
+        verbose_name=_("Provincia/Estado"),
+        null=True,
+        blank=True,
+    )
+    country = models.CharField(
+        max_length=100,
+        verbose_name=_("Pais"),
+        null=True,
+        blank=True,
+    )
+    adult = models.BooleanField(
+        verbose_name=_("Adulto"),
+        null=True,
+        blank=True,
+    )
+
+    sex = models.CharField(
+        max_length=100,
+        choices=SEX_TYPES,
+        verbose_name=_("Sexo"),
+        null=True,
+        blank=True,
+    )
+
+    birth_date = models.DateField(
+        verbose_name=_("Fecha nacimiento"),
+        null=True,
+        blank=True,
+    )
 
     class Meta:
-        verbose_name = _("Guest")
-        verbose_name_plural = _("Guests")
+        verbose_name = _("Inquilino")
+        verbose_name_plural = _("Inquilino")
         # Add a unique_together constraint if a guest can be uniquely identified by name + last_name + email
         # unique_together = ('name', 'last_name', 'email')
-        ordering = ["last_name", "name"]
+        ordering = ["name", "vat"]
 
     def __str__(self):
         return f"{self.name} {self.last_name} ({self.email})"
@@ -204,12 +260,14 @@ class Reservation(models.Model):
         else:
             self.total_price = 0  # Default if dates/rate not set yet
 
+
 class DailyPrice(models.Model):
     date = models.DateField(unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=1)
-    
+
     def __str__(self):
         return f"{self.date}: {self.price}"
+
 
 class Discount(models.Model):
     days_number = models.PositiveIntegerField()

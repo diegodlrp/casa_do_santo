@@ -10,13 +10,45 @@ from .forms import BulkPriceForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+
 # Register your models here.
 @admin.register(Guest)
 class GuestAdmin(admin.ModelAdmin):
     list_display = ("name", "last_name", "email", "phone", "vat")
     search_fields = ("name", "last_name", "email", "phone", "vat")
-    list_filter = ("name", "last_name")  # Basic filters
-    ordering = ("last_name", "name")  # Consistent with model Meta
+    list_filter = ("name", "vat")  # Basic filters
+    ordering = ("name", "vat")  # Consistent with model Meta
+
+    fieldsets = (
+        (
+            _("Datos Basicos"),
+            {"fields": ("name", "last_name", "last_name2", "sex")},
+        ),
+        (
+            _("Documento identificación"),
+            {"fields": ("document_type", "vat", "birth_date", "nacionality")},
+        ),
+        (
+            _("Lugar de residencia habitual"),
+            {
+                "fields": (
+                    "address",
+                    "address_state",
+                    "country",
+                )
+            },
+        ),
+        (
+            _("Contacto"),
+            {
+                "fields": (
+                    "phone",
+                    "mobile",
+                    "email",
+                )
+            },
+        ),
+    )
 
 
 @admin.register(Reservation)
@@ -130,16 +162,20 @@ class ReservationAdmin(admin.ModelAdmin):
     #     # form.base_fields['total_price'].disabled = True # No longer needed if in readonly_fields
     #     return form
 
+
 @admin.register(DailyPrice)
 class DailyPriceAdmin(admin.ModelAdmin):
     list_display = ("date", "price")
     change_list_template = "dailyprices_changelist.html"
 
-
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path("bulk-add/", self.admin_site.admin_view(self.bulk_add_view), name="dailyprice_bulk_add"),
+            path(
+                "bulk-add/",
+                self.admin_site.admin_view(self.bulk_add_view),
+                name="dailyprice_bulk_add",
+            ),
         ]
         return custom_urls + urls
 
@@ -163,19 +199,25 @@ class DailyPriceAdmin(admin.ModelAdmin):
                     created += 1
                     current += datetime.timedelta(days=1)
 
-                messages.success(request, f"{created} daily prices set from {start} to {end}")
+                messages.success(
+                    request, f"{created} daily prices set from {start} to {end}"
+                )
                 return redirect("admin:reservation_dailyprice_changelist")
         else:
             form = BulkPriceForm()
 
-        return render(request, "bulk_price_form.html", {
-            "form": form,
-            "opts": self.model._meta,
-        })
+        return render(
+            request,
+            "bulk_price_form.html",
+            {
+                "form": form,
+                "opts": self.model._meta,
+            },
+        )
 
     def changelist_view(self, request, extra_context=None):
         today = datetime.date.today()
-        
+
         try:
             year = int(request.GET.get("year", today.year))
         except (TypeError, ValueError):
@@ -188,7 +230,7 @@ class DailyPriceAdmin(admin.ModelAdmin):
         cleaned = request.GET.copy()
         cleaned.pop("year", None)
         cleaned.pop("month", None)
-        request.GET = cleaned 
+        request.GET = cleaned
 
         first_weekday, num_days = monthrange(year, month)  # 0=Mon ... 6=Sun
         first_of_month = datetime.date(year, month, 1)
@@ -201,7 +243,9 @@ class DailyPriceAdmin(admin.ModelAdmin):
         changelist_url = reverse("admin:reservation_dailyprice_changelist")
         prev_url = f"{changelist_url}?year={prev_month.year}&month={prev_month.month}"
         next_url = f"{changelist_url}?year={next_month.year}&month={next_month.month}"
-        change_url_for = lambda pk: reverse("admin:reservation_dailyprice_change", args=[pk])
+        change_url_for = lambda pk: reverse(
+            "admin:reservation_dailyprice_change", args=[pk]
+        )
         add_url_base = reverse("admin:reservation_dailyprice_add")
 
         headers = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -233,7 +277,6 @@ class DailyPriceAdmin(admin.ModelAdmin):
             ctx["prev_url"] = prev_url
             ctx["next_url"] = next_url
         return response
-
 
     # def get_urls(self):
     #     urls = super().get_urls()
@@ -273,6 +316,7 @@ class DailyPriceAdmin(admin.ModelAdmin):
     #         "calendar": mark_safe(calendar_html),
     #         "opts": self.model._meta,
     #     })
+
 
 # Register your models here.
 @admin.register(Discount)

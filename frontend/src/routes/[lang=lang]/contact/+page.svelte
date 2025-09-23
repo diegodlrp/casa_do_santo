@@ -26,7 +26,7 @@
     $: contact_address_link = data.contact_address_link;
     $: form_title = data.form_title;
     $: form_subtitle = data.form_subtitle;
-    console.log(data);
+    $: locale = data.locale;
    
     let name = "";
     let email = "";
@@ -43,7 +43,7 @@
 				},
 				mode: 'cors',
 				// Send petition data as JSON
-				body: JSON.stringify({ name: name, mail: email, message: message }),
+				body: JSON.stringify({ name: name, mail: email, message: message, language: locale}),
 				credentials: 'omit'
 			});
     };
@@ -135,6 +135,7 @@
                                     />
                                 </div>
                                 <!-- END email -->
+
                                 <!-- START message -->
                                 <div>
                                     <label for="message" class="text-sm"

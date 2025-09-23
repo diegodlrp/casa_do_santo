@@ -22,7 +22,7 @@
     $: contact_address_link = data.contact_address_link;
     $: form_title = data.form_title;
     $: form_subtitle = data.form_subtitle;
-    console.log(data);
+
 
     let name = "";
     let email = "";

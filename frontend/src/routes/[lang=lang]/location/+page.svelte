@@ -127,7 +127,7 @@
         <Carrousel data={carrousel_activity_data} dark={true} />
     </div>
 
-    <div>
+    <div class="bg-[color:var(--color-bg-dark)] border-b-2 border-[color:var(--color-text-caption)]">
         <Services
             title={routes_content_title}
             subtitle={routes_content_subtitle}

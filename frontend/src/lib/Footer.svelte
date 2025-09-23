@@ -25,7 +25,6 @@
                 address = baseDataResponse[0]["address"] || "";
                 phone = baseDataResponse[0]["phone"] || "";
                 email = baseDataResponse[0]["email"] || "";
-                console.log("email", email);
             } else {
                 console.warn(`No title data found for locale: ${locale}`);
             }

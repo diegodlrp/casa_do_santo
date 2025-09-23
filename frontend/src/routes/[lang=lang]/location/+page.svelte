@@ -4,10 +4,9 @@
     import ReservationForm from "$lib/ReservationForm.svelte";
     import Carrousel from "$lib/Carrousel.svelte";
     import { onMount } from "svelte";
-    import Services from "src/lib/Services.svelte";
+    import Services from "$lib/Services.svelte";
 
     export let data: PageData;
-
 
     // Destructure the data directly
     $: title_title = data.title_title;
@@ -52,7 +51,7 @@
             position: location,
             map,
             title: "Casa do Santo",
-            icon: icon
+            icon: icon,
         });
 
         carrousel_data.forEach((item) => {
@@ -115,20 +114,24 @@
     <div class="w-full h-full bg-[color:var(--color-bg-dark)] pt-[30px]">
         <h2 class="text-center">{@html carrousel_title}</h2>
         <h3 class="text-center">{@html carrousel_subtitle}</h3>
-        <Carrousel data={carrousel_data} dark={false}/>
+        <Carrousel data={carrousel_data} dark={false} />
     </div>
 
     <div class="w-full h-full bg-[color:var(--color-bg-light)] pt-[30px]">
-        <h2 class="text-center text-[color:var(--color-text-dark)]">{@html carrousel_activity_title}</h2>
-        <h3 class="text-center text-[color:var(--color-text-dark)]">{@html carrousel_activity_subtitle}</h3>
-        <Carrousel data={carrousel_activity_data} dark={true}/>
+        <h2 class="text-center text-[color:var(--color-text-dark)]">
+            {@html carrousel_activity_title}
+        </h2>
+        <h3 class="text-center text-[color:var(--color-text-dark)]">
+            {@html carrousel_activity_subtitle}
+        </h3>
+        <Carrousel data={carrousel_activity_data} dark={true} />
     </div>
 
     <div>
         <Services
-		title={routes_content_title}
-		subtitle={routes_content_subtitle}
-		data={routes_data}
-	/>
+            title={routes_content_title}
+            subtitle={routes_content_subtitle}
+            data={routes_data}
+        />
     </div>
 </div>

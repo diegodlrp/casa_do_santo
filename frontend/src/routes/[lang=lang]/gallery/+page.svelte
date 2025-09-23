@@ -35,6 +35,9 @@
                         tabindex="0"
                         onkeypress={(e) => e.key === "Enter" && openLightbox(i)}
                     >
+                        <p>
+                         {image.alt}
+                        </p>
                         <img
                             src={image.src}
                             alt={image.alt}

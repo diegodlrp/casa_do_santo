@@ -292,8 +292,8 @@ class ReservationSerializer(serializers.ModelSerializer):
 
         return reservation
 
+
 class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discount
         fields = "__all__"
-

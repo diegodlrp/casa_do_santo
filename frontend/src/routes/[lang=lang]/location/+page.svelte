@@ -4,6 +4,7 @@
     import ReservationForm from "$lib/ReservationForm.svelte";
     import Carrousel from "$lib/Carrousel.svelte";
     import { onMount } from "svelte";
+    import Services from "src/lib/Services.svelte";
 
     export let data: PageData;
 
@@ -25,6 +26,9 @@
     $: carrousel_activity_img = data.carrousel_activity_img;
     $: carrousel_activity_data = data.carrousel_activity_data;
     $: logo_map_img = data.logo_map_img;
+    $: routes_content_title = data.routes_content_title;
+    $: routes_content_subtitle = data.routes_content_subtitle;
+    $: routes_data = data.routes_data;
     let mapDiv: HTMLDivElement;
 
     onMount(() => {
@@ -118,5 +122,13 @@
         <h2 class="text-center text-[color:var(--color-text-dark)]">{@html carrousel_activity_title}</h2>
         <h3 class="text-center text-[color:var(--color-text-dark)]">{@html carrousel_activity_subtitle}</h3>
         <Carrousel data={carrousel_activity_data} dark={true}/>
+    </div>
+
+    <div>
+        <Services
+		title={routes_content_title}
+		subtitle={routes_content_subtitle}
+		data={routes_data}
+	/>
     </div>
 </div>

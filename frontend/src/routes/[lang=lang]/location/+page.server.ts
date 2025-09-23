@@ -29,6 +29,10 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
 
     let carrousel_activity_data: any[] = [];
 
+    let routes_content_title = '';
+    let routes_content_subtitle = '';
+    let routes_data: any[] = [];
+
     let error: string | null = null;
 
     try {
@@ -97,6 +101,17 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
             console.warn(`No carrousel data form data found for locale: ${locale}`);
         }
 
+        // Fetch routes data
+        const routesResponse = await apiRequest(`/page_content/routes_page_content/?lang=${locale}`);
+        if (routesResponse) {
+            routes_content_title = routesResponse.title;
+            routes_content_subtitle = routesResponse.excerpt;
+            routes_data = await apiRequest(`/tags/routes/page_content/?lang=${locale}`);
+
+        } else {
+            console.warn(`No service data found for locale: ${locale}`)
+        }
+
     }catch (e: any) {
         console.error('Error fetching data for page:', e);
         error = e; // Capture error message
@@ -119,6 +134,9 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         carrousel_activity_img,
         carrousel_activity_data,
         logo_map_img,
+        routes_content_title,
+        routes_content_subtitle,
+        routes_data,
         error
     }
 }

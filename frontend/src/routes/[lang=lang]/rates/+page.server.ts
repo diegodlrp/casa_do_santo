@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let rate_data: any[] = [];
 
     let error: string | null = null;
-    const titleResponse = await apiRequest(`/calendar/available-dates/`);
+
     try {
         // Fetch title data
         const titleResponse = await apiRequest(`/page_content/rates_title_content/?lang=${locale}`);

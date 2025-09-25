@@ -1,21 +1,22 @@
 <script lang="ts">
-    import ReservationForm from "$lib/ReservationForm.svelte";
+	import ReservationForm from "$lib/ReservationForm.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
-    $: form_title = data.form_title;
-    $: form_subtitle = data.form_subtitle;
-    $: form_img = data.form_img;
-    $: form_content = data.form_content;
+	$: form_title = data.form_title;
+	$: form_subtitle = data.form_subtitle;
+	$: form_img = data.form_img;
+	$: form_content = data.form_content;
 	$: percentage_true = data.percentage_true;
-    $: percentage_false = data.percentage_false;
-    $: rate_data = data.rate_data;
-
+	$: percentage_false = data.percentage_false;
+	$: rate_data = data.rate_data;
 </script>
 
 <!-- HOME Reservation FormT -->
-<div id="home_page_reservation_form h-[calc(100vh-16px)] sm:h-[calc(100vh-20px)]">
+<div
+	id="home_page_reservation_form h-[calc(100vh-16px)] sm:h-[calc(100vh-20px)]"
+>
 	<ReservationForm
 		title={form_title}
 		subtitle={form_subtitle}
@@ -23,143 +24,158 @@
 		content={form_content}
 	/>
 
-	<div class="min-h-[64px]"></div>
+	<div class="min-h-[64px] text-center">
+		<a href="#rates" class="mt-8 inline-block text-3xl animate-bounce">
+			&#8659;
+		</a>
+	</div>
 </div>
 <!-- END -->
 <div
-class="relative w-[100%] min-h-[calc(100vh-20px)] overflow-hidden"
+	id="rates"
+	class="pt-[24px] relative w-[100%] min-h-[calc(100vh-20px)] overflow-hidden"
 >
-{#if rate_data.length > 0}
-	<div class="min-h-[24px]"></div>
-	<div
-		class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
-		style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
-	>
-		<h2 class="text-3xl font-bold text-center mb-6">
-			Tarifas
-		</h2>
-		<table
-			class="min-w-full divide-y divide-[color:var(--color-text-caption)] shadow-sm rounded-lg"
+	{#if rate_data.length > 0}
+		<div class="min-h-[24px]"></div>
+		<div
+			class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
+			style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
 		>
-			<thead class="text-[color:var(--color-text)]">
-				<tr>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>Fecha inicio</th
-					>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>Fecha fin</th
-					>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>precio</th
-					>
-				</tr>
-			</thead>
-			<tbody
-				class="divide-y divide-[color:var(--color-text-caption)] text-[color:var(--color-text)]"
+			<h2 class="text-3xl font-bold text-center mb-6">Tarifas</h2>
+			<table
+				class="min-w-full divide-y divide-[color:var(--color-text-caption)] shadow-sm rounded-lg"
 			>
-				{#each rate_data as rate}
+				<thead class="text-[color:var(--color-text)]">
 					<tr>
-						<td
-							class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-							>{rate.start_date}</td
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>Fecha inicio</th
 						>
-						<td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{rate.end_date}</td>
-						<td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{rate.price}€</td>
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>Fecha fin</th
+						>
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>precio</th
+						>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-{/if}
+				</thead>
+				<tbody
+					class="divide-y divide-[color:var(--color-text-caption)] text-[color:var(--color-text)]"
+				>
+					{#each rate_data as rate}
+						<tr>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{rate.start_date}</td
+							>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{rate.end_date}</td
+							>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{rate.price}€</td
+							>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{/if}
 
-{#if percentage_true.length > 0}
-	<div class="min-h-[24px]"></div>
-	<div
-		class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
-		style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
-	>
-		<h2 class="text-3xl font-bold text-center mb-6">
-			Descuento en porcentage
-		</h2>
-		<table
-			class="min-w-full divide-y divide-[color:var(--color-text-caption)] shadow-sm rounded-lg"
+	{#if percentage_true.length > 0}
+		<div class="min-h-[24px]"></div>
+		<div
+			class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
+			style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
 		>
-			<thead class="text-[color:var(--color-text)]">
-				<tr>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>Nº Dias</th
-					>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>Descuento</th
-					>
-				</tr>
-			</thead>
-			<tbody
-				class="divide-y divide-[color:var(--color-text-caption)] text-[color:var(--color-text)]"
+			<h2 class="text-3xl font-bold text-center mb-6">
+				Descuento en porcentage
+			</h2>
+			<table
+				class="min-w-full divide-y divide-[color:var(--color-text-caption)] shadow-sm rounded-lg"
 			>
-				{#each percentage_true as discount}
+				<thead class="text-[color:var(--color-text)]">
 					<tr>
-						<td
-							class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-							>{discount.days_number}</td
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>Nº Dias</th
 						>
-						<td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{discount.discount}%</td>
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>Descuento</th
+						>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-{/if}
+				</thead>
+				<tbody
+					class="divide-y divide-[color:var(--color-text-caption)] text-[color:var(--color-text)]"
+				>
+					{#each percentage_true as discount}
+						<tr>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{discount.days_number}</td
+							>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{discount.discount}%</td
+							>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{/if}
 
-{#if percentage_false.length > 0}
-	<div class="min-h-[24px]"></div>
-	<div
-		class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
-		style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
-	>
-		<h2 class="text-3xl font-bold text-center mb-6">Descuento Fijo</h2>
-		<table
-			class="min-w-full divide-y divide-[color:var(--color-text-caption)] shadow-sm rounded-lg"
+	{#if percentage_false.length > 0}
+		<div class="min-h-[24px]"></div>
+		<div
+			class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
+			style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
 		>
-			<thead class="text-[color:var(--color-text)]">
-				<tr>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>Nº Dias</th
-					>
-					<th
-						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-						>Descuento</th
-					>
-				</tr>
-			</thead>
-			<tbody
-				class="divide-y divide-[color:var(--color-text-caption)] text-[color:var(--color-text)]"
+			<h2 class="text-3xl font-bold text-center mb-6">Descuento Fijo</h2>
+			<table
+				class="min-w-full divide-y divide-[color:var(--color-text-caption)] shadow-sm rounded-lg"
 			>
-				{#each percentage_false as discount}
+				<thead class="text-[color:var(--color-text)]">
 					<tr>
-						<td
-							class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-							>{discount.days_number}</td
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>Nº Dias</th
 						>
-						<td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{discount.discount}€</td>
+						<th
+							scope="col"
+							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+							>Descuento</th
+						>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-{/if}
-<div class="min-h-[24px]"></div>
+				</thead>
+				<tbody
+					class="divide-y divide-[color:var(--color-text-caption)] text-[color:var(--color-text)]"
+				>
+					{#each percentage_false as discount}
+						<tr>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{discount.days_number}</td
+							>
+							<td
+								class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+								>{discount.discount}€</td
+							>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{/if}
+	<div class="min-h-[24px]"></div>
 </div>

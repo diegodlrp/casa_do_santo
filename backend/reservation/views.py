@@ -13,6 +13,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from itertools import groupby
 
+
 # Create your views here.
 class ReservationViewSet(ModelViewSet):
     """
@@ -87,6 +88,7 @@ class AvailableDatesAPIView(APIView):
 
         return Response(booked_ranges, status=status.HTTP_200_OK)
 
+
 class DiscountViewSet(ModelViewSet):
     """
     API endpoint that allows Discount to be viewed or edited.
@@ -114,25 +116,24 @@ class DiscountViewSet(ModelViewSet):
 
         return Response(data, status=status.HTTP_200_OK)
 
+
 class DailyPriceDataRangesView(APIView):
     def get(self, request, *args, **kwargs):
         # 1. Get all daily prices, ordered by date
-        queryset = DailyPrice.objects.all().order_by('date')
+        queryset = DailyPrice.objects.all().order_by("date")
         if not queryset:
             return Response([])
         grouped_prices = []
         for price, group in groupby(queryset, key=lambda x: x.price):
             group_list = list(group)
-            
+
             # 3. Get the start and end dates for each group
             start_date = group_list[0].date
             end_date = group_list[-1].date
-            
-            grouped_prices.append({
-                'price': price,
-                'start_date': start_date,
-                'end_date': end_date
-            })
-            
+
+            grouped_prices.append(
+                {"price": price, "start_date": start_date, "end_date": end_date}
+            )
+
         # 4. Return the new structured data
         return Response(grouped_prices)

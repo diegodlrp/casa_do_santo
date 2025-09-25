@@ -15,8 +15,6 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let contact_img = '';
 
     let contact_phone = '';
-    let contact_phone2 = '';
-    let contact_phone3 = '';
     let contact_email = '';
     let contact_address = '';
     let contact_address_link = '';
@@ -53,8 +51,6 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         const baseResponse = await apiRequest(`/basedata/1/?lang=${locale}`)
         if (baseResponse){
             contact_phone = baseResponse.phone || '';
-            contact_phone2 = baseResponse.phone2 || '';
-            contact_phone3 = baseResponse.phone3 || '';
             contact_email = baseResponse.email || '';
             contact_address = baseResponse.address || '';
             contact_address_link = baseResponse.address_link || '';
@@ -84,8 +80,6 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         contact_content,
         contact_img,
         contact_phone,
-        contact_phone2,
-        contact_phone3,
         contact_email,
         contact_address,
         contact_address_link,

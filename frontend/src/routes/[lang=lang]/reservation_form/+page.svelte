@@ -32,7 +32,7 @@
 
     const handleSubmit = async () => {
         const response = await fetch(
-            "http://localhost:8000/api/send-reservationmail/",
+            "https://casadosantoadmin.casacam.net/api/send-reservationmail/",
             {
                 method: "POST",
                 headers: {

@@ -32,7 +32,7 @@ const es = {
     reservation_request: "Solicitud de Reserva",
     rooms: "Habitaciones",
     send_message: "Enviar mensaje",
-    what_to_do: "Que hacer",
+    what_to_do: "Qué hacer",
     what_to_visit: "Que visitar",
     write_your_message: "Escribe tu mensaje",
     your_email: "Tu correo electrónico",

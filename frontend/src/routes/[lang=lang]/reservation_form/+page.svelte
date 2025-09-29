@@ -22,13 +22,15 @@
     $: contact_address_link = data.contact_address_link;
     $: form_title = data.form_title;
     $: form_subtitle = data.form_subtitle;
-    console.log(data);
+    $: locale = data.locale;
 
     let name = "";
     let email = "";
     let message = "";
     let checkInDate = "";
     let checkOutDate = "";
+    let n_adults = 1;
+    let n_childs = 0;
 
     const handleSubmit = async () => {
         const response = await fetch(
@@ -46,6 +48,11 @@
                     name: name,
                     mail: email,
                     message: message,
+                    checkInDate: checkInDate,
+                    checkOutDate: checkOutDate,
+                    n_adults: n_adults,
+                    n_childs: n_childs,
+                    language: locale,
                 }),
                 credentials: "omit",
             },
@@ -58,11 +65,9 @@
             const urlParams = new URLSearchParams(window.location.search);
             checkInDate = urlParams.get("checkInDate");
             checkOutDate = urlParams.get("checkOutDate");
-            
+
             console.log("Value of myParam is:", checkInDate);
             console.log("Value of myParam is:", checkOutDate);
-
-           
         }
     });
 </script>
@@ -161,30 +166,64 @@
                                 <!-- END email -->
 
                                 <div>
-                                    <label for="check_in_date" class="block text-sm font-medium mb-1"
-                                      >Fecha de Entrada</label
+                                    <label
+                                        for="check_in_date"
+                                        class="block text-sm font-medium mb-1"
+                                        >Fecha de Entrada</label
                                     >
                                     <input
-                                      type="date"
-                                      id="check_in_date"
-                                      bind:value={checkInDate}
-                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                      required
-                                      disabled
+                                        type="date"
+                                        id="check_in_date"
+                                        bind:value={checkInDate}
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        required
+                                        disabled
                                     />
                                 </div>
 
                                 <div>
-                                    <label for="check_in_date" class="block text-sm font-medium mb-1"
-                                      >Fecha de Entrada</label
+                                    <label
+                                        for="check_in_date"
+                                        class="block text-sm font-medium mb-1"
+                                        >Fecha de Entrada</label
                                     >
                                     <input
-                                      type="date"
-                                      id="check_in_date"
-                                      bind:value={checkOutDate}
-                                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                      required
-                                      disabled
+                                        type="date"
+                                        id="check_in_date"
+                                        bind:value={checkOutDate}
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        required
+                                        disabled
+                                    />
+                                </div>
+                                <!-- START N Guest -->
+                                <div>
+                                    <label
+                                        for="n_adults"
+                                        class="block text-sm font-medium mb-1"
+                                        >Nº de adultos</label
+                                    >
+                                    <input
+                                        type="number"
+                                        id="n_adults"
+                                        bind:value={n_adults}
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        required
+                                        min="1"
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        for="n_childs"
+                                        class="block text-sm font-medium mb-1"
+                                        >Nº de niños</label
+                                    >
+                                    <input
+                                        type="number"
+                                        id="n_childs"
+                                        bind:value={n_childs}
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        required
                                     />
                                 </div>
                                 <!-- START message -->
@@ -204,7 +243,7 @@
                                 </div>
                                 <!-- END message -->
                                 <!-- START checkbox -->
-                                <div class="flex items-center">
+                                <!-- <div class="flex items-center">
                                     <input
                                         id="checked-checkbox"
                                         type="checkbox"
@@ -216,13 +255,13 @@
                                         for="checked-checkbox"
                                         class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                         >{"accept"}
-                                        <!-- <a
+                                        <a
                                             href="/privacy"
                                             class="text-[#c8a655]"
                                             >{"privacy_politic"}</a
-                                        > -->
+                                        > 
                                     </label>
-                                </div>
+                                </div>-->
                                 <!-- END checkbox -->
                                 <!-- START button -->
                                 <button

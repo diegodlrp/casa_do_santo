@@ -9,5 +9,3 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     search_fields = ("slug",)
     list_filter = ("slug",)
     ordering = ("slug",)
-
-

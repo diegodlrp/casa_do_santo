@@ -86,6 +86,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         form_title,
         form_subtitle,
         form_img,
+        locale,
         error
     }
 }

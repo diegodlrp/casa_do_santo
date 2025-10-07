@@ -1,18 +1,26 @@
-# your_app_name/views.py
-
-from .models import Reservation, Discount, DailyPrice
-from .serializers import ReservationSerializer, DiscountSerializer
-from django.utils import timezone
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
+# Standard library imports
 import datetime
-from django.db.models import Q
-from django.db import transaction
-from django.core.exceptions import ValidationError as DjangoValidationError
-from rest_framework import generics, status
-from rest_framework.response import Response
+import json
 from itertools import groupby
 
+# Third-party library imports (e.g., Django, Django REST Framework)
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import transaction
+from django.db.models import Q
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+
+# Application-specific imports (from other parts of your project)
+from api_service.views import send_reservation_mail_view
+
+# Local application imports (from the current package/app, using relative imports)
+from .models import DailyPrice, Discount, Reservation
+from .serializers import DiscountSerializer, ReservationSerializer, GuestSerializer
 
 # Create your views here.
 class ReservationViewSet(ModelViewSet):
@@ -137,3 +145,59 @@ class DailyPriceDataRangesView(APIView):
 
         # 4. Return the new structured data
         return Response(grouped_prices)
+
+# Create reservation and send email
+@csrf_exempt
+@require_POST
+def create_reservation(request):
+    print("aaaaaaaaaaaaaavagrant")
+    try:
+        # recuperate data from json
+        data = json.loads(request.body)
+        print("data",data)
+        name = data.get("name", "")
+        vat = "12345678P"
+        document_type = "NIF"
+        mail = data.get("mail", "")
+        message = data.get("message", "")
+        check_in = data.get("checkInDate", "")
+        check_out = data.get("checkOutDate", "")
+        n_adults = data.get("n_adults", "")
+        n_childs = data.get("n_childs", "")
+        language = data.get("language", "")
+        
+        
+
+        guest_data = {
+            "name": name,
+            "vat": vat,
+            "document_type": document_type 
+        }
+        guest_serializer = GuestSerializer(data=guest_data)
+        print("Guest Data being validated:", guest_data) # Print the data
+        if guest_serializer.is_valid():
+            # Data is valid, proceed with save...
+            print("Guest data is valid!")
+        else:
+            # Data is INVALID! Print the errors.
+            print("Guest data is INVALID!")
+            print("Validation Errors:", guest_serializer.errors)
+
+
+
+        if guest_serializer.is_valid():
+            try:
+                guest = guest_serializer.save()
+                print(guest)
+            except Exception as e:
+                # Handle database save error, external service error, etc.
+                print("Error during save or mail sending: ", e)
+        else:
+            print("88888")
+        email_response = send_reservation_mail_view(request)
+        return email_response
+    except Exception as e:
+        # Email sent failed
+        print("Error: ",e)
+        return JsonResponse({"message": "Email sent failed!"})
+    

@@ -48,7 +48,9 @@ class Guest(models.Model):
     )
     vat = models.CharField(
         max_length=20, verbose_name=_("Nº de documento")
-    )  # Changed verbose_name for clarity
+    )  
+    
+    # Changed verbose_name for clarity
     document_type = models.CharField(
         max_length=100,
         choices=DOCUMENT_TYPES,

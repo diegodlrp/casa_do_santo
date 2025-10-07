@@ -1,6 +1,6 @@
 # reservations_app/urls.py
 from django.urls import path
-from .views import AvailableDatesAPIView, DailyPriceDataRangesView
+from .views import AvailableDatesAPIView, DailyPriceDataRangesView, create_reservation
 
 urlpatterns = [
     # First path() call for available-dates
@@ -10,5 +10,8 @@ urlpatterns = [
         "price-data-ranges/",
         DailyPriceDataRangesView.as_view(),
         name="price-data-ranges",
+    ),
+    path(
+        "create-reservation/", create_reservation, name="create-reservation"
     ),
 ]

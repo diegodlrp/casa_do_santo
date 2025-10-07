@@ -20,12 +20,12 @@ class GuestSerializer(serializers.ModelSerializer):
 
     # Your Guest model has 'name' and 'last_name'. Your frontend sends 'first_name' and 'last_name'.
     # This maps 'first_name' from the incoming JSON to the 'name' field of the Guest model.
-    first_name = serializers.CharField(source="name", required=True)
+    # name = serializers.CharField(source="name", required=True)
 
     class Meta:
         model = Guest
         # Use 'first_name' and 'last_name' here to match the frontend's input structure
-        fields = ["first_name", "last_name", "email", "phone", "vat", "adult"]
+        fields = ["name", "vat", "document_type"]
         extra_kwargs = {
             "email": {
                 "validators": []

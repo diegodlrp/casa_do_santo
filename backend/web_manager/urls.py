@@ -37,6 +37,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("api_service.urls")),
+    path("api-reservation/", include("reservation.urls")),
     path("calendar/", include("reservation.urls")),
     path("", include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

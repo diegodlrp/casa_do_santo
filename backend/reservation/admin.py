@@ -9,6 +9,7 @@ from django.urls import reverse, path
 from .forms import BulkPriceForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 
 # Register your models here.
@@ -53,6 +54,9 @@ class GuestAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
+
+    change_form_template = 'reservation_form.html'
+
     list_display = (
         "main_guest",  # Displays the __str__ of the Guest object
         "check_in_date",
@@ -161,8 +165,32 @@ class ReservationAdmin(admin.ModelAdmin):
     #     form = super().get_form(request, obj, **kwargs)
     #     # form.base_fields['total_price'].disabled = True # No longer needed if in readonly_fields
     #     return form
+    def response_change(self, request, obj):
+        
+        # This code works ONLY if the button is placed in a block that's 
+        # INSIDE the main <form> tag (like {% block submit_buttons_bottom %})
+        if "run_python_script_btn" in request.POST:
 
+            # --- YOUR PYTHON SCRIPT EXECUTES HERE ---
+            # It prints to the SERVER TERMINAL (where you run runserver)
+            print("==================================================")
+            print(f"!!! ACCIÓN DE PYTHON EJECUTADA para Reserva ID: {obj.pk} !!!")
+            print(f"Nombre del Huésped: {obj.main_guest.name}")
+            print("==================================================")
 
+            self.message_user(
+                request, 
+                f"Script de Python ejecutado con éxito para la Reserva ID: {obj.pk}. Revisa la consola del servidor (terminal).",
+                level=messages.INFO
+            )
+
+            # 2. REDIRECCIÓN OBLIGATORIA
+            # This redirects the browser, forcing a clean GET request to the same page.
+            return HttpResponseRedirect(request.path)
+
+        # If your button wasn't pressed, Django proceeds with its normal saving/deleting logic.
+        return super().response_change(request, obj)
+        
 @admin.register(DailyPrice)
 class DailyPriceAdmin(admin.ModelAdmin):
     list_display = ("date", "price")

@@ -34,7 +34,7 @@
 
     const handleSubmit = async () => {
         const response = await fetch(
-            "https://casadosantoadmin.casacam.net/api/send-reservationmail/",
+            "https://casadosantoadmin.casacam.net/api-reservation/create-reservation/",
             {
                 method: "POST",
                 headers: {

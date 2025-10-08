@@ -131,9 +131,7 @@ class Reservation(models.Model):
     # This replaces guest_first_name, guest_last_name, guest_email, guest_phone.
     main_guest = models.ForeignKey(
         Guest,
-        on_delete=models.SET_NULL,  # If the Guest record is deleted, set this field to NULL
-        null=True,  # Allow a reservation to exist without a main_guest (e.g., if deleted)
-        blank=True,  # Allow the field to be optional in forms/admin
+        on_delete=models.CASCADE,
         related_name="main_reservations",  # Renamed related_name for clarity
         verbose_name=_("Main Guest"),
     )
@@ -160,21 +158,27 @@ class Reservation(models.Model):
 
     # Guest count for the whole house
     num_adults = models.PositiveIntegerField(
+        blank=True,
         default=1, verbose_name=_("Number of Adults")
     )
     num_children = models.PositiveIntegerField(
+        blank=True,
         default=0, verbose_name=_("Number of Children")
     )
     total_guests = models.PositiveIntegerField(
+        blank=True,
+        null=True,
         verbose_name=_("Total Guests (Calculated)")
     )  # Stored for convenience
 
     # Pricing and payment details
     daily_rate = models.DecimalField(
-        max_digits=8, decimal_places=2, verbose_name=_("Daily Rate at Booking")
+        max_digits=8, blank=True,
+        null=True, decimal_places=2, verbose_name=_("Daily Rate at Booking")
     )
     total_price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name=_("Total Price")
+        max_digits=10,  blank=True,
+        null=True, decimal_places=2, verbose_name=_("Total Price")
     )
     payment_status = models.CharField(
         max_length=20,
@@ -231,36 +235,36 @@ class Reservation(models.Model):
             return f"Reservation for {self.main_guest.name} {self.main_guest.last_name} from {self.check_in_date} to {self.check_out_date}"
         return f"Reservation (ID: {self.pk}) from {self.check_in_date} to {self.check_out_date}"
 
-    def clean(self):
-        """
-        Custom validation for the Reservation model.
-        """
-        # Ensure check-out date is after check-in date
-        if self.check_in_date and self.check_out_date:
-            if self.check_out_date <= self.check_in_date:
-                raise ValidationError(_("Check-out date must be after check-in date."))
+    # def clean(self):
+    #     """
+    #     Custom validation for the Reservation model.
+    #     """
+    #     # Ensure check-out date is after check-in date
+    #     if self.check_in_date and self.check_out_date:
+    #         if self.check_out_date <= self.check_in_date:
+    #             raise ValidationError(_("Check-out date must be after check-in date."))
 
-        # Corrected: Use 'total_guests' (plural) matching your model field name
-        self.total_guests = self.num_adults + self.num_children
+    #     # Corrected: Use 'total_guests' (plural) matching your model field name
+    #     self.total_guests = self.num_adults + self.num_children
 
-        # Ensure minimum 1 adult
-        if self.num_adults < 1:
-            raise ValidationError(
-                _("There must be at least one adult in the reservation.")
-            )
+    #     # Ensure minimum 1 adult
+    #     if self.num_adults < 1:
+    #         raise ValidationError(
+    #             _("There must be at least one adult in the reservation.")
+    #         )
 
-        # Prevent booking in the past
-        if self.check_in_date and self.check_in_date < datetime.date.today():
-            raise ValidationError(_("Check-in date cannot be in the past."))
+    #     # Prevent booking in the past
+    #     if self.check_in_date and self.check_in_date < datetime.date.today():
+    #         raise ValidationError(_("Check-in date cannot be in the past."))
 
-        # Calculate total price (can be done here or in save/signal)
-        # Ensure num_nights is calculated first if dates are set
-        if (
-            self.daily_rate and self.check_in_date and self.check_out_date
-        ):  # Ensure dates are present for num_nights
-            self.total_price = self.daily_rate * 3
-        else:
-            self.total_price = 0  # Default if dates/rate not set yet
+    #     # Calculate total price (can be done here or in save/signal)
+    #     # Ensure num_nights is calculated first if dates are set
+    #     if (
+    #         self.daily_rate and self.check_in_date and self.check_out_date
+    #     ):  # Ensure dates are present for num_nights
+    #         self.total_price = self.daily_rate * 3
+    #     else:
+    #         self.total_price = 0  # Default if dates/rate not set yet
 
 
 class DailyPrice(models.Model):

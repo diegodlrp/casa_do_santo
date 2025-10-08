@@ -7,6 +7,7 @@ from itertools import groupby
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import Q
+from django.http import FileResponse, JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -150,54 +151,60 @@ class DailyPriceDataRangesView(APIView):
 @csrf_exempt
 @require_POST
 def create_reservation(request):
-    print("aaaaaaaaaaaaaavagrant")
+    print("Received reservation request")
     try:
-        # recuperate data from json
         data = json.loads(request.body)
-        print("data",data)
-        name = data.get("name", "")
-        vat = "12345678P"
-        document_type = "NIF"
-        mail = data.get("mail", "")
-        message = data.get("message", "")
-        check_in = data.get("checkInDate", "")
-        check_out = data.get("checkOutDate", "")
-        n_adults = data.get("n_adults", "")
-        n_childs = data.get("n_childs", "")
-        language = data.get("language", "")
-        
-        
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-        guest_data = {
-            "name": name,
-            "vat": vat,
-            "document_type": document_type 
-        }
-        guest_serializer = GuestSerializer(data=guest_data)
-        print("Guest Data being validated:", guest_data) # Print the data
-        if guest_serializer.is_valid():
-            # Data is valid, proceed with save...
-            print("Guest data is valid!")
-        else:
-            # Data is INVALID! Print the errors.
-            print("Guest data is INVALID!")
-            print("Validation Errors:", guest_serializer.errors)
+    # 1. Validate and Create the Guest
+    guest_data = {
+        "name": data.get("name", ""),
+        "mail": data.get("mail", ""),
+        "vat": "12345678P",
+        "document_type": "NIF",
+    }
+    guest_serializer = GuestSerializer(data=guest_data)
 
-
-
-        if guest_serializer.is_valid():
-            try:
-                guest = guest_serializer.save()
-                print(guest)
-            except Exception as e:
-                # Handle database save error, external service error, etc.
-                print("Error during save or mail sending: ", e)
-        else:
-            print("88888")
-        email_response = send_reservation_mail_view(request)
-        return email_response
-    except Exception as e:
-        # Email sent failed
-        print("Error: ",e)
-        return JsonResponse({"message": "Email sent failed!"})
+    if not guest_serializer.is_valid():
+        print("Guest data is INVALID!")
+        print("Validation Errors:", guest_serializer.errors)
+        return JsonResponse({"errors": guest_serializer.errors}, status=400)
     
+    # If valid, save the guest
+    guest = guest_serializer.save()
+    print(f"Successfully created guest: {guest} with ID: {guest.id}")
+
+    # 2. Validate and Create the Reservation using the new Guest's ID
+    reservation_data = {
+        "status": "pending",
+        "check_in_date": data.get("checkInDate", ""),
+        "check_out_date": data.get("checkOutDate", ""),
+        "total_guest": 1,
+        "main_guest": guest.id,
+    }
+    reservation_serializer = ReservationSerializer(data=reservation_data)
+
+    if not reservation_serializer.is_valid():
+        print("Reservation data is INVALID!")
+        print("Validation Errors:", reservation_serializer.errors)
+        # Important: If reservation fails, you might want to delete the guest you just created
+        guest.delete() 
+        return JsonResponse({"errors": reservation_serializer.errors}, status=400)
+    
+    # If valid, save the reservation
+    try:
+        reservation = reservation_serializer.save()
+        print(f"Successfully created reservation: {reservation}")
+
+        # 3. Send confirmation email
+        send_reservation_mail_view(request) # You might want to pass reservation details here
+
+        return JsonResponse({"message": "Reservation created successfully!", "reservation_id": reservation.id}, status=201)
+
+    except Exception as e:
+        # Handle any other errors during save or email sending
+        print(f"Error during final save or mail sending: {e}")
+        # Again, consider deleting the created guest if the process fails here
+        guest.delete()
+        return JsonResponse({"error": "An internal error occurred."}, status=500)

@@ -20,9 +20,8 @@
     $: title_subtitle = data.title_subtitle;
     $: contact_title = data.contact_title;
     $: contact_content = data.contact_content;
-    $: contact_phone = data.contact_phone;
-    $: contact_phone2 = data.contact_phone2;
-    $: contact_phone3 = data.contact_phone3;
+    $: contact_phones = data.contact_phones;
+
     $: contact_email = data.contact_email;
     $: contact_address = data.contact_address;
     $: contact_address_link = data.contact_address_link;
@@ -78,24 +77,15 @@
                             </div>
 
                             <div class="text-[color:var(--color-text)]">
+                                {#each contact_phones as phone}
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiPhoneLine />
-                                    <a href="tel:{contact_phone}">{contact_phone}</a>
+                                    <a href="tel:{phone.number}">{phone.number}</a>
                                 </div>
-                                <div
-                                    class="flex felx-row items-center space-x-2"
-                                >
-                                    <RiPhoneLine />
-                                    <a href="tel:{contact_phone2}">{contact_phone2}</a>
-                                </div>
-                                <div
-                                    class="flex felx-row items-center space-x-2"
-                                >
-                                    <RiPhoneLine />
-                                    <a href="tel:{contact_phone3}">{contact_phone3}</a>
-                                </div>
+                                {/each}
+                                
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
@@ -175,17 +165,7 @@
                                         class="w-4 h-4"
                                         required
                                     />
-                                    <label
-                                        for="checked-checkbox"
-                                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                        >{"accept"}
-                                        <!-- <a
-                                            href="/privacy"
-                                            class="text-[#c8a655]"
-                                            >{"privacy_politic"}</a
-                                        > -->
-                                        </label
-                                    >
+                                    
                                 </div>
                                 <!-- END checkbox -->
                                 <!-- START button -->

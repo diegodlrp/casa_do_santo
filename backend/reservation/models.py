@@ -102,8 +102,8 @@ class Guest(models.Model):
     )
 
     class Meta:
-        verbose_name = _("Inquilino")
-        verbose_name_plural = _("Inquilino")
+        verbose_name = _("Huesped")
+        verbose_name_plural = _("Huespedes")
         # Add a unique_together constraint if a guest can be uniquely identified by name + last_name + email
         # unique_together = ('name', 'last_name', 'email')
         ordering = ["name", "vat"]
@@ -118,11 +118,11 @@ class Reservation(models.Model):
     """
 
     STATUS_CHOICES = (
-        ("pending", _("Pending")),
-        ("confirmed", _("Confirmed")),
-        ("checked_in", _("Checked In")),
-        ("checked_out", _("Checked Out")),
-        ("cancelled", _("Cancelled")),
+        ("pending", _("Pendiente")),
+        ("confirmed", _("Confirmado")),
+        ("checked_in", _("Check In")),
+        ("checked_out", _("Check Out")),
+        ("cancelled", _("Cancelado")),
         ("no_show", _("No Show")),
     )
 
@@ -133,7 +133,7 @@ class Reservation(models.Model):
         Guest,
         on_delete=models.CASCADE,
         related_name="main_reservations",  # Renamed related_name for clarity
-        verbose_name=_("Main Guest"),
+        verbose_name=_("Huesped principal"),
     )
 
     # --- OTHER GUESTS REFERENCE ---
@@ -142,7 +142,7 @@ class Reservation(models.Model):
         Guest,
         blank=True,
         related_name="other_reservations",  # Renamed for clarity
-        verbose_name=_("Other Guests"),
+        verbose_name=_("Otros Huespedes"),
     )
 
     # Information about the primary guest making the reservation
@@ -153,22 +153,22 @@ class Reservation(models.Model):
     # guest_phone = models.CharField(max_length=20, blank=True, verbose_name=_("Guest Phone"))
 
     # Reservation period
-    check_in_date = models.DateField(verbose_name=_("Check-in Date"))
-    check_out_date = models.DateField(verbose_name=_("Check-out Date"))
+    check_in_date = models.DateField(verbose_name=_("Fecha Check-in"))
+    check_out_date = models.DateField(verbose_name=_("Fecha Check-out"))
 
     # Guest count for the whole house
     num_adults = models.PositiveIntegerField(
         blank=True,
-        default=1, verbose_name=_("Number of Adults")
+        default=1, verbose_name=_("Numero de Adultos")
     )
     num_children = models.PositiveIntegerField(
         blank=True,
-        default=0, verbose_name=_("Number of Children")
+        default=0, verbose_name=_("Numero de Niños")
     )
     total_guests = models.PositiveIntegerField(
         blank=True,
         null=True,
-        verbose_name=_("Total Guests (Calculated)")
+        verbose_name=_("Nº Total (Calculado)")
     )  # Stored for convenience
 
     # Pricing and payment details
@@ -183,13 +183,13 @@ class Reservation(models.Model):
     payment_status = models.CharField(
         max_length=20,
         choices=(
-            ("pending", _("Pending")),
-            ("paid", _("Paid")),
-            ("refunded", _("Refunded")),
-            ("failed", _("Failed")),
+            ("pending", _("Pendiente")),
+            ("paid", _("Pagado")),
+            ("refunded", _("Devuelto")),
+            ("failed", _("Fallo")),
         ),
         default="pending",
-        verbose_name=_("Payment Status"),
+        verbose_name=_("Estado del pago"),
     )
     payment_transaction_id = models.CharField(
         max_length=255,
@@ -203,7 +203,7 @@ class Reservation(models.Model):
         decimal_places=2,
         null=True,
         blank=True,
-        verbose_name=_("Deposit Amount"),
+        verbose_name=_("Deposito"),
     )
     is_email_verified = models.BooleanField(
         default=False, verbose_name=_("Email Verified")
@@ -217,16 +217,16 @@ class Reservation(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default="pending",
-        verbose_name=_("Status"),
+        verbose_name=_("Estado"),
     )
     reservation_date = models.DateTimeField(
-        auto_now_add=True, verbose_name=_("Reservation Date")
+        auto_now_add=True, verbose_name=_("Fecha Reserva")
     )
-    last_updated = models.DateTimeField(auto_now=True, verbose_name=_("Last Updated"))
+    last_updated = models.DateTimeField(auto_now=True, verbose_name=_("Última actualización"))
 
     class Meta:
-        verbose_name = _("House Reservation")
-        verbose_name_plural = _("House Reservations")
+        verbose_name = _("Reserva")
+        verbose_name_plural = _("Reservas")
         ordering = ["check_in_date", "check_out_date"]
 
     def __str__(self):

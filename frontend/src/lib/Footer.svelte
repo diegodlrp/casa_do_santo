@@ -14,9 +14,7 @@
     let name = "Casa do Santo";
     let address = "";
     let email = "";
-    let phone = "";
-    let phone2 = "";
-    let phone3 = "";
+    let contact_phones: any[] = [];
 
     let error: string | null = null;
     onMount(async () => {
@@ -25,9 +23,7 @@
             const baseDataResponse = await apiRequest(`/basedata/`);
             if (baseDataResponse) {
                 address = baseDataResponse[0]["address"] || "";
-                phone = baseDataResponse[0]["phone"] || "";
-                phone2 = baseDataResponse[0]["phone2"] || "";
-                phone3 = baseDataResponse[0]["phone3"] || "";
+                contact_phones = baseDataResponse[0]["phones"] || "";
                 email = baseDataResponse[0]["email"] || "";
             } else {
                 console.warn(`No title data found for locale: ${locale}`);
@@ -84,28 +80,15 @@
                         <RiMapPin2Line />
                         {address}
                     </span>
-
-                    <a
-                        href="tel:{phone}"
-                        class="tel_icon flex items-center gap-x-1 text-white"
-                    >
-                        <RiPhoneLine />
-                        {phone}
-                    </a>
-                    <a
-                        href="tel:{phone2}"
-                        class="tel_icon flex items-center gap-x-1 text-white"
-                    >
-                        <RiPhoneLine />
-                        {phone2}
-                    </a>
-                    <a
-                        href="tel:{phone3}"
-                        class="tel_icon flex items-center gap-x-1 text-white"
-                    >
-                        <RiPhoneLine />
-                        {phone3}
-                    </a>
+                    {#each contact_phones as phone}
+                        <a
+                            href="tel:{phone.number}"
+                            class="tel_icon flex items-center gap-x-1 text-white"
+                        >
+                            <RiPhoneLine />
+                            {phone.number}
+                        </a>
+                    {/each}
                     <a
                         href="mailto:{email}"
                         class="email_icon flex items-center gap-x-1 text-white"

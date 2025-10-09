@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
+from api_service.views import send_reservation_confimation_mail
 
 # Register your models here.
 @admin.register(Guest)
@@ -94,13 +95,14 @@ class ReservationAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            _("Guest Details"),
+            _("Detalles huéspedes"),
             {"fields": ("main_guest", "other_guests")},  # Use the correct plural name
         ),
         (
-            _("Reservation Details"),
+            _("Detalles Reserva"),
             {
                 "fields": (
+                    "status",
                     "check_in_date",
                     "check_out_date",
                     "num_adults",
@@ -110,7 +112,7 @@ class ReservationAdmin(admin.ModelAdmin):
             },
         ),
         (
-            _("Pricing & Payment"),
+            _("Precio y Pago"),
             {
                 "fields": (
                     "daily_rate",
@@ -122,10 +124,10 @@ class ReservationAdmin(admin.ModelAdmin):
             },
         ),
         (
-            _("Status & Timestamps"),
+            _("Timestamps"),
             {
                 "fields": (
-                    "status",
+                    
                     "reservation_date",
                     "last_updated",
                     "total_guests",
@@ -178,12 +180,10 @@ class ReservationAdmin(admin.ModelAdmin):
             print(f"Nombre del Huésped: {obj.main_guest.name}")
             print("==================================================")
 
-            self.message_user(
-                request, 
-                f"Script de Python ejecutado con éxito para la Reserva ID: {obj.pk}. Revisa la consola del servidor (terminal).",
-                level=messages.INFO
-            )
-
+            try:
+                send_reservation_confimation_mail(request)
+            except Exception as e:
+                print("Error:",e)
             # 2. REDIRECCIÓN OBLIGATORIA
             # This redirects the browser, forcing a clean GET request to the same page.
             return HttpResponseRedirect(request.path)

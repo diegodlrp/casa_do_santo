@@ -180,7 +180,9 @@ def create_reservation(request):
         "status": "pending",
         "check_in_date": data.get("checkInDate", ""),
         "check_out_date": data.get("checkOutDate", ""),
-        "total_guest": 1,
+        "num_adults": int(data.get("n_adults", "")),
+        "num_children": int(data.get("n_childs", "")),
+        "total_guest": (int(data.get("n_adults", ""))+data.get("n_childs", "")),
         "main_guest": guest.id,
     }
     reservation_serializer = ReservationSerializer(data=reservation_data)

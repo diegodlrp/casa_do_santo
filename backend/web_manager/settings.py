@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-gfffq+m^-14yvmt-vn^dhuvwz)ogd6fu_!u20auln09=5&6ep('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['34.68.62.185', 'casadosanto.duckdns.org', 'casadosantoadmin.duckdns.org', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'casadosanto.casacam.net', 'casadosantoadmin.casacam.net']
 
 
 # Application definition
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "api_service",
     "page_content",
-    "reservation"
+    "reservation",
+    "base_data"
 ]
 
 MIDDLEWARE = [
@@ -58,15 +59,30 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-REST_FRAMEWORK = {}
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        # By removing 'rest_framework.renderers.BrowsableAPIRenderer',
+        # the HTML view will no longer be available for any endpoint.
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly"
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ],
+}
+
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",  # For local development
-    "http://127.0.0.1:5173",  # Also for local development
-    #"http://192.168.56.3:5173",
+    "https://casadosanto.casacam.net",
+    "https://casadosantoadmin.casacam.net",
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", # The origin of your Svelte app
+    "http://casadosanto.casacam.net",
+    "https://casadosanto.casacam.net",       # Production frontend
+    "https://casadosantoadmin.casacam.net",  # Production Django admin
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True

@@ -3,10 +3,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import datetime
+import uuid
+
 
 # Create your models here.
-
-
 class Guest(models.Model):
     """
     Model to store individual guest's contact and personal information.
@@ -46,10 +46,8 @@ class Guest(models.Model):
     mobile = models.CharField(
         max_length=20, null=True, blank=True, verbose_name=_("Móbil")
     )
-    vat = models.CharField(
-        max_length=20, verbose_name=_("Nº de documento")
-    )  
-    
+    vat = models.CharField(max_length=20, verbose_name=_("Nº de documento"))
+
     # Changed verbose_name for clarity
     document_type = models.CharField(
         max_length=100,
@@ -158,27 +156,29 @@ class Reservation(models.Model):
 
     # Guest count for the whole house
     num_adults = models.PositiveIntegerField(
-        blank=True,
-        default=1, verbose_name=_("Numero de Adultos")
+        blank=True, default=1, verbose_name=_("Numero de Adultos")
     )
     num_children = models.PositiveIntegerField(
-        blank=True,
-        default=0, verbose_name=_("Numero de Niños")
+        blank=True, default=0, verbose_name=_("Numero de Niños")
     )
     total_guests = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        verbose_name=_("Nº Total (Calculado)")
+        blank=True, null=True, verbose_name=_("Nº Total (Calculado)")
     )  # Stored for convenience
 
     # Pricing and payment details
     daily_rate = models.DecimalField(
-        max_digits=8, blank=True,
-        null=True, decimal_places=2, verbose_name=_("Daily Rate at Booking")
+        max_digits=8,
+        blank=True,
+        null=True,
+        decimal_places=2,
+        verbose_name=_("Daily Rate at Booking"),
     )
     total_price = models.DecimalField(
-        max_digits=10,  blank=True,
-        null=True, decimal_places=2, verbose_name=_("Total Price")
+        max_digits=10,
+        blank=True,
+        null=True,
+        decimal_places=2,
+        verbose_name=_("Total Price"),
     )
     payment_status = models.CharField(
         max_length=20,
@@ -222,7 +222,9 @@ class Reservation(models.Model):
     reservation_date = models.DateTimeField(
         auto_now_add=True, verbose_name=_("Fecha Reserva")
     )
-    last_updated = models.DateTimeField(auto_now=True, verbose_name=_("Última actualización"))
+    last_updated = models.DateTimeField(
+        auto_now=True, verbose_name=_("Última actualización")
+    )
 
     class Meta:
         verbose_name = _("Reserva")
@@ -265,6 +267,19 @@ class Reservation(models.Model):
     #         self.total_price = self.daily_rate * 3
     #     else:
     #         self.total_price = 0  # Default if dates/rate not set yet
+
+
+class ReservationEditToken(models.Model):
+    token = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    reservation = models.OneToOneField(Reservation, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    used = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Token for {self.reservation}"
 
 
 class DailyPrice(models.Model):

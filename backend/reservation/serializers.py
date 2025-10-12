@@ -25,7 +25,7 @@ class GuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest
         # Use 'first_name' and 'last_name' here to match the frontend's input structure
-        fields = ["name", "vat", "document_type"]
+        fields = ["name", "vat", "document_type", "email"]
         extra_kwargs = {
             "email": {
                 "validators": []
@@ -51,7 +51,6 @@ class ReservationSerializer(serializers.ModelSerializer):
             "total_guests",
             "num_children",
             "num_adults",
-           
         ]
 
 

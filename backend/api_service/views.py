@@ -147,22 +147,26 @@ def send_reservation_mail_view(request):
         # Email sent failed
         return JsonResponse({"message": "Email sent failed!"})
 
-def send_reservation_confimation_mail(request):
+
+def send_reservation_confimation_mail(request, mail, token):
     print("aaaaa")
     try:
         template = EmailTemplate.objects.get(slug="mail_reservation_url")
         subject = template.excerpt
         mail_body = template.content
+        mail_body = mail_body.replace("{uuid}", token)
         recipient_list = [mail]
         send_mail(
-                subject,
-                mail_body,
-                "casadosantocoira@gmail.com",  # From email (configured in settings)
-                recipient_list,  # To email(s)
-                fail_silently=False,  # Raise errors if sending fails
-                # Optional: To make 'Reply-To' work correctly in email clients
-                # headers={'Reply-To': from_email}
-            )
+            subject,
+            mail_body,
+            "casadosantocoira@gmail.com",  # From email (configured in settings)
+            recipient_list,  # To email(s)
+            fail_silently=False,  # Raise errors if sending fails
+            html_message=mail_body,
+            # Optional: To make 'Reply-To' work correctly in email clients
+            # headers={'Reply-To': from_email}
+        )
+
     except EmailTemplate.DoesNotExist:
         # Return an error if the template isn't found
         return JsonResponse(

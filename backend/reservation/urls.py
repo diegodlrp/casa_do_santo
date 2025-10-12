@@ -11,7 +11,5 @@ urlpatterns = [
         DailyPriceDataRangesView.as_view(),
         name="price-data-ranges",
     ),
-    path(
-        "create-reservation/", create_reservation, name="create-reservation"
-    ),
+    path("create-reservation/", create_reservation, name="create-reservation"),
 ]

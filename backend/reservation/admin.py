@@ -12,6 +12,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 
 from api_service.views import send_reservation_confimation_mail
+from .utils import create_one_time_link
+
 
 # Register your models here.
 @admin.register(Guest)
@@ -56,7 +58,7 @@ class GuestAdmin(admin.ModelAdmin):
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
 
-    change_form_template = 'reservation_form.html'
+    change_form_template = "reservation_form.html"
 
     list_display = (
         "main_guest",  # Displays the __str__ of the Guest object
@@ -127,7 +129,6 @@ class ReservationAdmin(admin.ModelAdmin):
             _("Timestamps"),
             {
                 "fields": (
-                    
                     "reservation_date",
                     "last_updated",
                     "total_guests",
@@ -168,8 +169,8 @@ class ReservationAdmin(admin.ModelAdmin):
     #     # form.base_fields['total_price'].disabled = True # No longer needed if in readonly_fields
     #     return form
     def response_change(self, request, obj):
-        
-        # This code works ONLY if the button is placed in a block that's 
+
+        # This code works ONLY if the button is placed in a block that's
         # INSIDE the main <form> tag (like {% block submit_buttons_bottom %})
         if "run_python_script_btn" in request.POST:
 
@@ -181,16 +182,21 @@ class ReservationAdmin(admin.ModelAdmin):
             print("==================================================")
 
             try:
-                send_reservation_confimation_mail(request)
+                token = create_one_time_link(request, obj)
+                print("token", token)
+                print("token.token", token.token)
+                mail = "casadosantocoira@gmail.com"
+                send_reservation_confimation_mail(request, mail, str(token.token))
             except Exception as e:
-                print("Error:",e)
+                print("Error:", e)
             # 2. REDIRECCIÓN OBLIGATORIA
             # This redirects the browser, forcing a clean GET request to the same page.
             return HttpResponseRedirect(request.path)
 
         # If your button wasn't pressed, Django proceeds with its normal saving/deleting logic.
         return super().response_change(request, obj)
-        
+
+
 @admin.register(DailyPrice)
 class DailyPriceAdmin(admin.ModelAdmin):
     list_display = ("date", "price")

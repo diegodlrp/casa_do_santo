@@ -23,6 +23,7 @@ from api_service.views import send_reservation_mail_view
 from .models import DailyPrice, Discount, Reservation
 from .serializers import DiscountSerializer, ReservationSerializer, GuestSerializer
 
+
 # Create your views here.
 class ReservationViewSet(ModelViewSet):
     """
@@ -147,6 +148,7 @@ class DailyPriceDataRangesView(APIView):
         # 4. Return the new structured data
         return Response(grouped_prices)
 
+
 # Create reservation and send email
 @csrf_exempt
 @require_POST
@@ -160,17 +162,18 @@ def create_reservation(request):
     # 1. Validate and Create the Guest
     guest_data = {
         "name": data.get("name", ""),
-        "mail": data.get("mail", ""),
+        "email": data.get("mail", ""),
         "vat": "12345678P",
         "document_type": "NIF",
     }
+    print("guest_data", guest_data)
     guest_serializer = GuestSerializer(data=guest_data)
 
     if not guest_serializer.is_valid():
         print("Guest data is INVALID!")
         print("Validation Errors:", guest_serializer.errors)
         return JsonResponse({"errors": guest_serializer.errors}, status=400)
-    
+
     # If valid, save the guest
     guest = guest_serializer.save()
     print(f"Successfully created guest: {guest} with ID: {guest.id}")
@@ -182,7 +185,7 @@ def create_reservation(request):
         "check_out_date": data.get("checkOutDate", ""),
         "num_adults": int(data.get("n_adults", "")),
         "num_children": int(data.get("n_childs", "")),
-        "total_guest": (int(data.get("n_adults", ""))+data.get("n_childs", "")),
+        "total_guest": (int(data.get("n_adults", "")) + data.get("n_childs", "")),
         "main_guest": guest.id,
     }
     reservation_serializer = ReservationSerializer(data=reservation_data)
@@ -191,18 +194,26 @@ def create_reservation(request):
         print("Reservation data is INVALID!")
         print("Validation Errors:", reservation_serializer.errors)
         # Important: If reservation fails, you might want to delete the guest you just created
-        guest.delete() 
+        guest.delete()
         return JsonResponse({"errors": reservation_serializer.errors}, status=400)
-    
+
     # If valid, save the reservation
     try:
         reservation = reservation_serializer.save()
         print(f"Successfully created reservation: {reservation}")
 
         # 3. Send confirmation email
-        send_reservation_mail_view(request) # You might want to pass reservation details here
+        send_reservation_mail_view(
+            request
+        )  # You might want to pass reservation details here
 
-        return JsonResponse({"message": "Reservation created successfully!", "reservation_id": reservation.id}, status=201)
+        return JsonResponse(
+            {
+                "message": "Reservation created successfully!",
+                "reservation_id": reservation.id,
+            },
+            status=201,
+        )
 
     except Exception as e:
         # Handle any other errors during save or email sending

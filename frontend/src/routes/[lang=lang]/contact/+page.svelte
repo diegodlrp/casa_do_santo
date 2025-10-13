@@ -157,7 +157,7 @@
                                 </div>
                                 <!-- END message -->
                                 <!-- START checkbox -->
-                                <div class="flex items-center">
+                                <!-- <div class="flex items-center">
                                     <input
                                         id="checked-checkbox"
                                         type="checkbox"
@@ -166,7 +166,7 @@
                                         required
                                     />
                                     
-                                </div>
+                                </div> -->
                                 <!-- END checkbox -->
                                 <!-- START button -->
                                 <button

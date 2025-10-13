@@ -16,7 +16,7 @@
     $: title_subtitle = data.title_subtitle;
     $: contact_title = data.contact_title;
     $: contact_content = data.contact_content;
-    $: contact_phone = data.contact_phone;
+    $: contact_phones = data.contact_phones;
     $: contact_email = data.contact_email;
     $: contact_address = data.contact_address;
     $: contact_address_link = data.contact_address_link;
@@ -99,14 +99,14 @@
                             </div>
 
                             <div class="text-[color:var(--color-text)]">
+                                {#each contact_phones as phone}
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >
                                     <RiPhoneLine />
-                                    <a href="tel:{contact_phone}"
-                                        >{contact_phone}</a
-                                    >
+                                    <a href="tel:{phone.number}">{phone.number}</a>
                                 </div>
+                                {/each}
                                 <div
                                     class="flex felx-row items-center space-x-2"
                                 >

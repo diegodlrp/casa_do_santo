@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
     let contact_content = '';
     let contact_img = '';
 
-    let contact_phone = '';
+    let contact_phones: any[] = [];
     let contact_email = '';
     let contact_address = '';
     let contact_address_link = '';
@@ -50,7 +50,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         // Fetch base data
         const baseResponse = await apiRequest(`/basedata/1/?lang=${locale}`)
         if (baseResponse){
-            contact_phone = baseResponse.phone || '';
+            contact_phones = baseResponse.phones || '';
             contact_email = baseResponse.email || '';
             contact_address = baseResponse.address || '';
             contact_address_link = baseResponse.address_link || '';
@@ -79,7 +79,7 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         contact_title,
         contact_content,
         contact_img,
-        contact_phone,
+        contact_phones,
         contact_email,
         contact_address,
         contact_address_link,

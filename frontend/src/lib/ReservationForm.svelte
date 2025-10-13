@@ -57,84 +57,88 @@
         percentage_false = discountResponse["percentage_false"];
         if (checkInInput && checkOutInput) {
             flatpickr(checkInInput, {
-                mode: "range",
-                dateFormat: "Y-m-d", // Format for your Django backend
-                minDate: "today", // Prevent picking past dates
-                inline: true,
-                altInput: true,
-                disable: titleResponse, // Display user-friendly date in input
-                altFormat: "F j, Y", // User-friendly format (e.g., July 31, 2025)
-                onChange: function (selectedDates, dateStr, instance) {
-                    if (selectedDates.length === 2) {
-                        // This condition checks if both start and end are selected
-                        console.log("selectedDates", selectedDates);
-                        checkInDate = instance.formatDate(
-                            selectedDates[0],
-                            "Y-m-d",
-                        );
-                        checkOutDate = instance.formatDate(
-                            selectedDates[1],
-                            "Y-m-d",
-                        );
-                        let differenceInTime =
-                            selectedDates[1].getTime() -
-                            selectedDates[0].getTime();
-                        n_days = differenceInTime / (1000 * 3600 * 24);
+    mode: "range",
+    dateFormat: "Y-m-d", // Format for your Django backend
+    minDate: "today", // Prevent picking past dates
+    inline: true,
+    // altInput: true,
+    // disable: titleResponse, // Display user-friendly date in input
+    altFormat: "F j, Y", // User-friendly format (e.g., July 31, 2025)
+    onChange: function (selectedDates, dateStr, instance) {
+        if (selectedDates.length === 2) {
+            // This condition checks if both start and end are selected
+            console.log("selectedDates", selectedDates);
+            checkInDate = instance.formatDate(
+                selectedDates[0],
+                "Y-m-d",
+            );
+            checkOutDate = instance.formatDate(
+                selectedDates[1],
+                "Y-m-d",
+            );
+            let differenceInTime =
+                selectedDates[1].getTime() -
+                selectedDates[0].getTime();
+            n_days = differenceInTime / (1000 * 3600 * 24);
 
-                        if (n_days >= 3) {
-                            isButtonDisabled = false;
-                            base_price = 233 * n_days;
-                            variant_discount_days = 0;
+            if (n_days >= 3) {
+                isButtonDisabled = false;
+                base_price = 233 * n_days;
+                variant_discount_days = 0;
 
-                            percentage_true.forEach((item) => {
-                                console.log("item", item);
-                                if (
-                                    n_days >= item.days_number &&
-                                    item.days_number > variant_discount_days
-                                ) {
-                                    variant_discount_days = item.days_number;
-                                    variant_discount = item.discount;
-                                }
-                                console.log(percentage_true);
-                            });
-                            fix_discount_days = 0;
-                            percentage_false.forEach((item) => {
-                                if (
-                                    n_days >= item.days_number &&
-                                    item.days_number > fix_discount_days
-                                ) {
-                                    fix_discount_days = item.days_number;
-                                    fix_discount = item.discount;
-                                }
-                                console.log(percentage_true);
-                            });
-
-                            total_price = base_price - fix_discount;
-                            total_price =
-                                (total_price * (100 - variant_discount)) / 100;
-                        } else {
-                            alert($LL.nights_warrning());
-                            isButtonDisabled = true;
-                        }
-
-                        console.info("checkOutDate", checkOutDate);
-                    } else {
-                        isButtonDisabled = true;
-                        checkInDate =
-                            selectedDates.length > 0
-                                ? instance.formatDate(selectedDates[0], "Y-m-d")
-                                : "";
-                        checkOutDate = "";
-                        n_days = 0;
-                        base_price = 0;
-                        total_price = 0;
-                        fix_discount = 0;
-                        variant_discount = 0;
-                        variant_discount_days = 0;
-                        fix_discount_days = 0;
+                percentage_true.forEach((item) => {
+                    console.log("item", item);
+                    if (
+                        n_days >= item.days_number &&
+                        item.days_number > variant_discount_days
+                    ) {
+                        variant_discount_days = item.days_number;
+                        variant_discount = item.discount;
                     }
-                },
-            });
+                    console.log(percentage_true);
+                });
+                fix_discount_days = 0;
+                percentage_false.forEach((item) => {
+                    if (
+                        n_days >= item.days_number &&
+                        item.days_number > fix_discount_days
+                    ) {
+                        fix_discount_days = item.days_number;
+                        fix_discount = item.discount;
+                    }
+                    console.log(percentage_true);
+                });
+
+                total_price = base_price - fix_discount;
+                total_price =
+                    (total_price * (100 - variant_discount)) / 100;
+            } else {
+                alert($LL.nights_warrning());
+                isButtonDisabled = true;
+            }
+
+            console.info("checkOutDate", checkOutDate);
+        } else {
+            isButtonDisabled = true;
+            checkInDate =
+                selectedDates.length > 0
+                    ? instance.formatDate(selectedDates[0], "Y-m-d")
+                    : "";
+            checkOutDate = "";
+            n_days = 0;
+            base_price = 0;
+            total_price = 0;
+            fix_discount = 0;
+            variant_discount = 0;
+            variant_discount_days = 0;
+            fix_discount_days = 0;
+        }
+
+        // --- ADD THIS LINE ---
+        // This clears the input field after the dates are selected and processed.
+        instance.input.value = "";
+    },
+});
         }
     });
 </script>
@@ -172,7 +176,7 @@
                                 <input
                                     type="text"
                                     id="check_in_date"
-                                    placeholder="Select check-in date"
+                                    placeholder=""
                                 />
 
                                 <!-- <label for="check_out_date">Check-out Date:</label> -->

@@ -20,9 +20,10 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework import routers
+from rest_framework.authtoken import views
 
 from page_content.views import TagViewSet, PageContentViewSet, ImageViewSet
-from reservation.views import ReservationViewSet, DiscountViewSet
+from reservation.views import ReservationViewSet, DiscountViewSet, GuestViewSet
 from base_data.views import BaseDataViewSet
 
 router = routers.DefaultRouter()
@@ -32,6 +33,7 @@ router.register(r"images", ImageViewSet)
 router.register(r"reservations", ReservationViewSet)
 router.register(r"basedata", BaseDataViewSet)
 router.register(r"discount", DiscountViewSet)
+router.register(r"guests", GuestViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

@@ -1,16 +1,28 @@
 # reservations_app/serializers.py
-from rest_framework import serializers
-from .models import Guest, Reservation, Discount
-from django.utils.translation import gettext_lazy as _
-from django.db import transaction  # Needed for atomic operations in create
-from django.core.mail import send_mail
+
+# --- 1. Python Standard Library Imports ---
 import json
-from django.shortcuts import render
-from django.http import FileResponse, JsonResponse
-from django.views.decorators.http import require_POST
+from io import BytesIO # UNUSUAL for serializers, typically used in views/utility functions
+
+# --- 2. Third-Party Imports ---
+from rest_framework import serializers
+
+# UNUSUAL for serializers, these are for PDF generation, which belongs in a utility or view file
+from reportlab.pdfgen import canvas 
+
+# --- 3. Django Core/Contributed Imports ---
+from django.core.mail import send_mail            # UNUSUAL for serializers, usually handled in tasks or service/utility layer
+from django.db import transaction                  # GOOD: Needed for atomic operations in create/update logic
+from django.http import FileResponse, JsonResponse # UNUSUAL: These are for views, not serializers
+from django.shortcuts import render                # UNUSUAL: For rendering templates in views
+from django.utils.translation import gettext_lazy as _ # GOOD: For translatable field labels/messages
+
+# UNUSUAL: These are view decorators, which belong in views.py
 from django.views.decorators.csrf import csrf_exempt
-from io import BytesIO
-from reportlab.pdfgen import canvas
+from django.views.decorators.http import require_POST 
+
+# --- 4. Local App Imports ---
+from .models import Guest, Reservation, Discount, ReservationEditToken # GOOD: Necessary for defining the serializer fields
 
 
 class GuestSerializer(serializers.ModelSerializer):

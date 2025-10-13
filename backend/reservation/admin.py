@@ -185,7 +185,7 @@ class ReservationAdmin(admin.ModelAdmin):
                 token = create_one_time_link(request, obj)
                 print("token", token)
                 print("token.token", token.token)
-                mail = "casadosantocoira@gmail.com"
+                mail = obj.main_guest.email
                 send_reservation_confimation_mail(request, mail, str(token.token))
             except Exception as e:
                 print("Error:", e)

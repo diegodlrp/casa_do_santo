@@ -20,7 +20,7 @@ from rest_framework.viewsets import ModelViewSet
 from api_service.views import send_reservation_mail_view
 
 # Local application imports (from the current package/app, using relative imports)
-from .models import DailyPrice, Discount, Reservation
+from .models import DailyPrice, Discount, Reservation, ReservationEditToken, Guest
 from .serializers import DiscountSerializer, ReservationSerializer, GuestSerializer
 
 
@@ -33,7 +33,49 @@ class ReservationViewSet(ModelViewSet):
     queryset = Reservation.objects.all().order_by("id")
     serializer_class = ReservationSerializer
 
+class GuestViewSet(ModelViewSet):
+    """
+    API endpoint that allows Guest to be viewed or edited.
+    """
 
+    queryset = Guest.objects.all().order_by("id")
+    serializer_class = GuestSerializer
+
+class TokenValidationView(APIView):
+    # If the token check needs to be public (e.g., accessed from the email link),
+    # you can use AllowAny. If it should be secured, use IsAuthenticated.
+    permission_classes = [] # AllowAny is the default if not set globally
+
+    def get(self, request, token_uuid, format=None):
+        """
+        Check if the provided UUID corresponds to an existing and unused token.
+        """
+        try:
+            token_instance = ReservationEditToken.objects.get(pk=token_uuid)
+            print("token_instance",token_instance)
+            if token_instance.used:
+                return Response(
+                    {"status": "invalid", "message": "Token has already been used."},
+                    status=status.HTTP_410_GONE # 410 Gone is semantically appropriate
+                )
+
+            # Token exists and is not used. Return success and the reservation ID.
+            return Response(
+                {
+                    "status": "valid",
+                    "reservation_id": token_instance.reservation.pk
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+            print("Error:", e)
+            return Response(
+                {"status": "invalid", "message": "Token not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        
 class AvailableDatesAPIView(APIView):
     """
     API endpoint to retrieve currently booked (unavailable) date ranges.

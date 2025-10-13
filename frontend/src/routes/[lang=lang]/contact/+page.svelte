@@ -35,7 +35,7 @@
 
     const handleSubmit = async () => {
 
-        const response = await fetch('http://localhost:8000/api/send-mail/', {
+        const response = await fetch('https://casadosantoadmin.casacam.net/api/send-mail/', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

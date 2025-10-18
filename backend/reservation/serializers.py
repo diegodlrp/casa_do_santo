@@ -63,6 +63,7 @@ class ReservationSerializer(serializers.ModelSerializer):
             "total_guests",
             "num_children",
             "num_adults",
+            "total_price"
         ]
 
 

@@ -148,13 +148,15 @@ def send_reservation_mail_view(request):
         return JsonResponse({"message": "Email sent failed!"})
 
 
-def send_reservation_confimation_mail(request, mail, token):
-    print("aaaaa")
+def send_reservation_confimation_mail(request, mail, token, total_price, check_in_date, check_out_date):
     try:
         template = EmailTemplate.objects.get(slug="mail_reservation_url")
         subject = template.excerpt
         mail_body = template.content
         mail_body = mail_body.replace("{uuid}", token)
+        mail_body = mail_body.replace("{total_price}", total_price)
+        mail_body = mail_body.replace("{check_in_date}", check_in_date)
+        mail_body = mail_body.replace("{check_out_date}", check_out_date)
         recipient_list = [mail]
         send_mail(
             subject,

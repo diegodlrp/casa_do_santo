@@ -186,7 +186,10 @@ class ReservationAdmin(admin.ModelAdmin):
                 print("token", token)
                 print("token.token", token.token)
                 mail = obj.main_guest.email
-                send_reservation_confimation_mail(request, mail, str(token.token))
+                total_price = obj.total_price
+                check_in_date = obj.check_in_date
+                check_out_date = obj.check_out_date
+                send_reservation_confimation_mail(request, mail, str(token.token), str(total_price), str(check_in_date), str(check_out_date))
             except Exception as e:
                 print("Error:", e)
             # 2. REDIRECCIÓN OBLIGATORIA

@@ -6,12 +6,13 @@
     import { onMount } from "svelte";
     import flatpickr from "flatpickr";
     import "flatpickr/dist/flatpickr.min.css"; // Import the CSS
-    import { apiRequest } from "./services/apiService";
+    import { apiRequest, apiPost } from "./services/apiService";
 
     export let title: string;
     export let subtitle: string;
     export let img: string;
     export let content: string;
+
 
     // Get today's date
     const today = new Date();
@@ -37,6 +38,7 @@
     let n_days = 0;
     let base_price = 0;
     let total_price = 0;
+    let max_reduction = 0;
 
     let percentage_true: any[] = [];
     let percentage_false: any[] = [];
@@ -45,6 +47,11 @@
     let fix_discount_days = 0;
     let variant_discount = 0;
     let variant_discount_days = 0;
+
+    let errors: { [key: string]: string[] | { [key: string]: string[] }[] } =
+        {};
+    let successMessage: string = "";
+    let isLoading: boolean = false;
 
     onMount(async () => {
         const checkInInput = document.getElementById("check_in_date");
@@ -57,88 +64,108 @@
         percentage_false = discountResponse["percentage_false"];
         if (checkInInput && checkOutInput) {
             flatpickr(checkInInput, {
-    mode: "range",
-    dateFormat: "Y-m-d", // Format for your Django backend
-    minDate: "today", // Prevent picking past dates
-    inline: true,
-    // altInput: true,
-    // disable: titleResponse, // Display user-friendly date in input
-    altFormat: "F j, Y", // User-friendly format (e.g., July 31, 2025)
-    onChange: function (selectedDates, dateStr, instance) {
-        if (selectedDates.length === 2) {
-            // This condition checks if both start and end are selected
-            console.log("selectedDates", selectedDates);
-            checkInDate = instance.formatDate(
-                selectedDates[0],
-                "Y-m-d",
-            );
-            checkOutDate = instance.formatDate(
-                selectedDates[1],
-                "Y-m-d",
-            );
-            let differenceInTime =
-                selectedDates[1].getTime() -
-                selectedDates[0].getTime();
-            n_days = differenceInTime / (1000 * 3600 * 24);
+                mode: "range",
+                dateFormat: "Y-m-d", // Format for your Django backend
+                minDate: "today", // Prevent picking past dates
+                inline: true,
+                // altInput: true,
+                // disable: titleResponse, // Display user-friendly date in input
+                altFormat: "F j, Y", // User-friendly format (e.g., July 31, 2025)
+                onChange: async function (selectedDates, dateStr, instance) {
+                    isLoading = true;
 
-            if (n_days >= 3) {
-                isButtonDisabled = false;
-                base_price = 233 * n_days;
-                variant_discount_days = 0;
+                    if (selectedDates.length === 2) {
+                        // This condition checks if both start and end are selected
+                        console.log("selectedDates", selectedDates);
+                        checkInDate = instance.formatDate(
+                            selectedDates[0],
+                            "Y-m-d",
+                        );
+                        checkOutDate = instance.formatDate(
+                            selectedDates[1],
+                            "Y-m-d",
+                        );
+                        let differenceInTime =
+                            selectedDates[1].getTime() -
+                            selectedDates[0].getTime();
+                        n_days = differenceInTime / (1000 * 3600 * 24);
 
-                percentage_true.forEach((item) => {
-                    console.log("item", item);
-                    if (
-                        n_days >= item.days_number &&
-                        item.days_number > variant_discount_days
-                    ) {
-                        variant_discount_days = item.days_number;
-                        variant_discount = item.discount;
+                        if (n_days >= 3) {
+                            isButtonDisabled = false;
+
+                            try {
+                                const response = await apiPost(
+                                    "/api-reservation/calculate_reservation_price/",
+                                    {
+                                        checkInDate: checkInDate,
+                                        checkOutDate: checkOutDate,
+                                    },
+                                );
+                                console.log("response:", response);
+                                const responseText = await response.text();
+                                if (response.ok) {
+                                    // Check if the request was successful (status code in the range 200-299)
+                                    try {
+                                        const data = JSON.parse(responseText);
+
+                                        // Now you can work with the 'data' object
+                                        console.log("data",data);
+                                        base_price = data["base_price"]
+                                        total_price = data["total_price"]
+                                        max_reduction = data["max_reduction"]
+                                    } catch (error) {
+                                        console.error(
+                                            "Error parsing JSON:",
+                                            error,
+                                        );
+                                    }
+                                } else {
+                                    console.error(
+                                        "Error en la respuesta de la API:",
+                                        response.status,
+                                        responseText,
+                                    );
+                                }
+
+                            } catch (error) {
+                                console.error("Network or other error:", error);
+                                errors.general = [
+                                    "No se pudo conectar con el servidor. Por favor, revisa tu conexión a internet.",
+                                ];
+                            } finally {
+                                isLoading = false;
+                            }
+
+                           
+                           
+                            
+                            
+
+                            
+                        } else {
+                            alert($LL.nights_warrning());
+                            isButtonDisabled = true;
+                        }
+
+                        console.info("checkOutDate", checkOutDate);
+                    } else {
+                        isButtonDisabled = true;
+                        checkInDate =
+                            selectedDates.length > 0
+                                ? instance.formatDate(selectedDates[0], "Y-m-d")
+                                : "";
+                        checkOutDate = "";
+                        n_days = 0;
+                        
+                        total_price = 0;
+                        
                     }
-                    console.log(percentage_true);
-                });
-                fix_discount_days = 0;
-                percentage_false.forEach((item) => {
-                    if (
-                        n_days >= item.days_number &&
-                        item.days_number > fix_discount_days
-                    ) {
-                        fix_discount_days = item.days_number;
-                        fix_discount = item.discount;
-                    }
-                    console.log(percentage_true);
-                });
 
-                total_price = base_price - fix_discount;
-                total_price =
-                    (total_price * (100 - variant_discount)) / 100;
-            } else {
-                alert($LL.nights_warrning());
-                isButtonDisabled = true;
-            }
-
-            console.info("checkOutDate", checkOutDate);
-        } else {
-            isButtonDisabled = true;
-            checkInDate =
-                selectedDates.length > 0
-                    ? instance.formatDate(selectedDates[0], "Y-m-d")
-                    : "";
-            checkOutDate = "";
-            n_days = 0;
-            base_price = 0;
-            total_price = 0;
-            fix_discount = 0;
-            variant_discount = 0;
-            variant_discount_days = 0;
-            fix_discount_days = 0;
-        }
-
-        // --- ADD THIS LINE ---
-        // This clears the input field after the dates are selected and processed.
-        instance.input.value = "";
-    },
-});
+                    // --- ADD THIS LINE ---
+                    // This clears the input field after the dates are selected and processed.
+                    instance.input.value = "";
+                },
+            });
         }
     });
 </script>
@@ -219,13 +246,7 @@
                                                 >{$LL.discounts()}:</td
                                             >
                                             <td class="text-right"
-                                                >{#if fix_discount > 0}{fix_discount_days}
-                                                    {$LL.nights()}
-                                                    {fix_discount} €<br />{/if}
-                                                {#if variant_discount > 0}{variant_discount_days}
-                                                    {$LL.nights()}
-                                                    {variant_discount}%<br
-                                                    />{/if}</td
+                                                >- {max_reduction} €</td
                                             >
                                         </tr>
                                         <tr

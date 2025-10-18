@@ -22,7 +22,7 @@ from api_service.views import send_reservation_mail_view
 # Local application imports (from the current package/app, using relative imports)
 from .models import DailyPrice, Discount, Reservation, ReservationEditToken, Guest
 from .serializers import DiscountSerializer, ReservationSerializer, GuestSerializer
-
+from .utils import get_reservation_price
 
 # Create your views here.
 class ReservationViewSet(ModelViewSet):
@@ -221,6 +221,9 @@ def create_reservation(request):
     print(f"Successfully created guest: {guest} with ID: {guest.id}")
 
     # 2. Validate and Create the Reservation using the new Guest's ID
+
+    reservation_price = get_reservation_price(request, data)
+    print("\n\n\n reservation_price", reservation_price)
     reservation_data = {
         "status": "pending",
         "check_in_date": data.get("checkInDate", ""),
@@ -229,6 +232,7 @@ def create_reservation(request):
         "num_children": int(data.get("n_childs", "")),
         "total_guest": (int(data.get("n_adults", "")) + data.get("n_childs", "")),
         "main_guest": guest.id,
+        "total_price": float(reservation_price["total_price"])
     }
     reservation_serializer = ReservationSerializer(data=reservation_data)
 
@@ -263,3 +267,36 @@ def create_reservation(request):
         # Again, consider deleting the created guest if the process fails here
         guest.delete()
         return JsonResponse({"error": "An internal error occurred."}, status=500)
+
+@csrf_exempt
+@require_POST
+def edit_reservation(request):
+    print("aaaa")
+    return JsonResponse(
+            {
+                "message": "Reservation created successfully!",
+                "reservation_id": 8,
+            },
+            status=201,
+    )
+
+@csrf_exempt
+@require_POST
+def calculate_reservation_price(request):
+    print("Received reservation request")
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    
+    # 1. Validate data
+    reservation_price = get_reservation_price(request, data)
+
+    return JsonResponse(
+            {               
+                "base_price": str(reservation_price["base_price"]),
+                "total_price": str(reservation_price["total_price"]),
+                "max_reduction": str(reservation_price["max_reduction"]),
+            },
+            status=200,
+    )

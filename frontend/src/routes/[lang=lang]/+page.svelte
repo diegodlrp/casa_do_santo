@@ -66,7 +66,8 @@
 	<div
 		class="absolute inset-0 bg-cover bg-center"
 		style="background-image: url({img});"
-	>
+	>	
+		<!-- Address/email info -->
 		<div class="start_info flex items-center gap-8 flex-row">
 			<div class="flex justify-between items-center w-full">
 				<div class="pl-4">
@@ -113,40 +114,36 @@
 <!-- HOME PAGE CONTENT -->
 <div
 	id="home_page_content"
-	class=" relative w-full bg-cover bg-center"
+	class=" relative w-full bg-cover bg-center text-[color:var(--color-text)]"
 	style="background-image: url({page_img}); opacity: 1;"
 >
 	<div
 		class="w-[100%] h-[100%] pt-[36px] pb-[100px] bg-[color:var(--color-bg-light)]/80"
 	>
-		<img
-			src="/svg/core_bg_dark.svg"
-			alt="core_bg"
-			class="bg-cover bg-center absolute h-full right-0"
-		/>
+		
 		<div class="min-h-[64px]"></div>
-		<div class="p-4 relative">
-			<div class="container">
-				<div>
-					<h2 class="text-center m-[30px]">
+		<div class="p-0 sm:p-4 w-full">
+			<div class="container max-w-6xl ">
+				<div class="mt-8 md:mt-16"></div> 
+		
+				<header class="text-center mb-10 space-y-4 max-w-4xl mx-auto">
+					<h2 class="text-xl sm:text-2xl font-normal">
 						{@html page_content_title}
 					</h2>
-				</div>
-
-				<div>
-					<h3 class="text-center text-[27px]">
-						<span class="text_dark"
-							>{@html page_content_subtitle}</span
-						>
+					<h3 class="text-3xl sm:text-4xl">
+						<span class="text_dark">
+							{@html page_content_subtitle}
+						</span>
 					</h3>
-					<br />
-					<h4 class="text_dark">{@html page_content}</h4>
-				</div>
+				</header>
+		
+				<main class="text_dark text-lg leading-relaxed space-y-4 text-center">
+					{@html page_content} 
+				</main>
 			</div>
 		</div>
 	</div>
 </div>
-
 <!-- END -->
 
 <!-- HOME About Us -->
@@ -163,7 +160,7 @@
 
 			<div class="w-full md:w-2/3 bg-cover bg-center">
 				<div class="relative h-[100%]">
-					<div class="px-2 sm:px-10 md:px-16 lg:px-[65px] py-0 xl:mt-[160px] lg:mt-[90px] md:mt-[40px]">
+					<div class="px-0 sm:px-10 md:px-16 lg:px-[65px] py-0 xl:mt-[160px] lg:mt-[90px] md:mt-[40px]">
 						<img
 							src="/svg/core_bg.svg"
 							alt="core_bg"

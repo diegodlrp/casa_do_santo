@@ -32,31 +32,70 @@
     let n_adults = 1;
     let n_childs = 0;
 
-    const handleSubmit = async () => {
-        const response = await fetch(
-            "https://casadosantoadmin.casacam.net/api-reservation/create-reservation/",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+    let errors: { [key: string]: string[] | { [key: string]: string[] }[] } =
+        {}; // Adjust type for nested errors
+    let successMessage: string = "";
+    let isLoading: boolean = false;
 
-                    // Add CSRF token header if needed (see previous email example notes)
+    const handleSubmit = async () => {
+        successMessage = "";
+
+        // VALIDATE
+
+        isLoading = true;
+        try {
+            const response = await fetch(
+            "https://casadosantoadmin.casacam.net/api-reservation/create-reservation/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+
+                        // Add CSRF token header if needed (see previous email example notes)
+                    },
+                    mode: "cors",
+                    // Send petition data as JSON
+                    body: JSON.stringify({
+                        name: name,
+                        mail: email,
+                        message: message,
+                        checkInDate: checkInDate,
+                        checkOutDate: checkOutDate,
+                        n_adults: n_adults,
+                        n_childs: n_childs,
+                        language: locale,
+                    }),
+                    credentials: "omit",
                 },
-                mode: "cors",
-                // Send petition data as JSON
-                body: JSON.stringify({
-                    name: name,
-                    mail: email,
-                    message: message,
-                    checkInDate: checkInDate,
-                    checkOutDate: checkOutDate,
-                    n_adults: n_adults,
-                    n_childs: n_childs,
-                    language: locale,
-                }),
-                credentials: "omit",
-            },
-        );
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                errors = errorData;
+                if (response.status === 409 && errorData.detail) {
+                    errors.general = [errorData.detail];
+                } else if (errorData.non_field_errors) {
+                    errors.general = errorData.non_field_errors;
+                } else {
+                    errors.general = [
+                        "Ocurrió un error inesperado al procesar la reserva. Por favor, inténtalo de nuevo.",
+                    ];
+                }
+                console.error("API Error:", errorData);
+            } else {
+                const result = await response.json();
+                successMessage = "¡Reserva realizada con éxito!";
+                console.log("Reservation successful:", result);
+                errors = {};
+            }
+        } catch (error) {
+            console.error("Network or other error:", error);
+            errors.general = [
+                "No se pudo conectar con el servidor. Por favor, revisa tu conexión a internet.",
+            ];
+        } finally {
+            isLoading = false;
+        }
     };
 
     onMount(() => {
@@ -84,6 +123,26 @@
         >
             <div class="p-4 relative z-10 rounded-4xl">
                 <div class="container form_bg">
+                    {#if successMessage}
+                        <div
+                            role="alert"
+                            class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+                        >
+                            <p>{successMessage}</p>
+                        </div>
+                    {/if}
+
+                    {#if errors.general}
+                        <div
+                            role="alert"
+                            class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+                        >
+                            {#each errors.general as error}
+                                <p>{error}</p>
+                            {/each}
+                        </div>
+                    {/if}
+
                     <div
                         class="flex w-full justify-center items-center flex-row"
                     >
@@ -100,12 +159,14 @@
 
                             <div class="text-[color:var(--color-text)]">
                                 {#each contact_phones as phone}
-                                <div
-                                    class="flex felx-row items-center space-x-2"
-                                >
-                                    <RiPhoneLine />
-                                    <a href="tel:{phone.number}">{phone.number}</a>
-                                </div>
+                                    <div
+                                        class="flex felx-row items-center space-x-2"
+                                    >
+                                        <RiPhoneLine />
+                                        <a href="tel:{phone.number}"
+                                            >{phone.number}</a
+                                        >
+                                    </div>
                                 {/each}
                                 <div
                                     class="flex felx-row items-center space-x-2"
@@ -266,8 +327,13 @@
                                 <!-- START button -->
                                 <button
                                     class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-[30px]"
-                                    >{$LL.send_message()}</button
+                                    disabled={isLoading}
                                 >
+                                    {#if isLoading}
+                                        Enviando...
+                                    {:else}
+                                        {$LL.send_message()}{/if}
+                                </button>
                                 <!-- END button -->
                             </form>
                         </div>

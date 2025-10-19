@@ -14,6 +14,12 @@
         show_open = !show_open;
     }
 
+    function closeMenuOnLinkClick() {
+        if (!show_open) {
+             NavToggle();
+        }
+    }
+
 </script>
 
 <header class="bg-[color:var(--color-bg-dark)] fixed w-full top-0 left-0 z-950 px-2 sm:px-6 lg:px-8">
@@ -30,22 +36,22 @@
         >
             <ul class="flex flex-col items-center gap-8 lg:flex-row">
                 <li>
-                    <a href="{base}/{$locale}" class="nav-link">{$LL.home()}</a>
+                    <a href="{base}/{$locale}" class="nav-link" on:click={closeMenuOnLinkClick}>{$LL.home()}</a>
                 </li>
                 <li>
-                    <a href="{base}/{$locale}/availability" class="nav-link">{$LL.book()}</a>
+                    <a href="{base}/{$locale}/availability" class="nav-link" on:click={closeMenuOnLinkClick}>{$LL.book()}</a>
                 </li>
                 <li>
-                    <a href="{base}/{$locale}/rooms" class="nav-link">{$LL.rooms()}</a>
+                    <a href="{base}/{$locale}/rooms" class="nav-link" on:click={closeMenuOnLinkClick}>{$LL.rooms()}</a>
                 </li>
                 <li>
-                    <a href="{base}/{$locale}/location" class="nav-link">{$LL.what_to_do()}</a>
+                    <a href="{base}/{$locale}/location" class="nav-link" on:click={closeMenuOnLinkClick}>{$LL.what_to_do()}</a>
                 </li>
                 <li>
-                    <a href="{base}/{$locale}/gallery" class="nav-link">{$LL.gallery()}</a>
+                    <a href="{base}/{$locale}/gallery" class="nav-link" on:click={closeMenuOnLinkClick}>{$LL.gallery()}</a>
                 </li>
                 <li>
-                    <a href="{base}/{$locale}/contact" class="nav-link">{$LL.contact()}</a>
+                    <a href="{base}/{$locale}/contact" class="nav-link" on:click={closeMenuOnLinkClick}>{$LL.contact()}</a>
                 </li>
                 
                 <LocaleSwitcher />

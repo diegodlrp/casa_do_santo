@@ -7,18 +7,13 @@
     export let data: PageData;
 
     // Destructure the data directly
-    const {
-        img,
-        title_img,
-        error,
-    } = data;
+    const { img, title_img, error } = data;
 
     $: title = data.title;
     $: content = data.content;
     $: rooms_data = data.rooms_data;
     $: title_title = data.title_title;
     $: title_subtitle = data.title_subtitle;
-    
 </script>
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
@@ -41,14 +36,15 @@
             <div
                 class="relative pt-16 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20"
             >
-                <a href="#rooms_list" class="mt-8 inline-block text-3xl animate-bounce">
+                <a
+                    href="#rooms_list"
+                    class="mt-8 inline-block text-3xl animate-bounce"
+                >
                     &#8659;
                 </a>
             </div>
         </div>
     </div>
-
-
 
     <div class=" min-h-[64px]"></div>
 </div>
@@ -57,7 +53,7 @@
 <div id="rooms_list">
     {#each rooms_data as room, index}
         <div
-            class="relative w-[100%] h-[calc(100vh-84px)] sm:h-[calc(100vh-100px)] overflow-hidden"
+            class="relative w-[100%] h-[calc(100vh-84px)] min-h-[800px] sm:h-[calc(100vh-100px)]"
         >
             <!-- background img -->
             <div
@@ -74,31 +70,36 @@
             <div
                 class="absolute h-[100%] bg-[color:var(--color-bg-dark)]/80 xl:w-[30%]"
                 class:room_bg={index % 2 === 1}
-				class:room_bg_right={index % 2 === 0}
+                class:room_bg_right={index % 2 === 0}
             >
                 <div class="py-0 px-[65px] mt-[160px]">
                     <img
                         src="/svg/core_bg.svg"
                         alt="core_bg"
-                        class="bg-cover bg-center absolute h-full "
+                        class="bg-cover bg-center absolute h-full"
                     />
 
                     <h2 class="text-center m-[30px]">{@html room.title}</h2>
-                    
-                    <h3 class="text-center text-[27px]">{@html room.excerpt}</h3>
 
-                    <div class="text-base text-white leading-[31px] font-montserrat text-center">{@html room.content}</div>
+                    <h3 class="text-center text-[27px]">
+                        {@html room.excerpt}
+                    </h3>
+
+                    <div
+                        class="text-base text-white leading-[31px] font-montserrat text-center"
+                    >
+                        {@html room.content}
+                    </div>
 
                     <a
-        href="gallery?room={room.slug}"
-        type="submit"
-        class="core_button left-1/2 -translate-x-1/2 px-6 py-2 mt-[30px] absolute hover:scale-105 active:scale-95 transition"
-    >
-        {$LL.more_photos()}
-    </a>
+                        href="gallery?room={room.slug}"
+                        type="submit"
+                        class="core_button left-1/2 -translate-x-1/2 px-6 py-2 mt-[30px] absolute hover:scale-105 active:scale-95 transition"
+                    >
+                        {$LL.more_photos()}
+                    </a>
                 </div>
             </div>
-
         </div>
     {/each}
 </div>

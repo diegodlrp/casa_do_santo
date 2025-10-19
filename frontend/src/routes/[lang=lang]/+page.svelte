@@ -170,9 +170,7 @@
 
 			<div class="w-full md:w-2/3 bg-cover bg-center">
 				<div class="relative h-[100%]">
-					<div
-						class="py-0 px-[65px] xl:mt-[160px] lg:mt-[90px] md:mt-[40px]"
-					>
+					<div class="px-2 sm:px-10 md:px-16 lg:px-[65px] py-0 xl:mt-[160px] lg:mt-[90px] md:mt-[40px]">
 						<img
 							src="/svg/core_bg.svg"
 							alt="core_bg"

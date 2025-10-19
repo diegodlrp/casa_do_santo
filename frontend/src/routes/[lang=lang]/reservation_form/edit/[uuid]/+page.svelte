@@ -201,7 +201,6 @@
   }
 
   async function handleSubmit() {
-    console.log("aasdas");
     successMessage = "";
     if (!validateForm()) {
       return;

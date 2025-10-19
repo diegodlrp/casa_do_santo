@@ -30,6 +30,16 @@ html {
     @apply content-center mx-auto p-[12px] md:p-[32px]
 }
 
+.start_info {
+    @apply bg-[color:var(--color-bg-dark)]/80 absolute ;
+    width: 100%;
+    pointer-events: all;
+    font-family: 'Montserrat', sans-serif;
+    height: 8%;
+    right: 0;
+    bottom: 0;
+  }
+
 /* titles */
 
 h2 {

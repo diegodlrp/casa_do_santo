@@ -67,7 +67,7 @@
 		class="absolute inset-0 bg-cover bg-center"
 		style="background-image: url({img});"
 	>
-		<!-- <div class="start_info flex items-center gap-8 flex-row">
+		<div class="start_info flex items-center gap-8 flex-row">
 			<div class="flex justify-between items-center w-full">
 				<div class="pl-4">
 					<span
@@ -80,13 +80,6 @@
 
 				<div class="pr-4 flex gap-x-8">
 					<a
-						href="tel:{phone}"
-						class="tel_icon flex items-center gap-x-1 text-white"
-					>
-						<RiPhoneLine />
-						{phone}
-					</a>
-					<a
 						href="mailto:{email}"
 						class="email_icon flex items-center gap-x-1 text-white"
 					>
@@ -95,7 +88,7 @@
 					</a>
 				</div>
 			</div>
-		</div> -->
+		</div>
 	</div>
 
 	<div

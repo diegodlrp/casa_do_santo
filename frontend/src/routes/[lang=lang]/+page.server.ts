@@ -56,7 +56,14 @@ export const load: PageServerLoad = async ({ locals: { LL } }) => {
         } else {
             console.warn(`No title data found for locale: ${locale}`);
         }
-
+        // Fetch base data 
+        const baseResponse = await apiRequest(`/basedata/1/?lang=${locale}`)
+        if (baseResponse) {
+            address = baseResponse.address || '';
+            email = baseResponse.email || '';
+        } else {
+            console.warn(`No title data found for locale: ${locale}`);
+        }
         // Fetch title data
         const contentResponse = await apiRequest(`/page_content/home_page_content/?lang=${locale}`);
         if (titleResponse) {

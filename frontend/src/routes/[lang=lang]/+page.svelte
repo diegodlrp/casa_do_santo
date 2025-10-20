@@ -147,7 +147,7 @@
 <!-- END -->
 
 <!-- HOME About Us -->
-<div
+<!-- <div
 	id="home_page_about_us"
 	class="bg-cover bg-center"
 	style="background-image: url({about_us_img}); opacity: 1;"
@@ -187,15 +187,56 @@
 		</div>
 	</div>
 
-	<div class="bg-[color:var(--color-bg-dark)] flex">
-		<!-- <a class="text-[color:var(--color-text)]" href="https://maps.app.goo.gl/fZhtSQQbJkm6LbXh6">Consulta nuestra ubicación</a> -->
+	
+</div> -->
+<!-- END -->
 
-		<div class="relative w-[100%] h-[450px] overflow-hidden">
-			<div bind:this={mapDiv} class="w-full h-full"></div>
-		</div>
+
+<section id="about-us" class="bg-cover bg-center" style="background-image: url({about_us_img});">
+    
+    <div class="bg-[color:var(--color-bg-dark)]/80">
+        
+        <div class="flex flex-col md:flex-row">
+
+            <div class="w-full md:w-1/3">
+                <img src={about_us_img} alt="A view of our establishment" class="w-full h-full object-cover" />
+            </div>
+
+            <div class="w-full md:w-2/3 relative flex items-center justify-center">
+                
+                <img
+                    src="/svg/core_bg.svg"
+                    alt=""
+                    aria-hidden="true"
+                    class="absolute top-0 right-0 h-full z-0"
+                />
+
+                <div class="relative z-10 text-center px-6 py-12 sm:px-10 md:px-16 lg:py-24">
+                    <h2 class="mb-4">
+                        {@html about_us_title}
+                    </h2>
+
+                    <h3 class="mb-8 text-2xl md:text-3xl">
+                        {@html about_us_subtitle}
+                    </h3>
+
+                    <div class="max-w-prose mx-auto text-white leading-relaxed">
+                        {@html about_us_content}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="bg-[color:var(--color-bg-dark)] flex">
+	<!-- <a class="text-[color:var(--color-text)]" href="https://maps.app.goo.gl/fZhtSQQbJkm6LbXh6">Consulta nuestra ubicación</a> -->
+
+	<div class="relative w-[100%] h-[450px] overflow-hidden">
+		<div bind:this={mapDiv} class="w-full h-full"></div>
 	</div>
 </div>
-<!-- END -->
 <div class="bg-[color:var(--color-bg-dark)]">
 	<Services
 		title={services_content_title}

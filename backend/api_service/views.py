@@ -15,7 +15,7 @@ from .models import EmailTemplate
 @require_POST
 def send_mail_view(request):
     try:
-
+        
         # recuperate data from json
         data = json.loads(request.body)
         name = data.get("name", "")
@@ -40,7 +40,7 @@ def send_mail_view(request):
         mail_body = mail_body.replace("{message}", message)
         mail_body = mail_body.replace("{mail}", mail)
         mail_body = mail_body.replace("{language}", language)
-        mail_body = mail_body.replace("{current_datetime}", current_datetime)
+        mail_body = mail_body.replace("{current_datetime}", str(current_datetime))
 
         recipient_list = ["casadosantocoira@gmail.com"]
 
@@ -102,7 +102,7 @@ def send_reservation_mail_view(request):
         mail_body = mail_body.replace("{checkOutDate}", check_out)
         mail_body = mail_body.replace("{n_adults}", str(n_adults))
         mail_body = mail_body.replace("{n_childs}", str(n_childs))
-        mail_body = mail_body.replace("{current_datetime}", current_datetime)
+        mail_body = mail_body.replace("{current_datetime}", str(current_datetime))
 
         recipient_list = ["casadosantocoira@gmail.com"]
 
@@ -161,13 +161,13 @@ def send_reservation_confimation_mail(request, mail, token, total_price, check_i
         subject = template.excerpt
 
         current_datetime = datetime.datetime.now()
-        
+
         mail_body = template.content
         mail_body = mail_body.replace("{uuid}", token)
         mail_body = mail_body.replace("{total_price}", total_price)
         mail_body = mail_body.replace("{check_in_date}", check_in_date)
         mail_body = mail_body.replace("{check_out_date}", check_out_date)
-        mail_body = mail_body.replace("{current_datetime}", current_datetime)
+        mail_body = mail_body.replace("{current_datetime}", str(current_datetime))
         
         recipient_list = [mail]
         send_mail(

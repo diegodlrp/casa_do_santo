@@ -31,6 +31,7 @@
     guest_sex: string;
     guest_vat: string;
     guest_document_type: string;
+    guest_document_support: string;
     guest_birth_date: string;
     guest_nacionality: string;
     guest_address: string;
@@ -56,6 +57,7 @@
     guest_sex: "",
     guest_vat: "",
     guest_document_type: "",
+    guest_document_support: "",
     guest_birth_date: "",
     guest_nacionality: "",
     guest_address: "",
@@ -238,7 +240,7 @@
 
 
       const response = await fetch(
-        "https://casadosantoadmin.casacam.net/api-reservation/edit-reservation/",
+        "http://127.0.0.1:8000/api-reservation/edit-reservation/",
         {
           method: "POST",
           headers: {
@@ -429,6 +431,24 @@
             {#if errors.guest_document_type}
               <p class="mt-1 text-sm text-red-600">
                 {errors.guest_document_type[0]}
+              </p>
+            {/if}
+          </div>
+
+          <div>
+            <label for="document_type" class="block text-sm font-medium mb-1"
+              >Tipo Documento</label
+            >
+            <input
+              type="text"
+              id="document_type"
+              bind:value={formData.guest_document_support}
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            />
+            {#if errors.guest_document_support}
+              <p class="mt-1 text-sm text-red-600">
+                {errors.guest_document_support[0]}
               </p>
             {/if}
           </div>

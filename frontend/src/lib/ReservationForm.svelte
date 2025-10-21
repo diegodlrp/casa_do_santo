@@ -56,8 +56,7 @@
     onMount(async () => {
         const checkInInput = document.getElementById("check_in_date");
         const checkOutInput = document.getElementById("check_out_date");
-        const titleResponse = await apiRequest(`/calendar/available-dates/`);
-        console.log("titleResponse", titleResponse);
+        const availableDatesResponse = await apiRequest(`/calendar/available-dates/`);
         const discountResponse = await apiRequest(`/discount/?lang=${locale}`);
         console.log("discountResponse", discountResponse);
         percentage_true = discountResponse["percentage_true"];
@@ -69,7 +68,7 @@
                 minDate: "today", // Prevent picking past dates
                 inline: true,
                 // altInput: true,
-                // disable: titleResponse, // Display user-friendly date in input
+                disable: availableDatesResponse, // Display user-friendly date in input
                 altFormat: "F j, Y", // User-friendly format (e.g., July 31, 2025)
                 onChange: async function (selectedDates, dateStr, instance) {
                     isLoading = true;

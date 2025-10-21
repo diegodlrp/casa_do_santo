@@ -79,7 +79,7 @@
                 console.error("API Error:", errorData);
             } else {
                 const result = await response.json();
-                successMessage = "¡Mensaje realizada con éxito!";
+                successMessage = "¡Mensaje enviado con éxito!";
                 console.log("Reservation successful:", result);
                 errors = {};
             }
@@ -110,9 +110,10 @@
                     {#if successMessage}
                         <div
                             role="alert"
-                            class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 w-[80%]"
+                            class="bg-green-100 border-l-4 border-green-500 text-green-700 p-8 mb-4 w-[80%] text-center"
                         >
-                            <p>{successMessage}</p>
+                       
+                        <p>{successMessage.toUpperCase()}</p>
                         </div>
                     {/if}
 

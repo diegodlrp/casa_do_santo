@@ -182,9 +182,10 @@ class ReservationAdmin(admin.ModelAdmin):
             print("==================================================")
 
             try:
+                obj.status = "confirmed"
+                obj.save()
                 token = create_one_time_link(request, obj)
-                print("token", token)
-                print("token.token", token.token)
+
                 mail = obj.main_guest.email
                 total_price = obj.total_price
                 check_in_date = obj.check_in_date

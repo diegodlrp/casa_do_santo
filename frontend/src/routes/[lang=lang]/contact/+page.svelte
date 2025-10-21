@@ -40,7 +40,7 @@
         isLoading = true;
         try {
             const response = await fetch(
-                "https://casadosantoadmin.casacam.net/api/send-mail/",
+                "http://localhost:8000/api/send-mail/",
                 {
                     method: "POST",
                     headers: {
@@ -59,7 +59,11 @@
                     credentials: "omit",
                 },
             );
-
+            
+            name = ""
+            email = ""
+            message = ""
+            
             if (!response.ok) {
                 const errorData = await response.json();
                 errors = errorData;
@@ -75,7 +79,7 @@
                 console.error("API Error:", errorData);
             } else {
                 const result = await response.json();
-                successMessage = "¡Reserva realizada con éxito!";
+                successMessage = "¡Mensaje realizada con éxito!";
                 console.log("Reservation successful:", result);
                 errors = {};
             }

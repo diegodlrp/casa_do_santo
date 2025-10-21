@@ -88,7 +88,7 @@
                         let differenceInTime =
                             selectedDates[1].getTime() -
                             selectedDates[0].getTime();
-                        n_days = differenceInTime / (1000 * 3600 * 24);
+                            n_days = Math.floor(differenceInTime / (1000 * 3600 * 24));
 
                         if (n_days >= 3) {
                             isButtonDisabled = false;

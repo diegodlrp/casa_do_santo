@@ -4,6 +4,9 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class EmailTemplate(models.Model):
+    name = models.CharField(
+        max_length=200, null=True, blank=True, verbose_name=_("Nombre Plantilla")
+    )
     slug = models.SlugField(unique=True, db_index=True, verbose_name=_("Slug"))
     excerpt = models.CharField(
         max_length=200, null=True, blank=True, verbose_name=_("Asunto")

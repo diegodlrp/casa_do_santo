@@ -3,201 +3,153 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
+  import FormField from "$lib/FormField.svelte";
 
   export let data: PageData;
 
-  $: main_guest_id = data.main_guest_id;
-  $: main_guest_name = data.main_guest_name;
-  $: main_guest_vat = data.main_guest_vat;
-  $: main_guest_email = data.main_guest_email;
-  $: check_in_date = data.check_in_date;
-  $: check_out_date = data.check_out_date;
-  $: special_request = data.special_request;
-  $: reservation_id = data.reservation_id;
+  // Destructure props from data
+  $: ({
+    main_guest_name,
+    main_guest_vat,
+    main_guest_email,
+    check_in_date,
+    check_out_date,
+    special_request,
+    reservation_id,
+    reservationform_mandatory1,
+    reservationform_mandatory2,
+    reservationform_mandatory3,
+    reservationform_info1,
+    reservationform_info2
+  } = data);
 
-  // Define a type for an individual guest
-  interface Guest {
-    name: string;
+  // --- 1. UNIFIED GUEST INTERFACE ---
+  // All fields are now in one interface for every guest.
+  interface GuestData {
+    first_name: string;
     last_name: string;
+    last_name2: string;
+    sex: string;
+    document_type: string;
+    document_support: string;
     vat: string;
+    birth_date: string;
+    nacionality: string;
+    address: string;
+    address_state: string;
+    country: string;
+    phone: string;
+    mobile: string;
+    email: string;
     adult: boolean;
   }
 
-  // Define a type for the main form data
+  // --- 2. UNIFIED FORM DATA STRUCTURE ---
+  // The form now holds a single array of guests. The primary guest is always at index 0.
   interface FormData {
-    guest_first_name: string; // Keep for the primary guest (or make primary guest part of guests array)
-    guest_last_name: string;
-    guest_last_name2: string;
-    guest_sex: string;
-    guest_vat: string;
-    guest_document_type: string;
-    guest_document_support: string;
-    guest_birth_date: string;
-    guest_nacionality: string;
-    guest_address: string;
-    guest_address_state: string;
-    guest_country: string;
-    guest_phone: string;
-    guest_mobile: string;
-    guest_email: string;
-
-    guest_adult: boolean;
+    guests: GuestData[];
     check_in_date: string;
     check_out_date: string;
     special_requests: string;
-    // New: Array to hold additional guests
-    additional_guests: Guest[];
+    reservation_id: Integer;
   }
 
-  // Initial form data
+  // Helper function to create a new, empty guest object
+  const createNewGuest = (isPrimary = false): GuestData => ({
+    first_name: "",
+    last_name: "",
+    last_name2: "",
+    sex: "",
+    document_type: "",
+    document_support: "",
+    vat: "",
+    birth_date: "",
+    nacionality: "",
+    address: "",
+    address_state: "",
+    country: "",
+    phone: "",
+    mobile: "",
+    email: "",
+    adult: isPrimary, // Primary guest is an adult by default
+  });
+
+  // Initial form data with one primary guest
   let formData: FormData = {
-    guest_first_name: "",
-    guest_last_name: "",
-    guest_last_name2: "",
-    guest_sex: "",
-    guest_vat: "",
-    guest_document_type: "",
-    guest_document_support: "",
-    guest_birth_date: "",
-    guest_nacionality: "",
-    guest_address: "",
-    guest_address_state: "",
-    guest_country: "",
-    guest_phone: "",
-    guest_mobile: "",
-    guest_email: "",
-    guest_adult: true,
+    guests: [createNewGuest(true)], // Start with the primary guest
     check_in_date: "",
     check_out_date: "",
     special_requests: "",
-    additional_guests: [], // Start with no additional guests
+    reservation_id: 0
   };
 
-  let errors: { [key: string]: string[] | { [key: string]: string[] }[] } = {}; // Adjust type for nested errors
+  // --- 3. UPDATED ERROR STRUCTURE ---
+  // Errors will now be an object containing a 'guests' array.
+  let errors: { guests?: ({ [key: string]: string[] })[], general?: string[], [key: string]: any } = {};
   let successMessage: string = "";
   let isLoading: boolean = false;
 
-  // Set minimum date for check-in to today
-  let today: string;
-  console.log("today", today);
-
-  console.log(
-    "script is executing, is browser?",
-    typeof window !== "undefined",
-  );
+  const documentTypes = [
+    { value: "dni", label: "DNI (Documento Nacional de Identidad)" },
+    { value: "passport", label: "Pasaporte" },
+    { value: "nie", label: "NIE (Número de Identidad de Extranjero)" },
+  ];
 
   onMount(() => {
+    // Populate the primary guest (at index 0) and other form data
+    formData.guests[0].first_name = main_guest_name || "";
+    formData.guests[0].vat = main_guest_vat || "";
+    formData.guests[0].email = main_guest_email || "";
     formData.check_in_date = check_in_date;
     formData.check_out_date = check_out_date;
     formData.special_requests = special_request;
-    formData.guest_first_name = main_guest_name;
-    formData.guest_vat = main_guest_vat;
-    formData.guest_email = main_guest_email;
+    formData.reservation_id = reservation_id;
   });
 
-  // Function to add a new empty guest field
+  // --- 4. SIMPLIFIED GUEST MANAGEMENT ---
   function addGuest() {
-    formData.additional_guests = [
-      ...formData.additional_guests,
-      { name: "", last_name: "", vat: "", adult: false },
-    ];
-    // Clear any previous general errors related to guest count if they were there
-    if (
-      errors.general &&
-      errors.general.includes(
-        "Debe haber al menos un huésped principal y un huésped por cada formulario adicional.",
-      )
-    ) {
-      delete errors.general;
-    }
+    formData.guests = [...formData.guests, createNewGuest()];
   }
 
-  // Function to remove a guest field
   function removeGuest(index: number) {
-    formData.additional_guests = formData.additional_guests.filter(
-      (_, i) => i !== index,
-    );
+    // Prevent removing the primary guest
+    if (index > 0) {
+      formData.guests = formData.guests.filter((_, i) => i !== index);
+    }
   }
 
-  // --- Validation ---
-  function validateGuest(
-    guest: Guest,
-    index: number,
-  ): { [key: string]: string[] } {
-    const guestErrors: { [key: string]: string[] } = {};
-    if (!guest.name.trim()) {
-      guestErrors.first_name = ["El nombre es requerido."];
-    }
-    if (!guest.last_name.trim()) {
-      guestErrors.last_name = ["El apellido es requerido."];
-    }
-    if (!guest.vat.trim()) {
-      guestErrors.last_name = ["El DNI es requerido."];
-    }
-    return guestErrors;
-  }
-
+  // --- 5. UNIFIED VALIDATION LOGIC ---
   function validateForm(): boolean {
     errors = {}; // Clear previous errors
     let isValid = true;
+    const guestErrors: ({ [key: string]: string[] })[] = [];
 
-    // Validate Primary Guest
-    if (!formData.guest_first_name.trim()) {
-      errors.guest_first_name = ["El nombre es requerido."];
-      isValid = false;
-    }
-    if (!formData.guest_last_name.trim()) {
-      errors.guest_last_name = ["El apellido es requerido."];
-      isValid = false;
-    }
-    if (
-      !formData.guest_email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.guest_email)
-    ) {
-      errors.guest_email = ["Por favor, introduce un email válido."];
-      isValid = false;
-    }
-
-    // Validate Dates
-    if (!formData.check_in_date) {
-      errors.check_in_date = ["La fecha de entrada es requerida."];
-      isValid = false;
-    }
-    if (!formData.check_out_date) {
-      errors.check_out_date = ["La fecha de salida es requerida."];
-      isValid = false;
-    }
-    if (formData.check_in_date && formData.check_out_date) {
-      const checkIn = new Date(formData.check_in_date);
-      const checkOut = new Date(formData.check_out_date);
-      if (checkOut <= checkIn) {
-        errors.check_out_date = [
-          "La fecha de salida debe ser posterior a la de entrada.",
-        ];
-        isValid = false;
+    formData.guests.forEach((guest, index) => {
+      const singleGuestErrors: { [key: string]: string[] } = {};
+      if (!guest.first_name.trim()) singleGuestErrors.first_name = ["El nombre es requerido."];
+      if (!guest.last_name.trim()) singleGuestErrors.last_name = ["El primer apellido es requerido."];
+      if (!guest.vat.trim()) singleGuestErrors.vat = ["El Nº del documento es requerido."];
+      if (!guest.birth_date) singleGuestErrors.birth_date = ["La fecha de nacimiento es requerida."];
+      if (!guest.document_type) singleGuestErrors.document_type = ["El tipo de documento es requerido."];
+      if (index === 0 && (!guest.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guest.email))) {
+        singleGuestErrors.email = ["Por favor, introduce un email válido."];
       }
-    }
-
-    // Validate Additional Guests
-    const additionalGuestErrors: { [key: string]: string[] }[] = [];
-    formData.additional_guests.forEach((guest, index) => {
-      const guestErrors = validateGuest(guest, index);
-      if (Object.keys(guestErrors).length > 0) {
-        additionalGuestErrors[index] = guestErrors;
+      
+      if (Object.keys(singleGuestErrors).length > 0) {
         isValid = false;
+        guestErrors[index] = singleGuestErrors;
       }
     });
-    if (additionalGuestErrors.length > 0) {
-      errors.additional_guests = additionalGuestErrors;
+
+    if (guestErrors.length > 0) {
+      errors.guests = guestErrors;
     }
-
-    // Ensure total adults match expected if you were to count additional guests as adults
-    // You might need to adjust num_adults calculation based on how many "adults" the form represents in total.
-    // For now, assuming num_adults is for the total count, and additional_guests are just more people.
-    let totalGuests = 1; // Primary guest
-    totalGuests += formData.additional_guests.length; // Add number of additional guests
-
-    // If you want to enforce num_adults to be at least (1 + number of additional_guests)
+    
+    // Validate dates
+    if (new Date(formData.check_out_date) <= new Date(formData.check_in_date)) {
+        errors.check_out_date = ["La fecha de salida debe ser posterior a la de entrada."];
+        isValid = false;
+    }
 
     return isValid;
   }
@@ -207,97 +159,34 @@
     if (!validateForm()) {
       return;
     }
-
     isLoading = true;
     try {
-      // Prepare data for API: Combine primary guest and additional guests
-      const reservationData = {
-        ...formData,
-        // Create an array of all guests for the backend
-        guests_details: [
-          // {
-          //   first_name: formData.guest_first_name,
-          //   last_name: formData.guest_last_name,
-          //   email: formData.guest_email,
-          //   phone: formData.guest_phone,
-          //   vat: formData.guest_vat
-          // },
-          ...formData.additional_guests.map((guest) => ({
-            first_name: guest.name,
-            last_name: guest.last_name,
-            vat: guest.vat,
-            adult: guest.adult,
-            email: "",
-            phone: "",
-          })),
-        ],
-        // Remove individual guest fields if your backend expects only the 'guests_details' array
-        // guest_first_name: undefined,
-        // guest_last_name: undefined,
-        // guest_email: undefined,
-        // guest_phone: undefined,
-      };
-
-
-      const response = await fetch(
-        "http://127.0.0.1:8000/api-reservation/edit-reservation/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken") || "", // Ensure CSRF token is sent
-          },
-          body: JSON.stringify(reservationData),
+      // The formData is already in the correct shape for the backend
+      const response = await fetch("https://casadosantoadmin.casacam.net/api-reservation/edit-reservation/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken") || "",
         },
-      );
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
         errors = errorData;
-        if (response.status === 409 && errorData.detail) {
-          errors.general = [errorData.detail];
-        } else if (errorData.non_field_errors) {
-          errors.general = errorData.non_field_errors;
-        } else {
-          errors.general = [
-            "Ocurrió un error inesperado al procesar la reserva. Por favor, inténtalo de nuevo.",
-          ];
-        }
-        console.error("API Error:", errorData);
       } else {
-        const result = await response.json();
         successMessage = "¡Reserva realizada con éxito!";
-        console.log("Reservation successful:", result);
-        // Reset form
-        // formData = {
-        //   guest_first_name: "",
-        //   guest_last_name: "",
-        //   guest_email: "",
-        //   guest_phone: "",
-        //   check_in_date: today,
-        //   check_out_date: new Date(
-        //     new Date(today).setDate(new Date(today).getDate() + 1),
-        //   )
-        //     .toISOString()
-        //     .split("T")[0],
-        //   special_requests: "",
-        //   additional_guests: [],
-        // };
         errors = {};
-        // invalidateAll(); // Uncomment if you need to invalidate SvelteKit load functions
       }
     } catch (error) {
-      console.error("Network or other error:", error);
-      errors.general = [
-        "No se pudo conectar con el servidor. Por favor, revisa tu conexión a internet.",
-      ];
+      errors.general = ["No se pudo conectar con el servidor."];
     } finally {
       isLoading = false;
     }
   }
 
-  // Helper function to get CSRF token from cookies
   function getCookie(name: string) {
+    if (typeof document === 'undefined') return null;
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
       const cookies = document.cookie.split(";");
@@ -324,402 +213,89 @@
     </h2>
 
     {#if successMessage}
-      <div
-        role="alert"
-        class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
-      >
+      <div role="alert" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
         <p>{successMessage}</p>
       </div>
     {/if}
 
     {#if errors.general}
-      <div
-        role="alert"
-        class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
-      >
-        {#each errors.general as error}
-          <p>{error}</p>
-        {/each}
+      <div role="alert" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+        {#each errors.general as error}<p>{error}</p>{/each}
       </div>
     {/if}
-
+      
+    <div>{@html reservationform_info1}</div>
+    <div>{@html reservationform_info2}</div>
+      
     <form on:submit|preventDefault={handleSubmit} class="space-y-6">
-      <fieldset class="border border-gray-300 p-4 rounded-md">
-        <legend class="text-lg font-semibold px-2"
-          >Datos del Huésped Principal</legend
-        >
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-          <div>
-            <label for="first_name" class="block text-sm font-medium mb-1"
-              >Nombre</label
-            >
-            <input
-              type="text"
-              id="first_name"
-              bind:value={formData.guest_first_name}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_first_name}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_first_name[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="last_name" class="block text-sm font-medium mb-1"
-              >Apellido</label
-            >
-            <input
-              type="text"
-              id="last_name"
-              bind:value={formData.guest_last_name}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_last_name}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_last_name[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="last_name" class="block text-sm font-medium mb-1"
-              >segundo Apellido</label
-            >
-            <input
-              type="text"
-              id="last_name"
-              bind:value={formData.guest_last_name2}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_last_name2}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_last_name[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="sexo" class="block text-sm font-medium mb-1"
-              >Sexo</label
-            >
-            <input
-              type="text"
-              id="sexo"
-              bind:value={formData.guest_sex}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_sex}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_sex[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="document_type" class="block text-sm font-medium mb-1"
-              >Tipo Documento</label
-            >
-            <input
-              type="text"
-              id="document_type"
-              bind:value={formData.guest_document_type}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_document_type}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_document_type[0]}
-              </p>
-            {/if}
-          </div>
-
-          <div>
-            <label for="document_type" class="block text-sm font-medium mb-1"
-              >Tipo Documento</label
-            >
-            <input
-              type="text"
-              id="document_type"
-              bind:value={formData.guest_document_support}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_document_support}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_document_support[0]}
-              </p>
-            {/if}
-          </div>
-
-          <div>
-            <label>DNI</label>
-            <input
-              type="text"
-              id="last_name1"
-              bind:value={formData.guest_vat}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-
-          <div>
-            <label for="date_birth" class="block text-sm font-medium mb-1"
-              >Fecha nacimiento</label
-            >
-            <input
-              type="date"
-              id="date_birth"
-              bind:value={formData.guest_birth_date}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_birth_date}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_birth_date[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="nacionality" class="block text-sm font-medium mb-1"
-              >Nacionalidad</label
-            >
-            <input
-              type="text"
-              id="nacionality"
-              bind:value={formData.guest_nacionality}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_nacionality}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_nacionality[0]}
-              </p>
-            {/if}
-          </div>
-
-          <div>
-            <label for="address" class="block text-sm font-medium mb-1"
-              >Dirrección</label
-            >
-            <input
-              type="text"
-              id="address"
-              bind:value={formData.guest_address}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_address}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_address[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium mb-1"
-              >Email</label
-            >
-            <input
-              type="email"
-              id="email"
-              bind:value={formData.guest_email}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.guest_email}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_email[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="phone" class="block text-sm font-medium mb-1"
-              >Teléfono (Opcional)</label
-            >
-            <input
-              type="tel"
-              id="phone"
-              bind:value={formData.guest_phone}
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {#if errors.guest_phone}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.guest_phone[0]}
-              </p>
-            {/if}
-          </div>
-          
-          <div class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="myCheckbox"
-              bind:checked={formData.guest_adult}
-              class="h-4 w-4 border-gray-300 rounded focus:ring-indigo-500"
-              aria-labelledby="myCheckboxLabel"
-            />
-            <label for="myCheckbox" id="myCheckboxLabel"> Adulto </label>
-          </div>
-        </div>
-      </fieldset>
-
-      {#each formData.additional_guests as guest, i (i)}
+      {#each formData.guests as guest, i (i)}
         <fieldset class="border border-gray-300 p-4 rounded-md relative">
-          <legend class="text-lg font-semibold px-2"
-            >Huésped Adicional {i + 1}</legend
-          >
-          <button
-            type="button"
-            on:click={() => removeGuest(i)}
-            class="absolute top-2 right-2 text-red-600 hover:text-red-800 font-bold text-xl"
-            aria-label="Remove guest"
-          >
-            &times;
-          </button>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            <div>
-              <!-- name -->
+          <legend class="text-lg font-semibold px-2">
+            {#if i === 0}
+              Datos del Huésped Principal
+            {:else}
+              Huésped Adicional {i}
+            {/if}
+          </legend>
 
-              <label
-                for="additional_guest_first_name_{i}"
-                class="block text-sm font-medium mb-1">Nombre</label
-              >
-              <input
-                type="text"
-                id="additional_guest_first_name_{i}"
-                bind:value={guest.name}
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
-              {#if errors.additional_guests && errors.additional_guests[i] && errors.additional_guests[i].first_name}
-                <p class="mt-1 text-sm text-red-600">
-                  {errors.additional_guests[i].name[0]}
-                </p>
-              {/if}
-            </div>
-            <div>
-              <label
-                for="additional_guest_last_name_{i}"
-                class="block text-sm font-medium mb-1">Apellido</label
-              >
-              <input
-                type="text"
-                id="additional_guest_last_name_{i}"
-                bind:value={guest.last_name}
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
-              {#if errors.additional_guests && errors.additional_guests[i] && errors.additional_guests[i].last_name}
-                <p class="mt-1 text-sm text-red-600">
-                  {errors.additional_guests[i].last_name[0]}
-                </p>
-              {/if}
-            </div>
-            <div>
-              <label>DNI</label>
-              <input
-                type="text"
-                id="last_name2"
-                bind:value={guest.vat}
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
-            </div>
-            <div class="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="myCheckbox1"
-                bind:checked={formData.guest_adult}
-                class="h-4 w-4 border-gray-300 rounded focus:ring-indigo-500"
-                aria-labelledby="myCheckboxLabel"
-              />
-              <label for="myCheckbox" id="myCheckboxLabel"> Adulto </label>
-            </div>
+          {#if i > 0}
+            <button
+              type="button"
+              on:click={() => removeGuest(i)}
+              class="absolute top-2 right-2 text-red-600 hover:text-red-800 font-bold text-xl"
+              aria-label="Remove guest"
+            >&times;</button>
+          {/if}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <FormField label="Nombre ¹⁾²⁾" id="first_name_{i}" bind:value={guest.first_name} required errors={errors.guests?.[i]?.first_name} />
+            <FormField label="Primer Apellido ¹⁾²⁾" id="last_name_{i}" bind:value={guest.last_name} required errors={errors.guests?.[i]?.last_name} />
+            <FormField label="Segundo Apellido ¹⁾" id="last_name2_{i}" bind:value={guest.last_name2} optional errors={errors.guests?.[i]?.last_name2} />
+            <FormField label="Fecha Nacimiento ¹⁾²⁾" id="birth_date_{i}" type="date" bind:value={guest.birth_date} required errors={errors.guests?.[i]?.birth_date} />
+            <FormField label="Sexo" id="sex_{i}" bind:value={guest.sex} required errors={errors.guests?.[i]?.sex} />
+            <FormField label="País de Nacionalidad ¹⁾²⁾" id="nationality_{i}" bind:value={guest.nacionality} required errors={errors.guests?.[i]?.nacionality} />
+            <FormField label="Tipo de Documento ¹⁾²⁾" id="document_type_{i}" type="select" bind:value={guest.document_type} options={documentTypes} required errors={errors.guests?.[i]?.document_type} />
+            <FormField label="Nº del documento ¹⁾²⁾" id="vat_{i}" bind:value={guest.vat} required errors={errors.guests?.[i]?.vat} />
+            <FormField label="Soporte del documento ¹⁾" id="document_support_{i}" bind:value={guest.document_support} optional errors={errors.guests?.[i]?.document_support} />
+            <FormField label="Dirección ¹⁾²⁾" id="address_{i}" bind:value={guest.address} required errors={errors.guests?.[i]?.address} />
+            <FormField label="Provincia ¹⁾" id="address_state_{i}" bind:value={guest.address_state} required errors={errors.guests?.[i]?.address_state} />
+            <FormField label="País ¹⁾²⁾" id="country_{i}" bind:value={guest.country} required errors={errors.guests?.[i]?.country} />
+            <FormField label="Teléfono ¹⁾²⁾" id="phone_{i}" type="tel" bind:value={guest.phone} optional errors={errors.guests?.[i]?.phone} />
+            <FormField label="Móvil" id="mobile_{i}" type="tel" bind:value={guest.mobile} optional errors={errors.guests?.[i]?.mobile} />
+            <FormField label="Email ¹⁾²⁾" id="email_{i}" type="email" bind:value={guest.email} required={i === 0} optional={i > 0} errors={errors.guests?.[i]?.email} />
+            <FormField label="Adulto" id="adult_{i}" type="checkbox" bind:value={guest.adult} />
           </div>
         </fieldset>
       {/each}
+
       <div class="flex justify-center">
-        <button
-          type="button"
-          on:click={addGuest}
-          class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0"
-        >
+        <button type="button" on:click={addGuest} class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0">
           Añadir Huésped
         </button>
       </div>
+      
       <fieldset class="border border-gray-300 p-4 rounded-md">
         <legend class="text-lg font-semibold px-2">Fechas de la Reserva</legend>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-          <div>
-            <label for="check_in_date" class="block text-sm font-medium mb-1"
-              >Fecha de Entrada</label
-            >
-            <input
-              type="date"
-              id="check_in_date"
-              bind:value={formData.check_in_date}
-              min={today}
-              disabled
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.check_in_date}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.check_in_date[0]}
-              </p>
-            {/if}
-          </div>
-          <div>
-            <label for="check_out_date" class="block text-sm font-medium mb-1"
-              >Fecha de Salida</label
-            >
-            <input
-              type="date"
-              id="check_out_date"
-              bind:value={formData.check_out_date}
-              disabled
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
-            />
-            {#if errors.check_out_date}
-              <p class="mt-1 text-sm text-red-600">
-                {errors.check_out_date[0]}
-              </p>
-            {/if}
-          </div>
+           <FormField label="Fecha de Entrada ¹⁾²⁾" id="check_in_date" type="date" bind:value={formData.check_in_date} required disabled errors={errors.check_in_date} />
+           <FormField label="Fecha de Salida" id="check_out_date" type="date" bind:value={formData.check_out_date} required disabled errors={errors.check_out_date} />
         </div>
       </fieldset>
 
       <div>
-        <label for="special_requests" class="block text-sm font-medium mb-1"
-          >Solicitudes Especiales (Opcional)</label
-        >
-        <textarea
-          id="special_requests"
-          bind:value={formData.special_requests}
-          rows="4"
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        ></textarea>
-        {#if errors.special_requests}
-          <p class="mt-1 text-sm text-red-600">
-            {errors.special_requests[0]}
-          </p>
-        {/if}
+        <label for="special_requests" class="block text-sm font-medium mb-1">Solicitudes Especiales (Opcional)</label>
+        <textarea id="special_requests" bind:value={formData.special_requests} rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
       </div>
+
       <div class="flex justify-center">
-        <button
-          type="submit"
-          class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0"
-          disabled={isLoading}
-        >
-          {#if isLoading}
-            Enviando...
-          {:else}
-            Confirmar Reserva
-          {/if}
+        <button type="submit" class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0" disabled={isLoading}>
+          {#if isLoading}Enviando...{:else}Confirmar Reserva{/if}
         </button>
       </div>
     </form>
   </div>
   <div class="min-h-[24px]"></div>
+  <div id="section_1">{@html reservationform_mandatory1}</div>
+  <div id="section_2">{@html reservationform_mandatory2}</div>
+  <div id="section_3">{@html reservationform_mandatory3}</div>
 </div>

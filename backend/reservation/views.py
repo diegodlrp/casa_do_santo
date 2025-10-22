@@ -15,6 +15,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from django.core.exceptions import ValidationError
 
 # Application-specific imports (from other parts of your project)
 from api_service.views import send_reservation_mail_view
@@ -205,7 +206,7 @@ def create_reservation(request):
     guest_data = {
         "name": data.get("name", ""),
         "email": data.get("mail", ""),
-        "vat": "12345678P",
+        "vat": "",
         "document_type": "NIF",
     }
     print("guest_data", guest_data)
@@ -268,18 +269,161 @@ def create_reservation(request):
         guest.delete()
         return JsonResponse({"error": "An internal error occurred."}, status=500)
 
+# Helper function to process guest data and return or create a Guest instance
+def process_guest_data(guest_data: dict):
+    """
+    Tries to find an existing Guest by 'vat' (document number) or creates a new one.
+    Updates the existing guest's details.
+    """
+    # Map incoming JSON keys to Django model field names
+    guest_model_data = {
+        'name': guest_data.get('first_name'),
+        'last_name': guest_data.get('last_name'),
+        'last_name2': guest_data.get('last_name2', ''),
+        'sex': guest_data.get('sex'),
+        # Mapping 'document_type' and 'document_support' to 'vat'
+        'document_type': guest_data.get('document_type', 'DNI').upper(),
+        'vat': guest_data.get('vat'), # Assuming 'vat' holds the actual document number
+        
+        'birth_date': guest_data.get('birth_date'),
+        'nacionality': guest_data.get('nacionality'),
+        'address': guest_data.get('address'),
+        'address_state': guest_data.get('address_state'),
+        'country': guest_data.get('country'),
+        'phone': guest_data.get('phone', ''),
+        'mobile': guest_data.get('mobile', ''),
+        'email': guest_data.get('email', ''),
+        'adult': guest_data.get('adult', True),
+    }
+
+    # Clean up empty strings or nulls to match model null/blank constraints
+    for key, value in list(guest_model_data.items()):
+        if value in (None, ''):
+            guest_model_data[key] = None
+        
+        # Convert birth_date string to Python date object
+        if key == 'birth_date' and guest_model_data[key]:
+             guest_model_data[key] = datetime.datetime.strptime(guest_model_data[key], '%Y-%m-%d').date()
+        
+        # Ensure document_type is one of the valid choices
+        if key == 'document_type':
+            valid_types = [choice[0] for choice in Guest.DOCUMENT_TYPES]
+            if guest_model_data[key] not in valid_types:
+                 guest_model_data[key] = 'DNI' # Default if invalid
+
+
+    # 1. Try to find the guest by VAT number
+    # Assuming VAT/document number is the unique identifier for a guest.
+    vat_number = guest_model_data.get('vat')
+    guest_instance = None
+
+    if vat_number:
+        try:
+            # Check for existing guest
+            guest_instance = Guest.objects.get(vat=vat_number)
+            
+            # Update fields of existing guest
+            for key, value in guest_model_data.items():
+                setattr(guest_instance, key, value)
+            guest_instance.save()
+            
+        except Guest.DoesNotExist:
+            # Create a new guest if not found
+            guest_instance = Guest.objects.create(**guest_model_data)
+        except Exception as e:
+            print(f"Error processing guest with VAT {vat_number}: {e}")
+            raise ValidationError(f"Error saving guest data for {vat_number}: {e}")
+    else:
+        # Handle case where VAT is missing (e.g., just create a new one)
+        # This might need better error handling or defaulting based on your business logic.
+        guest_instance = Guest.objects.create(**guest_model_data)
+
+    return guest_instance
+
+
 @csrf_exempt
 @require_POST
 def edit_reservation(request):
-    print("aaaa")
-    return JsonResponse(
-            {
-                "message": "Reservation created successfully!",
-                "reservation_id": 8,
-            },
-            status=201,
-    )
+    """
+    Processes the JSON payload to find and update an existing reservation and its guests.
+    """
+    if request.method != 'POST':
+        return JsonResponse({"error": "Only POST method is allowed"}, status=405)
 
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
+    # --- KEY CHANGE 1: Get the reservation_id from the payload ---
+    reservation_id = data.get('reservation_id')
+    if not reservation_id:
+        return JsonResponse({"error": "Field 'reservation_id' is required to edit."}, status=400)
+
+    try:
+        with transaction.atomic():
+            # --- KEY CHANGE 2: Fetch the existing Reservation object ---
+            try:
+                reservation = Reservation.objects.get(pk=reservation_id)
+            except Reservation.DoesNotExist:
+                return JsonResponse({"error": f"Reservation with ID {reservation_id} not found."}, status=404)
+
+            # 1. Process all guest data (this can create new guests if they don't exist)
+            guests_data = data.get('guests', [])
+            if not guests_data:
+                return JsonResponse({"error": "Reservation must include at least one guest."}, status=400)
+
+            guest_instances = [process_guest_data(guest_data) for guest_data in guests_data]
+            main_guest = guest_instances[0]
+            other_guests = guest_instances[1:]
+
+            # 2. Prepare and validate reservation data
+            check_in_str = data.get('check_in_date')
+            check_out_str = data.get('check_out_date')
+
+            if not check_in_str or not check_out_str:
+                return JsonResponse({"error": "Both check_in_date and check_out_date are required."}, status=400)
+            
+            check_in_date = datetime.datetime.strptime(check_in_str, '%Y-%m-%d').date()
+            check_out_date = datetime.datetime.strptime(check_out_str, '%Y-%m-%d').date()
+
+            if check_out_date <= check_in_date:
+                return JsonResponse({"error": "Check-out date must be after check-in date."}, status=400)
+
+            # --- KEY CHANGE 3: Update the fields of the fetched object ---
+            reservation.main_guest = main_guest
+            reservation.check_in_date = check_in_date
+            reservation.check_out_date = check_out_date
+            reservation.special_requests = data.get('special_requests', '')
+            reservation.num_adults = sum(1 for guest in guest_instances if guest.adult)
+            reservation.num_children = sum(1 for guest in guest_instances if not guest.adult)
+            reservation.total_guests = len(guest_instances)
+            # You can update other fields like status if needed
+            # reservation.status = 'confirmed'
+
+            # 4. Save the updated reservation to the database
+            reservation.save()
+
+            # 5. Set the M2M relationship for other guests
+            reservation.other_guests.set(other_guests)
+
+            print(f"Reservation with ID {reservation.pk} was updated successfully.")
+
+            # 6. Return a success response for the update
+            return JsonResponse(
+                {
+                    "message": "Reservation updated successfully!",
+                    "reservation_id": reservation.pk,
+                },
+                status=200, # Use 200 OK for a successful update
+            )
+
+    except ValidationError as e:
+        return JsonResponse({"errors": e.message_dict}, status=400)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return JsonResponse({"error": "An unexpected error occurred."}, status=500)
+    
 @csrf_exempt
 @require_POST
 def calculate_reservation_price(request):

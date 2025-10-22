@@ -18,6 +18,13 @@ export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
     let check_out_date = "";
     let special_request = "";
     let reservation_id;
+
+    let reservationform_mandatory1 = "";
+    let reservationform_mandatory2 = "";
+    let reservationform_mandatory3 = "";
+
+    let reservationform_info1 = "";
+    let reservationform_info2 = "";
     try {
         // 1. Attempt the API call. 
         // If the token is invalid (404, 410, 400), apiRequest should throw.
@@ -48,6 +55,43 @@ export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
             } else {
                 console.warn(`No main guest data found for locale: ${locale}`);
             }
+
+            // Fetch Mandatyory data
+            const mandatoryResponse1 = await apiRequest(`/page_content/reservationform_mandatory1/?lang=${locale}`);
+            if (mandatoryResponse1) {
+                console.log("mandatoryResponse1",mandatoryResponse1)
+                reservationform_mandatory1 = mandatoryResponse1.content || '';
+            } else {
+                console.warn(`No mandatoryResponse1 data found for locale: ${locale}`);
+            }
+
+            const mandatoryResponse2 = await apiRequest(`/page_content/reservationform_mandatory2/?lang=${locale}`);
+            if (mandatoryResponse2) {
+                reservationform_mandatory2 = mandatoryResponse2.content || '';
+            } else {
+                console.warn(`No mandatoryResponse2 data found for locale: ${locale}`);
+            }
+
+            const mandatoryResponse3 = await apiRequest(`/page_content/reservationform_mandatory3/?lang=${locale}`);
+            if (mandatoryResponse3) {
+                reservationform_mandatory3 = mandatoryResponse3.content || '';
+            } else {
+                console.warn(`No mandatoryResponse3 data found for locale: ${locale}`);
+            }
+
+            const mandatoryInfo = await apiRequest(`/page_content/reservationform_info1/?lang=${locale}`);
+            if (mandatoryInfo) {
+                reservationform_info1 = mandatoryInfo.content || '';
+            } else {
+                console.warn(`No mandatoryInfo data found for locale: ${locale}`);
+            }
+
+            const mandatoryInfo2 = await apiRequest(`/page_content/reservationform_info2/?lang=${locale}`);
+            if (mandatoryInfo2) {
+                reservationform_info2 = mandatoryInfo2.content || '';
+            } else {
+                console.warn(`No mandatoryInfo2 data found for locale: ${locale}`);
+            }
         } else {
             console.warn(`No reservation data found for locale: ${locale}`);
         }
@@ -72,8 +116,11 @@ export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
         check_in_date,
         check_out_date,
         special_request,
-        reservation_id
-        // You would typically fetch the existing reservation data here too,
-        // but for this example, we only return the UUID.
+        reservation_id,
+        reservationform_mandatory1,
+        reservationform_mandatory2,
+        reservationform_mandatory3,
+        reservationform_info1,
+        reservationform_info2
     };
 };

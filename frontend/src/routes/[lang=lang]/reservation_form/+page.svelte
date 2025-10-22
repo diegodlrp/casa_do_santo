@@ -32,6 +32,14 @@
     let n_adults = 1;
     let n_childs = 0;
 
+    const maxGuests = 6;
+    $: totalGuests = n_adults + n_childs;
+    $: totalGuestsError =
+        totalGuests > maxGuests
+            ? `El número total de huéspedes (adultos + niños) no puede ser mayor de ${maxGuests}.`
+            : null;
+
+
     let errors: { [key: string]: string[] | { [key: string]: string[] }[] } =
         {}; // Adjust type for nested errors
     let successMessage: string = "";
@@ -41,6 +49,10 @@
         successMessage = "";
 
         // VALIDATE
+        if (totalGuestsError) {
+            errors = { general: [totalGuestsError] };
+            return; // Stop the form submission
+        }
 
         isLoading = true;
         try {
@@ -84,9 +96,20 @@
                 console.error("API Error:", errorData);
             } else {
                 const result = await response.json();
-                successMessage = "¡Reserva realizada con éxito!";
+                successMessage = "¡Solicitud de reserva realizada con éxito!";
                 console.log("Reservation successful:", result);
                 errors = {};
+
+                // ---------------------------------------------------
+                // ✨ ADD THIS SECTION TO CLEAR THE FORM VALUES ✨
+                // ---------------------------------------------------
+                name = "";
+                email = "";
+                message = "";
+                checkInDate = "";
+                checkOutDate = "";
+                n_adults = 1; 
+                n_childs = 0;
             }
         } catch (error) {
             console.error("Network or other error:", error);
@@ -126,9 +149,9 @@
                     {#if successMessage}
                         <div
                             role="alert"
-                            class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+                            class="bg-green-100 border-l-4 border-green-500 text-green-700 p-8 mb-4 text-center"
                         >
-                            <p>{successMessage}</p>
+                            <p>{successMessage.toUpperCase()}</p>
                         </div>
                     {/if}
 
@@ -271,6 +294,7 @@
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         required
                                         min="1"
+                                        max="6"
                                     />
                                 </div>
                                 <div>
@@ -285,6 +309,7 @@
                                         bind:value={n_childs}
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         required
+                                        max="5"
                                     />
                                 </div>
                                 <!-- START message -->

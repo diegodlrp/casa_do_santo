@@ -46,7 +46,7 @@ class Guest(models.Model):
     mobile = models.CharField(
         max_length=20, null=True, blank=True, verbose_name=_("Móbil")
     )
-    vat = models.CharField(max_length=20, verbose_name=_("Nº de documento"))
+    vat = models.CharField(max_length=20,  null=True, blank=True, verbose_name=_("Nº de documento"))
 
     # Changed verbose_name for clarity
     document_type = models.CharField(

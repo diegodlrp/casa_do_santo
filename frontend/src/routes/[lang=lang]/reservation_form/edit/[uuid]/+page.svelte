@@ -20,7 +20,7 @@
     reservationform_mandatory2,
     reservationform_mandatory3,
     reservationform_info1,
-    reservationform_info2
+    reservationform_info2,
   } = data);
 
   // --- 1. UNIFIED GUEST INTERFACE ---
@@ -80,12 +80,16 @@
     check_in_date: "",
     check_out_date: "",
     special_requests: "",
-    reservation_id: 0
+    reservation_id: 0,
   };
 
   // --- 3. UPDATED ERROR STRUCTURE ---
   // Errors will now be an object containing a 'guests' array.
-  let errors: { guests?: ({ [key: string]: string[] })[], general?: string[], [key: string]: any } = {};
+  let errors: {
+    guests?: { [key: string]: string[] }[];
+    general?: string[];
+    [key: string]: any;
+  } = {};
   let successMessage: string = "";
   let isLoading: boolean = false;
 
@@ -122,19 +126,29 @@
   function validateForm(): boolean {
     errors = {}; // Clear previous errors
     let isValid = true;
-    const guestErrors: ({ [key: string]: string[] })[] = [];
+    const guestErrors: { [key: string]: string[] }[] = [];
 
     formData.guests.forEach((guest, index) => {
       const singleGuestErrors: { [key: string]: string[] } = {};
-      if (!guest.first_name.trim()) singleGuestErrors.first_name = ["El nombre es requerido."];
-      if (!guest.last_name.trim()) singleGuestErrors.last_name = ["El primer apellido es requerido."];
-      if (!guest.vat.trim()) singleGuestErrors.vat = ["El Nº del documento es requerido."];
-      if (!guest.birth_date) singleGuestErrors.birth_date = ["La fecha de nacimiento es requerida."];
-      if (!guest.document_type) singleGuestErrors.document_type = ["El tipo de documento es requerido."];
-      if (index === 0 && (!guest.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guest.email))) {
+      if (!guest.first_name.trim())
+        singleGuestErrors.first_name = ["El nombre es requerido."];
+      if (!guest.last_name.trim())
+        singleGuestErrors.last_name = ["El primer apellido es requerido."];
+      if (!guest.vat.trim())
+        singleGuestErrors.vat = ["El Nº del documento es requerido."];
+      if (!guest.birth_date)
+        singleGuestErrors.birth_date = ["La fecha de nacimiento es requerida."];
+      if (!guest.document_type)
+        singleGuestErrors.document_type = [
+          "El tipo de documento es requerido.",
+        ];
+      if (
+        index === 0 &&
+        (!guest.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guest.email))
+      ) {
         singleGuestErrors.email = ["Por favor, introduce un email válido."];
       }
-      
+
       if (Object.keys(singleGuestErrors).length > 0) {
         isValid = false;
         guestErrors[index] = singleGuestErrors;
@@ -144,11 +158,13 @@
     if (guestErrors.length > 0) {
       errors.guests = guestErrors;
     }
-    
+
     // Validate dates
     if (new Date(formData.check_out_date) <= new Date(formData.check_in_date)) {
-        errors.check_out_date = ["La fecha de salida debe ser posterior a la de entrada."];
-        isValid = false;
+      errors.check_out_date = [
+        "La fecha de salida debe ser posterior a la de entrada.",
+      ];
+      isValid = false;
     }
 
     return isValid;
@@ -162,14 +178,17 @@
     isLoading = true;
     try {
       // The formData is already in the correct shape for the backend
-      const response = await fetch("https://casadosantoadmin.casacam.net/api-reservation/edit-reservation/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie("csrftoken") || "",
+      const response = await fetch(
+        "https://casadosantoadmin.casacam.net/api-reservation/edit-reservation/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken") || "",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -186,7 +205,7 @@
   }
 
   function getCookie(name: string) {
-    if (typeof document === 'undefined') return null;
+    if (typeof document === "undefined") return null;
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
       const cookies = document.cookie.split(";");
@@ -213,20 +232,26 @@
     </h2>
 
     {#if successMessage}
-      <div role="alert" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+      <div
+        role="alert"
+        class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4"
+      >
         <p>{successMessage}</p>
       </div>
     {/if}
 
     {#if errors.general}
-      <div role="alert" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+      <div
+        role="alert"
+        class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+      >
         {#each errors.general as error}<p>{error}</p>{/each}
       </div>
     {/if}
-      
+
     <div>{@html reservationform_info1}</div>
     <div>{@html reservationform_info2}</div>
-      
+
     <form on:submit|preventDefault={handleSubmit} class="space-y-6">
       {#each formData.guests as guest, i (i)}
         <fieldset class="border border-gray-300 p-4 rounded-md relative">
@@ -243,59 +268,221 @@
               type="button"
               on:click={() => removeGuest(i)}
               class="absolute top-2 right-2 text-red-600 hover:text-red-800 font-bold text-xl"
-              aria-label="Remove guest"
-            >&times;</button>
+              aria-label="Remove guest">&times;</button
+            >
           {/if}
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            <FormField label="Nombre ¹⁾²⁾" id="first_name_{i}" bind:value={guest.first_name} required errors={errors.guests?.[i]?.first_name} />
-            <FormField label="Primer Apellido ¹⁾²⁾" id="last_name_{i}" bind:value={guest.last_name} required errors={errors.guests?.[i]?.last_name} />
-            <FormField label="Segundo Apellido ¹⁾" id="last_name2_{i}" bind:value={guest.last_name2} optional errors={errors.guests?.[i]?.last_name2} />
-            <FormField label="Fecha Nacimiento ¹⁾²⁾" id="birth_date_{i}" type="date" bind:value={guest.birth_date} required errors={errors.guests?.[i]?.birth_date} />
-            <FormField label="Sexo" id="sex_{i}" bind:value={guest.sex} required errors={errors.guests?.[i]?.sex} />
-            <FormField label="País de Nacionalidad ¹⁾²⁾" id="nationality_{i}" bind:value={guest.nacionality} required errors={errors.guests?.[i]?.nacionality} />
-            <FormField label="Tipo de Documento ¹⁾²⁾" id="document_type_{i}" type="select" bind:value={guest.document_type} options={documentTypes} required errors={errors.guests?.[i]?.document_type} />
-            <FormField label="Nº del documento ¹⁾²⁾" id="vat_{i}" bind:value={guest.vat} required errors={errors.guests?.[i]?.vat} />
-            <FormField label="Soporte del documento ¹⁾" id="document_support_{i}" bind:value={guest.document_support} optional errors={errors.guests?.[i]?.document_support} />
-            <FormField label="Dirección ¹⁾²⁾" id="address_{i}" bind:value={guest.address} required errors={errors.guests?.[i]?.address} />
-            <FormField label="Provincia ¹⁾" id="address_state_{i}" bind:value={guest.address_state} required errors={errors.guests?.[i]?.address_state} />
-            <FormField label="País ¹⁾²⁾" id="country_{i}" bind:value={guest.country} required errors={errors.guests?.[i]?.country} />
-            <FormField label="Teléfono ¹⁾²⁾" id="phone_{i}" type="tel" bind:value={guest.phone} optional errors={errors.guests?.[i]?.phone} />
-            <FormField label="Móvil" id="mobile_{i}" type="tel" bind:value={guest.mobile} optional errors={errors.guests?.[i]?.mobile} />
-            <FormField label="Email ¹⁾²⁾" id="email_{i}" type="email" bind:value={guest.email} required={i === 0} optional={i > 0} errors={errors.guests?.[i]?.email} />
-            <FormField label="Adulto" id="adult_{i}" type="checkbox" bind:value={guest.adult} />
+            <FormField
+              label="Nombre <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>⁾"
+              id="first_name_{i}"
+              bind:value={guest.first_name}
+              required
+              errors={errors.guests?.[i]?.first_name}
+            />
+            <FormField
+              label="Primer Apellido <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="last_name_{i}"
+              bind:value={guest.last_name}
+              required
+              errors={errors.guests?.[i]?.last_name}
+            />
+            <FormField
+              label="Segundo Apellido <a href='#section_1'>¹⁾</a>"
+              id="last_name2_{i}"
+              bind:value={guest.last_name2}
+              optional
+              errors={errors.guests?.[i]?.last_name2}
+            />
+            <FormField
+              label="Fecha Nacimiento <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="birth_date_{i}"
+              type="date"
+              bind:value={guest.birth_date}
+              required
+              errors={errors.guests?.[i]?.birth_date}
+            />
+            <FormField
+              label="Sexo"
+              id="sex_{i}"
+              bind:value={guest.sex}
+              required
+              errors={errors.guests?.[i]?.sex}
+            />
+            <FormField
+              label="País de Nacionalidad <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="nationality_{i}"
+              bind:value={guest.nacionality}
+              required
+              errors={errors.guests?.[i]?.nacionality}
+            />
+            <FormField
+              label="Tipo de Documento <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="document_type_{i}"
+              type="select"
+              bind:value={guest.document_type}
+              options={documentTypes}
+              required
+              errors={errors.guests?.[i]?.document_type}
+            />
+            <FormField
+              label="Nº del documento <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="vat_{i}"
+              bind:value={guest.vat}
+              required
+              errors={errors.guests?.[i]?.vat}
+            />
+            <FormField
+              label="Soporte del documento <a href='#section_1'>¹⁾</a>"
+              id="document_support_{i}"
+              bind:value={guest.document_support}
+              optional
+              errors={errors.guests?.[i]?.document_support}
+            />
+            <FormField
+              label="Dirección <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="address_{i}"
+              bind:value={guest.address}
+              required
+              errors={errors.guests?.[i]?.address}
+            />
+            <FormField
+              label="Provincia <a href='#section_1'>¹⁾</a>"
+              id="address_state_{i}"
+              bind:value={guest.address_state}
+              required
+              errors={errors.guests?.[i]?.address_state}
+            />
+            <FormField
+              label="País <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="country_{i}"
+              bind:value={guest.country}
+              required
+              errors={errors.guests?.[i]?.country}
+            />
+            <FormField
+              label="Teléfono <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="phone_{i}"
+              type="tel"
+              bind:value={guest.phone}
+              optional
+              errors={errors.guests?.[i]?.phone}
+            />
+            <FormField
+              label="Móvil"
+              id="mobile_{i}"
+              type="tel"
+              bind:value={guest.mobile}
+              optional
+              errors={errors.guests?.[i]?.mobile}
+            />
+            <FormField
+              label="Email <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+              id="email_{i}"
+              type="email"
+              bind:value={guest.email}
+              required={i === 0}
+              optional={i > 0}
+              errors={errors.guests?.[i]?.email}
+            />
+            <FormField
+              label="Parentesco <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a><a href='#section_3'>³⁾</a>"
+              id="country_{i}"
+              bind:value={guest.country}
+              required
+              errors={errors.guests?.[i]?.country}
+            />
+            <FormField
+              label="Adulto"
+              id="adult_{i}"
+              type="checkbox"
+              bind:value={guest.adult}
+            />
           </div>
         </fieldset>
       {/each}
 
       <div class="flex justify-center">
-        <button type="button" on:click={addGuest} class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0">
+        <button
+          type="button"
+          on:click={addGuest}
+          class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0"
+        >
           Añadir Huésped
         </button>
       </div>
-      
+
       <fieldset class="border border-gray-300 p-4 rounded-md">
         <legend class="text-lg font-semibold px-2">Fechas de la Reserva</legend>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-           <FormField label="Fecha de Entrada ¹⁾²⁾" id="check_in_date" type="date" bind:value={formData.check_in_date} required disabled errors={errors.check_in_date} />
-           <FormField label="Fecha de Salida" id="check_out_date" type="date" bind:value={formData.check_out_date} required disabled errors={errors.check_out_date} />
+          <FormField
+            label="Fecha de Entrada <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+            id="check_in_date"
+            type="date"
+            bind:value={formData.check_in_date}
+            required
+            disabled
+            errors={errors.check_in_date}
+          />
+          <FormField
+            label="Fecha de Salida <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
+            id="check_out_date"
+            type="date"
+            bind:value={formData.check_out_date}
+            required
+            disabled
+            errors={errors.check_out_date}
+          />
         </div>
       </fieldset>
 
       <div>
-        <label for="special_requests" class="block text-sm font-medium mb-1">Solicitudes Especiales (Opcional)</label>
-        <textarea id="special_requests" bind:value={formData.special_requests} rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+        <label for="special_requests" class="block text-sm font-medium mb-1"
+          >Solicitudes Especiales (Opcional)</label
+        >
+        <textarea
+          id="special_requests"
+          bind:value={formData.special_requests}
+          rows="4"
+          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        ></textarea>
       </div>
 
       <div class="flex justify-center">
-        <button type="submit" class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0" disabled={isLoading}>
+        <button
+          type="submit"
+          class="core_button font-bold py-2 px-4 hover:scale-105 active:scale-95 transition duration-150 ease-in-out transform mt-0"
+          disabled={isLoading}
+        >
           {#if isLoading}Enviando...{:else}Confirmar Reserva{/if}
         </button>
       </div>
     </form>
   </div>
   <div class="min-h-[24px]"></div>
-  <div id="section_1">{@html reservationform_mandatory1}</div>
-  <div id="section_2">{@html reservationform_mandatory2}</div>
-  <div id="section_3">{@html reservationform_mandatory3}</div>
+  <div
+    id="section_1"
+    class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
+    style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
+  >
+   1) {@html reservationform_mandatory1}
+  </div>
+
+  <div class="min-h-[24px]"></div>
+  <div
+    id="section_2"
+    class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
+    style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
+  >
+   2) {@html reservationform_mandatory2}
+  </div>
+  <div class="min-h-[24px]"></div>
+  <div
+    id="section_3"
+    class="max-w-3xl mx-auto p-6 bg-[color:var(--color-bg-dark)]/90 shadow-lg rounded-lg bg-cover bg-center"
+    style="background-image: url('/svg/core_bg.svg'); opacity: 1;"
+  >
+   3) {@html reservationform_mandatory3}
+  </div>
+  <div class="min-h-[24px]"></div>
 </div>

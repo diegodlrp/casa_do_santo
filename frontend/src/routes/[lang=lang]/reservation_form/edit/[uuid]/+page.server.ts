@@ -6,7 +6,7 @@ import { apiRequest } from '$lib/services/apiService';
 
 export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
     const locale = LL.locale();
-    console.log("locale", locale);
+
     // params.uuid comes from the [uuid] dynamic route segment
     const uuid = params.uuid;
     let checkToken;
@@ -38,7 +38,6 @@ export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
         }
         reservation_id = checkToken.reservation_id;
         const reservation = await apiRequest('/reservations/'+reservation_id)
-        console.log("reservation",reservation)
         
         if (reservation){
             check_in_date = reservation.check_in_date;
@@ -46,7 +45,6 @@ export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
             special_request = reservation.special_request;
             main_guest_id = reservation.main_guest
             const main_guest = await apiRequest('/guests/'+main_guest_id)
-            console.log("main_guest",main_guest)
 
             if (main_guest){
                 main_guest_name = main_guest.name;
@@ -59,7 +57,6 @@ export const load: PageServerLoad = async ({ params, locals: { LL } }) => {
             // Fetch Mandatyory data
             const mandatoryResponse1 = await apiRequest(`/page_content/reservationform_mandatory1/?lang=${locale}`);
             if (mandatoryResponse1) {
-                console.log("mandatoryResponse1",mandatoryResponse1)
                 reservationform_mandatory1 = mandatoryResponse1.content || '';
             } else {
                 console.warn(`No mandatoryResponse1 data found for locale: ${locale}`);

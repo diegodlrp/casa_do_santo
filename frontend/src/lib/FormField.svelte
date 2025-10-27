@@ -12,6 +12,7 @@
     export let type = "text";
     export let required = false;
     export let optional = false;
+    export let disabled = false;
 
     // ADD THIS LINE: Prop to receive the dropdown options
     export let options: SelectOption[] | undefined = undefined;
@@ -37,6 +38,7 @@
         <textarea
             {id}
             {required}
+            {disabled}
             bind:value
             rows="4"
             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -52,6 +54,7 @@
         <select
             {id}
             {required}
+            {disabled}
             bind:value
             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
@@ -73,6 +76,7 @@
         <input
             {id}
             type={type} {required}
+            {disabled}
             bind:value
             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />

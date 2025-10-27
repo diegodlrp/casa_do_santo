@@ -52,8 +52,7 @@ def send_mail_view(request):
                 "casadosantocoira@gmail.com",  # From email (configured in settings)
                 recipient_list,  # To email(s)
                 fail_silently=False,  # Raise errors if sending fails
-                # Optional: To make 'Reply-To' work correctly in email clients
-                # headers={'Reply-To': from_email}
+                html_message=mail_body,
             )
         except Exception as e:
             print("error:", e)
@@ -114,8 +113,7 @@ def send_reservation_mail_view(request):
                 "casadosantocoira@gmail.com",  # From email (configured in settings)
                 recipient_list,  # To email(s)
                 fail_silently=False,  # Raise errors if sending fails
-                # Optional: To make 'Reply-To' work correctly in email clients
-                # headers={'Reply-To': from_email}
+                html_message=mail_body,
             )
         except Exception as e:
             print("error:", e)
@@ -140,8 +138,7 @@ def send_reservation_mail_view(request):
                 "casadosantocoira@gmail.com",  # From email (configured in settings)
                 recipient_list,  # To email(s)
                 fail_silently=False,  # Raise errors if sending fails
-                # Optional: To make 'Reply-To' work correctly in email clients
-                # headers={'Reply-To': from_email}
+                html_message=mail_body,
             )
         except Exception as e:
             print("error:", e)
@@ -155,7 +152,7 @@ def send_reservation_mail_view(request):
         return JsonResponse({"message": "Email sent failed!"})
 
 
-def send_reservation_confimation_mail(request, mail, token, total_price, check_in_date, check_out_date):
+def send_reservation_confimation_mail(request,guest_name, mail, token, total_price, check_in_date, check_out_date):
     try:
         template = EmailTemplate.objects.get(slug="mail_reservation_url")
         subject = template.excerpt
@@ -164,11 +161,11 @@ def send_reservation_confimation_mail(request, mail, token, total_price, check_i
 
         mail_body = template.content
         mail_body = mail_body.replace("{uuid}", token)
-        mail_body = mail_body.replace("{total_price}", total_price)
-        mail_body = mail_body.replace("{check_in_date}", check_in_date)
-        mail_body = mail_body.replace("{check_out_date}", check_out_date)
+        mail_body = mail_body.replace("{total_price}", str(total_price))
+        mail_body = mail_body.replace("{check_in_date}", str(check_in_date))
+        mail_body = mail_body.replace("{check_out_date}", str(check_out_date))
         mail_body = mail_body.replace("{current_datetime}", str(current_datetime))
-        
+        mail_body = mail_body.replace("{guest_name}", str(guest_name))
         recipient_list = [mail]
         send_mail(
             subject,
@@ -177,8 +174,7 @@ def send_reservation_confimation_mail(request, mail, token, total_price, check_i
             recipient_list,  # To email(s)
             fail_silently=False,  # Raise errors if sending fails
             html_message=mail_body,
-            # Optional: To make 'Reply-To' work correctly in email clients
-            # headers={'Reply-To': from_email}
+
         )
 
     except EmailTemplate.DoesNotExist:

@@ -284,7 +284,7 @@
               label="Primer Apellido <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
               id="last_name_{i}"
               bind:value={guest.last_name}
-              required
+              optional
               errors={errors.guests?.[i]?.last_name}
             />
             <FormField
@@ -299,21 +299,21 @@
               id="birth_date_{i}"
               type="date"
               bind:value={guest.birth_date}
-              required
+              optional
               errors={errors.guests?.[i]?.birth_date}
             />
             <FormField
               label="Sexo"
               id="sex_{i}"
               bind:value={guest.sex}
-              required
+              optional
               errors={errors.guests?.[i]?.sex}
             />
             <FormField
               label="País de Nacionalidad <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
               id="nationality_{i}"
               bind:value={guest.nacionality}
-              required
+              optional
               errors={errors.guests?.[i]?.nacionality}
             />
             <FormField
@@ -322,14 +322,14 @@
               type="select"
               bind:value={guest.document_type}
               options={documentTypes}
-              required
+              optional
               errors={errors.guests?.[i]?.document_type}
             />
             <FormField
               label="Nº del documento <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
               id="vat_{i}"
               bind:value={guest.vat}
-              required
+              optional
               errors={errors.guests?.[i]?.vat}
             />
             <FormField
@@ -343,21 +343,21 @@
               label="Dirección <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
               id="address_{i}"
               bind:value={guest.address}
-              required
+              optional
               errors={errors.guests?.[i]?.address}
             />
             <FormField
               label="Provincia <a href='#section_1'>¹⁾</a>"
               id="address_state_{i}"
               bind:value={guest.address_state}
-              required
+              optional
               errors={errors.guests?.[i]?.address_state}
             />
             <FormField
               label="País <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a>"
               id="country_{i}"
               bind:value={guest.country}
-              required
+              optional
               errors={errors.guests?.[i]?.country}
             />
             <FormField
@@ -389,7 +389,7 @@
               label="Parentesco <a href='#section_1'>¹⁾</a><a href='#section_2'>²⁾</a><a href='#section_3'>³⁾</a>"
               id="country_{i}"
               bind:value={guest.country}
-              required
+              optional
               errors={errors.guests?.[i]?.country}
             />
             <FormField
@@ -420,7 +420,7 @@
             id="check_in_date"
             type="date"
             bind:value={formData.check_in_date}
-            required
+            optional
             disabled
             errors={errors.check_in_date}
           />
@@ -429,7 +429,7 @@
             id="check_out_date"
             type="date"
             bind:value={formData.check_out_date}
-            required
+            optional
             disabled
             errors={errors.check_out_date}
           />

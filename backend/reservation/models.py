@@ -99,6 +99,26 @@ class Guest(models.Model):
         blank=True,
     )
 
+    documment_support = models.CharField(
+        max_length=100,
+        verbose_name=_("Soporte del documento"),
+        null=True,
+        blank=True,
+    )
+    zip = models.CharField(
+        max_length=100,
+        verbose_name=_("Código postal"),
+        null=True,
+        blank=True,
+    )
+
+    relationship = models.CharField(
+        max_length=100,
+        verbose_name=_("Parentesco"),
+        null=True,
+        blank=True,
+    )
+
     class Meta:
         verbose_name = _("Huesped")
         verbose_name_plural = _("Huespedes")

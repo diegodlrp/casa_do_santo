@@ -96,7 +96,7 @@
                 console.error("API Error:", errorData);
             } else {
                 const result = await response.json();
-                successMessage = "¡Envio de solicitud realizado con éxito!";
+                successMessage = "¡Envio de solicitud realizado correctamente!";
                 console.log("Reservation successful:", result);
                 errors = {};
 

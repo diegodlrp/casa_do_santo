@@ -111,10 +111,10 @@ class Guest(models.Model):
         null=True,
         blank=True,
     )
-
+        # verbose_name=_("Parentesco"),ue512021
+# 
     relationship = models.CharField(
         max_length=100,
-        verbose_name=_("Parentesco"),
         null=True,
         blank=True,
     )
@@ -314,3 +314,15 @@ class Discount(models.Model):
     days_number = models.PositiveIntegerField()
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     percentage = models.BooleanField(default=True)
+
+class DateRangeMinDays(models.Model):
+    """
+    Represents a discount that applies to a specific date range,
+    with a minimum number of days required.
+    """
+    start_date = models.DateField(verbose_name=_("Start Date"))
+    end_date = models.DateField(verbose_name=_("End Date"))
+    min_days = models.PositiveIntegerField(
+        verbose_name=_("Minimum Days"),
+        
+    )

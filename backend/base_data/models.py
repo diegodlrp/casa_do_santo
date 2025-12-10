@@ -19,6 +19,9 @@ class PhoneNumber(models.Model):
         blank=True,
     )
 
+    min_nights = models.PositiveIntegerField(default=3)
+
+
     class Meta:
         verbose_name = _("Teléfono")
         verbose_name_plural = _("Teléfonos")

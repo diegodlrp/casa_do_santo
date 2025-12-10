@@ -368,7 +368,7 @@ class DiscountAdmin(admin.ModelAdmin):
 # Register your models here.
 @admin.register(DateRangeMinDays)
 class DateRangeMinDaysAdmin(admin.ModelAdmin):
-    list_display = ("min_days")
-    search_fields = ("min_days")
+    list_display = ("min_days",)
+    search_fields = ("min_days",)
     list_filter = ("min_days",)  # Basic filters
-    ordering = ("min_days")
+    ordering = ("min_days",)

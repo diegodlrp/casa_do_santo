@@ -57,7 +57,7 @@
         isLoading = true;
         try {
             const response = await fetch(
-            "https://casadosantoadmin.casacam.net/api-reservation/create-reservation/",
+            "https://admin.casadosanto.es/api-reservation/create-reservation/",
                 {
                     method: "POST",
                     headers: {

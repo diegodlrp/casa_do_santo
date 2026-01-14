@@ -7,10 +7,11 @@
 	import Services from "$lib/Services.svelte";
 	import { onMount } from "svelte";
 
+	import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
+
 	export let data: PageData;
 
-	// Destructure the data directly
-	const { img, address, email, phone, about_us_img, form_img, error } = data;
+	const { img, address, email, phone, about_us_img, form_img } = data;
 
 	$: title = data.title;
 	$: page_content_title = data.page_content_title;
@@ -30,33 +31,44 @@
 	$: form_subtitle = data.form_subtitle;
 	$: form_content = data.form_content;
 	$: logo_map_img = data.logo_map_img;
+
 	let mapDiv: HTMLDivElement;
 
-	onMount(() => {
-		// Replace with your real Casa do Santo coordinates
-		const location = { lat: 42.8568341, lng: -8.5884587 };
-
-		const map = new google.maps.Map(mapDiv, {
-			zoom: 10,
-			center: location,
-			mapTypeId: google.maps.MapTypeId.HYBRID, // satellite by default
-			disableDefaultUI: false, // keep default controls
-			zoomControl: true, // force zoom buttons
-			mapTypeControl: true, // allow switching (optional)
+	onMount(async () => {
+		// 👇 Tell the loader your API key & version
+		setOptions({
+			key: "AIzaSyATa5X8tqNoCati6u4Ki_LppgDsvSlvDF4", // your API key
 		});
+
+		// 👉 Load the `maps` library
+		const { Map } = await importLibrary("maps");
+
+		// Initialize the map
+		const location = { lat: 42.8568341, lng: -8.5884587 };
+		const map = new Map(mapDiv, {
+			center: location,
+			zoom: 10,
+			mapTypeId: google.maps.MapTypeId.HYBRID,
+			disableDefaultUI: false,
+			zoomControl: true,
+			mapTypeControl: true,
+		});
+
+		// Add your custom marker
 		const icon = {
-			url: logo_map_img, // The image URL
-			scaledSize: new google.maps.Size(40, 40), // The size of the icon in pixels
+			url: logo_map_img,
+			scaledSize: new google.maps.Size(40, 40),
 		};
 
 		new google.maps.Marker({
 			position: location,
 			map,
 			title: "Casa do Santo",
-			icon: icon,
+			icon,
 		});
 	});
 </script>
+
 
 <!-- HOME PAGE TITLE -->
 <div

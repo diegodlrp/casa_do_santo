@@ -3,12 +3,13 @@
     import Title from "$lib/Title.svelte";
     import ReservationForm from "$lib/ReservationForm.svelte";
     import Carrousel from "$lib/Carrousel.svelte";
-    import { onMount } from "svelte";
     import Services from "$lib/Services.svelte";
+    import { onMount } from "svelte";
+
+    import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 
     export let data: PageData;
 
-    // Destructure the data directly
     $: title_title = data.title_title;
     $: title_subtitle = data.title_subtitle;
     $: title_img = data.title_img;
@@ -28,49 +29,64 @@
     $: routes_content_title = data.routes_content_title;
     $: routes_content_subtitle = data.routes_content_subtitle;
     $: routes_data = data.routes_data;
+
     let mapDiv: HTMLDivElement;
 
-    onMount(() => {
-        // Replace with your real Casa do Santo coordinates
+    onMount(async () => {
+        // 🔑 Configurar Google Maps
+        setOptions({
+            key: "AIzaSyATa5X8tqNoCati6u4Ki_LppgDsvSlvDF4",
+        });
+
+        // 📦 Cargar librerías necesarias
+        const { Map } = await importLibrary("maps");
+        const { Marker } = await importLibrary("marker");
+
         const location = { lat: 42.8568341, lng: -8.5884587 };
 
-        const map = new google.maps.Map(mapDiv, {
-            zoom: 10,
+        const map = new Map(mapDiv, {
             center: location,
-            mapTypeId: google.maps.MapTypeId.HYBRID, // satellite by default
-            disableDefaultUI: false, // keep default controls
-            zoomControl: true, // force zoom buttons
-            mapTypeControl: true, // allow switching (optional)
+            zoom: 10,
+            mapTypeId: "hybrid",
+            disableDefaultUI: false,
+            zoomControl: true,
+            mapTypeControl: true,
         });
-        const icon = {
-            url: logo_map_img, // The image URL
-            scaledSize: new google.maps.Size(40, 40), // The size of the icon in pixels
-        };
 
-        new google.maps.Marker({
+        // 📍 Marcador principal
+        new Marker({
             position: location,
             map,
             title: "Casa do Santo",
-            icon: icon,
+            icon: {
+                url: logo_map_img,
+                scaledSize: new google.maps.Size(40, 40),
+            },
         });
 
-        carrousel_data.forEach((item) => {
-            try {
-                let excerpt = item.excerpt;
-            } catch (e: any) {
-                console.error("Error fetching data for page:", e);
-            }
-            let latitude = parseFloat(item["excerpt"].split(";")[0]);
-            let longitude = parseFloat(item["excerpt"].split(";")[1]);
+        // 📍 Marcadores dinámicos desde carrousel_data
+        carrousel_data?.forEach((item) => {
+            if (!item?.excerpt) return;
 
-            new google.maps.Marker({
-                position: { lat: latitude, lng: longitude },
+            const [latStr, lngStr] = item.excerpt.split(";");
+
+            const lat = Number(latStr);
+            const lng = Number(lngStr);
+
+            if (isNaN(lat) || isNaN(lng)) {
+                console.warn("Coordenadas inválidas:", item.excerpt);
+                return;
+            }
+
+            new Marker({
+                position: { lat, lng },
                 map,
-                title: item["title"],
+                title: item.title,
             });
         });
     });
 </script>
+
 
 <Title title={title_title} subtitle={title_subtitle} img={title_img} />
 <div

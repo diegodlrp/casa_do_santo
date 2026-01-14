@@ -40,7 +40,7 @@
         isLoading = true;
         try {
             const response = await fetch(
-                "https://casadosantoadmin.casacam.net/api/send-mail/",
+                "https://admin.casadosanto.es/api/send-mail/",
                 {
                     method: "POST",
                     headers: {

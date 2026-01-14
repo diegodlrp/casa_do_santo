@@ -179,7 +179,7 @@
     try {
       // The formData is already in the correct shape for the backend
       const response = await fetch(
-        "https://casadosantoadmin.casacam.net/api-reservation/edit-reservation/",
+        "https://admin.casadosanto.es/api-reservation/edit-reservation/",
         {
           method: "POST",
           headers: {

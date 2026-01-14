@@ -27,7 +27,14 @@ SECRET_KEY = "django-insecure-gfffq+m^-14yvmt-vn^dhuvwz)ogd6fu_!u20auln09=5&6ep(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "casadosanto.casacam.net", "casadosantoadmin.casacam.net"]
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'casadosanto.es',
+    'www.casadosanto.es',
+    'api.casadosanto.es',
+    'admin.casadosanto.es',
+]
 
 
 # Application definition

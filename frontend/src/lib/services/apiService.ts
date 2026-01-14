@@ -1,7 +1,7 @@
 // import {authStore} from './authService';
 
 // BASE URL for API calls
-const API_BASE_URL = 'https://casadosantoadmin.casacam.net'
+const API_BASE_URL = 'https://admin.casadosanto.es'
 
 /**
  * Make an authenticated API request

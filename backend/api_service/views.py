@@ -79,6 +79,8 @@ def send_reservation_mail_view(request):
         n_adults = data.get("n_adults", "")
         n_childs = data.get("n_childs", "")
         language = data.get("language", "")
+        check_in_minus_7 = check_in - datetime.timedelta(days=7)
+        
 
         current_datetime = datetime.datetime.now()
 
@@ -102,7 +104,8 @@ def send_reservation_mail_view(request):
         mail_body = mail_body.replace("{n_adults}", str(n_adults))
         mail_body = mail_body.replace("{n_childs}", str(n_childs))
         mail_body = mail_body.replace("{current_datetime}", str(current_datetime))
-
+        mail_body = mail_body.replace("{check_in_date-7}", str(check_in_minus_7))
+        
         recipient_list = ["casadosantocoira@gmail.com"]
 
         # send mail
@@ -166,6 +169,8 @@ def send_reservation_confimation_mail(request,guest_name, mail, token, total_pri
         mail_body = mail_body.replace("{check_out_date}", str(check_out_date))
         mail_body = mail_body.replace("{current_datetime}", str(current_datetime))
         mail_body = mail_body.replace("{guest_name}", str(guest_name))
+        check_in_minus_7 = check_in_date - datetime.timedelta(days=7)
+        mail_body = mail_body.replace("{check_in_date-7}", str(check_in_minus_7))
         recipient_list = [mail]
         send_mail(
             subject,
